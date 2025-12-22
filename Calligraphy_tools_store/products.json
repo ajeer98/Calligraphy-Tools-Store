@@ -1,0 +1,169 @@
+[
+    {
+        "id": 1,
+        "title": "Calligraphy Kit 1",
+        "tag": "Calligraphy Kit",
+        "price": 349,
+        "mrp": 400,
+        "discount": 33,
+        "image": "image/kit1.png",
+        "images": ["image/kit1.png", "image/kit1.png", "image/kit1.png"],
+        "rating": 4.5,
+        "modalType": "kit",
+        "modalData": {
+            "items": [
+                "2 qalam", "1 ink", "1 ink container", "1 pack thread", "15 glossy sheet", "1 pack qalam cleaner"
+            ]
+        }
+    },
+    {
+        "id": 2,
+        "title": "Calligraphy Kit 2",
+        "tag": "Calligraphy Kit",
+        "price": 449,
+        "mrp": 550,
+        "discount": 33,
+        "image": "image/kit1.png",
+        "images": ["image/kit1.png", "image/kit1.png", "image/kit1.png"],
+        "rating": 4.5,
+        "modalType": "kit",
+        "modalData": {
+            "items": [
+                "3 Qalam", "2 ink", "2 ink container with silk thread", "15 glossy sheet", "1 pack qalam cleaner"
+            ]
+        }
+    },
+    {
+        "id": 3,
+        "title": "Calligraphy Kit 3",
+        "tag": "Calligraphy Kit",
+        "price": 649,
+        "mrp": 700,
+        "discount": 33,
+        "image": "image/kit1.png",
+        "images": ["image/kit1.png", "image/kit1.png", "image/kit1.png"],
+        "rating": 4.5,
+        "modalType": "kit",
+        "modalData": {
+            "items": [
+                "3 Qalam", "3 ink", "3 ink container with silk thread", "20 glossy sheet A4", "1 pack qalam cleaner"
+            ]
+        }
+    },
+    {
+        "id": 4,
+        "title": "Bamboo Qalam",
+        "tag": "Qalam",
+        "price": 90,
+        "mrp": 100,
+        "discount": 20,
+        "image": "image/Bamboo Qalam.png",
+        "images": ["image/Bamboo Qalam.png", "image/Bamboo Qalam.png"],
+        "rating": 4.2,
+        "modalType": "size",
+        "modalData": {
+            "title": "Select Qalam Size (Multiple)",
+            "name": "qalam-size",
+            "options": [
+                { "value": "2mm", "text": "2mm (Fine)" },
+                { "value": "4mm", "text": "4mm (Medium)" },
+                { "value": "6mm", "text": "6mm (Bold)" },
+                { "value": "Set of 5", "text": "Set of 5 (Mixed)" }
+            ]
+        }
+    },
+    {
+        "id": 5,
+        "title": "Celi Qalam",
+        "tag": "Qalam",
+        "price": 300,
+        "mrp": 350,
+        "discount": 20,
+        "image": "image/Celi Qalam.png",
+        "images": ["image/Celi Qalam.png", "image/Celi Qalam-1.png", "image/celi Qalam-2.png"],
+        "rating": 4.2,
+        "modalType": "size",
+        "modalData": {
+            "title": "Select Qalam Size (Multiple)",
+            "name": "qalam-size",
+            "options": [
+                { "value": "2mm", "text": "2mm (Fine)" },
+                { "value": "4mm", "text": "4mm (Medium)" },
+                { "value": "6mm", "text": "6mm (Bold)" },
+                { "value": "Set of 5", "text": "Set of 5 (Mixed)" }
+            ]
+        }
+    },
+    {
+        "id": 6,
+        "title": "Javi Qalam",
+        "weight": "1 kg",
+        "tag": "Qalam",
+        "price": 24,
+        "mrp": 28,
+        "discount": 14,
+        "image": "image/Javi Qalam.png",
+        "images": ["image/Javi Qalam.png", "image/Javi Qalam.png"],
+        "rating": 4.8,
+        "modalType": "size",
+        "modalData": {
+            "title": "Select Qalam Size (Multiple)",
+            "name": "qalam-size",
+            "options": [
+                { "value": "2mm", "text": "2mm (Fine)" },
+                { "value": "4mm", "text": "4mm (Medium)" },
+                { "value": "6mm", "text": "6mm (Bold)" },
+                { "value": "Set of 5", "text": "Set of 5 (Mixed)" }
+            ]
+        }
+    },
+    {
+        "id": 7,
+        "title": "Steel Nib Qalam",
+        "weight": "5 kg",
+        "tag": "Qalam",
+        "price": 350,
+        "mrp": 450,
+        "discount": 25,
+        "image": "image/Steel Nib Qalam.png",
+        "images": ["image/Steel Nib Qalam.png", "image/Steel Nib Qalam.png"],
+        "rating": 4.3,
+        "modalType": "size",
+        "modalData": {
+            "title": "Select Nib Size (Multiple)",
+            "name": "steel-nib-size",
+            "options": [
+                { "value": "0.5 mm", "text": "0.5 mm" },
+                { "value": "0.8 mm", "text": "0.8 mm" },
+                { "value": "1 mm", "text": "1 mm" },
+                { "value": "1.5 mm", "text": "1.5 mm" },
+                { "value": "2 mm", "text": "2 mm" },
+                { "value": "2.5 mm", "text": "2.5 mm" }
+            ]
+        }
+    },
+    {
+        "id": 8,
+        "title": "Ink container",
+        "weight": "840 g",
+        "tag": "Ink container",
+        "price": 148,
+        "mrp": 168,
+        "discount": 12,
+        "image": "image/Ink container.png",
+        "images": ["image/Ink container.png", "image/Ink container.png"],
+        "rating": 4.9
+    },
+    {
+        "id": 9,
+        "title": "Glossy Sheet",
+        "weight": "840 g",
+        "tag": "Paper",
+        "price": 148,
+        "mrp": 168,
+        "discount": 12,
+        "image": "image/Glossy Sheet.png",
+        "images": ["image/Glossy Sheet.png", "image/Glossy Sheet.png"],
+        "rating": 4.9
+    }
+]

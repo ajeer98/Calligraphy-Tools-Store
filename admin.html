@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Calligraphy Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Product Admin Panel</h1>
+            <div class="flex items-center gap-4">
+                <button onclick="resetForm(); document.getElementById('title').focus();" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-medium text-sm">
+                    <i class="fas fa-plus mr-2"></i>Add New Product
+                </button>
+                <a href="index.html" class="text-blue-600 hover:underline">Back to Store</a>
+            </div>
+        </div>
+        
+        <!-- Add/Edit Form -->
+        <form id="product-form" class="space-y-4 mb-8 border-b pb-8">
+            <input type="hidden" id="product-id">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Title</label>
+                    <input type="text" id="title" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Category (Tag)</label>
+                    <select id="tag" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2">
+                        <option value="Calligraphy Kit">Calligraphy Kit</option>
+                        <option value="Qalam">Qalam</option>
+                        <option value="Ink">Ink</option>
+                        <option value="Ink container">Ink container</option>
+                        <option value="Paper">Paper</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Price (₹)</label>
+                    <input type="number" id="price" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">MRP (₹)</label>
+                    <input type="number" id="mrp" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2">
+                </div>
+                <div class="md:col-span-2" id="options-container">
+                    <label class="block text-sm font-medium text-gray-700">Options (Comma separated)</label>
+                    <input type="text" id="options" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" placeholder="e.g. Red, Blue, Green for Ink OR 1mm, 2mm for Qalam">
+                    <p class="text-xs text-gray-500 mt-1">Leave empty to use default lists for Qalam/Ink.</p>
+                </div>
+                <div class="md:col-span-2 hidden" id="description-container">
+                    <label class="block text-sm font-medium text-gray-700">Description / Kit Contents</label>
+                    <textarea id="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" placeholder="Enter product description or kit contents..."></textarea>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Product Images <span id="image-count" class="text-gray-500 font-normal">(0/10)</span></label>
+                <div class="mt-1">
+                    <input type="file" id="image-upload" accept="image/*" multiple class="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-full file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-gray-50 file:text-gray-700
+                        hover:file:bg-gray-100
+                    ">
+                    <p class="text-xs text-gray-500 mt-1">Upload up to 10 images from Gallery / Files</p>
+                </div>
+                <div id="image-preview-container" class="mt-2 hidden grid grid-cols-3 sm:grid-cols-4 gap-4">
+                    <!-- Images injected here -->
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-medium">Save Product</button>
+                <button type="button" onclick="resetForm()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 font-medium">Cancel</button>
+            </div>
+        </form>
+
+        <!-- Product List -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="product-list" class="bg-white divide-y divide-gray-200">
+                    <!-- Items injected here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'calligraphy_products_v4';
+        let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+        const form = document.getElementById('product-form');
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const productList = document.getElementById('product-list');
+        const tagSelect = document.getElementById('tag');
+        const optionsContainer = document.getElementById('options-container');
+        const descriptionContainer = document.getElementById('description-container');
+
+        let currentImages = [];
+
+        function toggleFields() {
+            const tag = tagSelect.value;
+            if (tag === 'Qalam' || tag === 'Ink') {
+                optionsContainer.classList.remove('hidden');
+                descriptionContainer.classList.add('hidden');
+            } else if (tag === 'Calligraphy Kit') {
+                optionsContainer.classList.add('hidden');
+                descriptionContainer.classList.remove('hidden');
+            } else {
+                optionsContainer.classList.add('hidden');
+                descriptionContainer.classList.add('hidden');
+            }
+        }
+
+        tagSelect.addEventListener('change', toggleFields);
+        toggleFields(); // Initialize on load
+
+        function renderList() {
+            productList.innerHTML = products.map(p => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap"><img src="${p.image}" class="h-12 w-12 object-contain rounded border"></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${p.title}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹${p.price}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="editProduct(${p.id})" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
+                        <button onclick="deleteProduct(${p.id})" class="text-red-600 hover:text-red-900">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        imageUpload.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            if (currentImages.length + files.length > 10) {
+                alert("You can only upload a maximum of 10 images.");
+                return;
+            }
+            
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImages.push(e.target.result);
+                    renderImagePreviews();
+                };
+                reader.readAsDataURL(file);
+            });
+            e.target.value = ''; // Reset to allow re-uploading same file if needed
+        });
+
+        function renderImagePreviews() {
+            imagePreviewContainer.innerHTML = '';
+            document.getElementById('image-count').innerText = `(${currentImages.length}/10)`;
+            if (currentImages.length > 0) {
+                imagePreviewContainer.classList.remove('hidden');
+                currentImages.forEach((img, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'relative group';
+                    div.innerHTML = `
+                        <img src="${img}" class="h-24 w-full object-cover rounded border bg-gray-50">
+                        <button type="button" onclick="removeImage(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition shadow-sm">
+                            <i class="fas fa-times text-xs"></i>
+                        </button>
+                    `;
+                    imagePreviewContainer.appendChild(div);
+                });
+            } else {
+                imagePreviewContainer.classList.add('hidden');
+            }
+        }
+
+        function removeImage(index) {
+            currentImages.splice(index, 1);
+            renderImagePreviews();
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('product-id').value;
+            const optionsStr = document.getElementById('options').value;
+
+            const productData = {
+                title: document.getElementById('title').value,
+                tag: document.getElementById('tag').value,
+                price: Number(document.getElementById('price').value),
+                mrp: Number(document.getElementById('mrp').value),
+                options: optionsStr ? optionsStr.split(',').map(s => s.trim()).filter(s => s) : [],
+                description: document.getElementById('description').value,
+                images: currentImages,
+                image: currentImages.length > 0 ? currentImages[0] : ''
+            };
+
+            if (id) {
+                const index = products.findIndex(p => p.id == id);
+                if (index !== -1) products[index] = { ...products[index], ...productData };
+            } else {
+                products.push({ ...productData, id: Date.now(), modalType: 'none' });
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+            renderList();
+            resetForm();
+        });
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            document.getElementById('product-id').value = product.id;
+            document.getElementById('title').value = product.title;
+            document.getElementById('tag').value = product.tag;
+            document.getElementById('price').value = product.price;
+            document.getElementById('mrp').value = product.mrp;
+            document.getElementById('options').value = product.options ? product.options.join(', ') : '';
+            document.getElementById('description').value = product.description || '';
+            currentImages = product.images || (product.image ? [product.image] : []);
+            renderImagePreviews();
+            toggleFields();
+        }
+
+        function deleteProduct(id) {
+            if(confirm('Delete this product?')) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+                renderList();
+            }
+        }
+
+        function resetForm() {
+            form.reset();
+            document.getElementById('product-id').value = '';
+            document.getElementById('options').value = '';
+            document.getElementById('description').value = '';
+            currentImages = [];
+            renderImagePreviews();
+            toggleFields();
+        }
+
+        renderList();
+    </script>
+</body>
+</html>

@@ -339,10 +339,8 @@
             } else if (product.tag === 'Ink') {
                 openSelectionModal(product, 'Select Ink Color', options);
             } else if (product.tag === 'Paper') {
-                openSelectionModal(product, 'Select Quantity', []);
                 openSelectionModal(product, options.length > 0 ? 'Select Option' : 'Select Quantity', options);
             } else if (product.tag === 'Ink container') {
-                openSelectionModal(product, 'Select Quantity', []);
                 openSelectionModal(product, options.length > 0 ? 'Select Option' : 'Select Quantity', options);
             } else if (product.tag === 'Calligraphy Kit') {
                 openSelectionModal(product, 'Select Quantity', options);
@@ -597,8 +595,26 @@
             if (storedProducts && storedProducts.length > 0) {
                 products = storedProducts;
 
-                // Check and add missing new product (ID 9)
+                // Check and add missing new products (ID 7, 8, 9)
                 const newItems = [
+                    {
+                        id: 7,
+                        title: "Copperplate Oblique Holder",
+                        tag: "Qalam",
+                        price: 550,
+                        mrp: 750,
+                        image: "https://via.placeholder.com/400?text=Oblique+Holder",
+                        options: ['Standard']
+                    },
+                    {
+                        id: 8,
+                        title: "Premium Gold Calligraphy Ink",
+                        tag: "Ink",
+                        price: 199,
+                        mrp: 299,
+                        image: "https://via.placeholder.com/400?text=Gold+Ink",
+                        options: ['Gold']
+                    },
                     {
                         id: 9,
                         title: "Calligraphy Practice Pad (A4)",

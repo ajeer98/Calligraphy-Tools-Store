@@ -52,9 +52,9 @@
                 <div class="md:col-span-2" id="options-container">
                     <label class="block text-sm font-medium text-gray-700">Options (Comma separated)</label>
                     <input type="text" id="options" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" placeholder="e.g. Red, Blue, Green for Ink OR 1mm, 2mm for Qalam">
-                    <p class="text-xs text-gray-500 mt-1">Leave empty to use default lists for Qalam/Ink.</p>
+                    <p class="text-xs text-gray-500 mt-1">Leave empty to use default lists for Qalam/Ink. Enter values for others.</p>
                 </div>
-                <div class="md:col-span-2 hidden" id="description-container">
+                <div class="md:col-span-2" id="description-container">
                     <label class="block text-sm font-medium text-gray-700">Description / Kit Contents</label>
                     <textarea id="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" placeholder="Enter product description or kit contents..."></textarea>
                 </div>
@@ -75,7 +75,7 @@
             </div>
 
             <div class="flex gap-4">
-                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-medium">Save Product</button>
+                <button type="submit" id="submit-btn" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-medium">Save Product</button>
                 <button type="button" onclick="resetForm()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 font-medium">Cancel</button>
             </div>
         </form>
@@ -87,6 +87,8 @@
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Options</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
@@ -100,43 +102,154 @@
 
     <script>
         const STORAGE_KEY = 'calligraphy_products_v4';
-        let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        let products = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+        // Ensure ID 7 and 8 exist in Admin too (Migration for existing users)
+        if (products && products.length > 0) {
+            const newItems = [
+                {
+                    id: 7,
+                    title: "Copperplate Oblique Holder",
+                    tag: "Qalam",
+                    price: 550,
+                    mrp: 750,
+                    image: "https://via.placeholder.com/400?text=Oblique+Holder",
+                    options: ['Standard']
+                },
+                {
+                    id: 8,
+                    title: "Premium Gold Calligraphy Ink",
+                    tag: "Ink",
+                    price: 199,
+                    mrp: 299,
+                    image: "https://via.placeholder.com/400?text=Gold+Ink",
+                    options: ['Gold']
+                },
+                {
+                    id: 9,
+                    title: "Calligraphy Practice Pad (A4)",
+                    tag: "Paper",
+                    price: 150,
+                    mrp: 200,
+                    image: "https://via.placeholder.com/400?text=Practice+Pad",
+                    options: ['Grid', 'Lined', 'Blank']
+                }
+            ];
+            let updated = false;
+            newItems.forEach(item => {
+                if (!products.find(p => p.id === item.id)) {
+                    products.push(item);
+                    updated = true;
+                }
+            });
+            if (updated) localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+        }
+
+        if (!products || products.length === 0) {
+            products = [
+                {
+                    id: 1,
+                    title: "Bamboo Qalam Set (7 Pens)",
+                    tag: "Qalam",
+                    price: 450,
+                    mrp: 600,
+                    image: "https://via.placeholder.com/400?text=Bamboo+Qalam",
+                    options: ['Mix Set']
+                },
+                {
+                    id: 2,
+                    title: "Calligraphy Ink - Black 30ml",
+                    tag: "Ink",
+                    price: 120,
+                    mrp: 150,
+                    image: "https://via.placeholder.com/400?text=Black+Ink",
+                    options: ['Black']
+                },
+                {
+                    id: 3,
+                    title: "Glossy Art Paper A4",
+                    tag: "Paper",
+                    price: 250,
+                    mrp: 350,
+                    image: "https://via.placeholder.com/400?text=Art+Paper",
+                    options: []
+                },
+                {
+                    id: 4,
+                    title: "Glass Inkwell Container",
+                    tag: "Ink container",
+                    price: 80,
+                    mrp: 120,
+                    image: "https://via.placeholder.com/400?text=Inkwell",
+                    options: []
+                },
+                {
+                    id: 5,
+                    title: "Beginner Calligraphy Kit",
+                    tag: "Calligraphy Kit",
+                    price: 999,
+                    mrp: 1499,
+                    image: "https://via.placeholder.com/400?text=Starter+Kit",
+                    options: [],
+                    description: "Complete set for beginners."
+                },
+                {
+                    id: 6,
+                    title: "Handmade Teak Qalam",
+                    tag: "Qalam",
+                    price: 300,
+                    mrp: 450,
+                    image: "https://via.placeholder.com/400?text=Teak+Qalam",
+                    options: ['3mm', '5mm']
+                },
+                {
+                    id: 7,
+                    title: "Copperplate Oblique Holder",
+                    tag: "Qalam",
+                    price: 550,
+                    mrp: 750,
+                    image: "https://via.placeholder.com/400?text=Oblique+Holder",
+                    options: ['Standard']
+                },
+                {
+                    id: 8,
+                    title: "Premium Gold Calligraphy Ink",
+                    tag: "Ink",
+                    price: 199,
+                    mrp: 299,
+                    image: "https://via.placeholder.com/400?text=Gold+Ink",
+                    options: ['Gold']
+                },
+                {
+                    id: 9,
+                    title: "Calligraphy Practice Pad (A4)",
+                    tag: "Paper",
+                    price: 150,
+                    mrp: 200,
+                    image: "https://via.placeholder.com/400?text=Practice+Pad",
+                    options: ['Grid', 'Lined', 'Blank']
+                }
+            ];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+        }
 
         const form = document.getElementById('product-form');
         const imagePreviewContainer = document.getElementById('image-preview-container');
         const productList = document.getElementById('product-list');
-        const tagSelect = document.getElementById('tag');
-        const optionsContainer = document.getElementById('options-container');
-        const descriptionContainer = document.getElementById('description-container');
 
         let currentImages = [];
-
-        function toggleFields() {
-            const tag = tagSelect.value;
-            if (tag === 'Qalam' || tag === 'Ink') {
-                optionsContainer.classList.remove('hidden');
-                descriptionContainer.classList.add('hidden');
-            } else if (tag === 'Calligraphy Kit') {
-                optionsContainer.classList.add('hidden');
-                descriptionContainer.classList.remove('hidden');
-            } else {
-                optionsContainer.classList.add('hidden');
-                descriptionContainer.classList.add('hidden');
-            }
-        }
-
-        tagSelect.addEventListener('change', toggleFields);
-        toggleFields(); // Initialize on load
 
         function renderList() {
             productList.innerHTML = products.map(p => `
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap"><img src="${p.image || 'https://via.placeholder.com/50?text=No+Img'}" class="h-12 w-12 object-contain rounded border bg-gray-50"></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${p.title}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${p.tag}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-w-xs truncate" title="${p.options ? p.options.join(', ') : ''}">${p.options && p.options.length ? p.options.join(', ') : '-'}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹${p.price}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editProduct(${p.id})" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                        <button onclick="deleteProduct(${p.id})" class="text-red-600 hover:text-red-900">Delete</button>
+                        <button onclick="editProduct(${p.id})" class="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 px-3 py-1 rounded mr-2 transition"><i class="fas fa-edit mr-1"></i>Edit</button>
+                        <button onclick="deleteProduct(${p.id})" class="bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1 rounded transition"><i class="fas fa-trash mr-1"></i>Delete</button>
                     </td>
                 </tr>
             `).join('');
@@ -223,7 +336,11 @@
             document.getElementById('description').value = product.description || '';
             currentImages = product.images || (product.image ? [product.image] : []);
             renderImagePreviews();
-            toggleFields();
+
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = "Update Product";
+            btn.className = "bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 font-medium";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function deleteProduct(id) {
@@ -242,7 +359,10 @@
             document.getElementById('image-url-input').value = '';
             currentImages = [];
             renderImagePreviews();
-            toggleFields();
+
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = "Save Product";
+            btn.className = "bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-medium";
         }
 
         function downloadJSON() {

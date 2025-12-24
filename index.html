@@ -3,262 +3,613 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Calligraphy Store</title>
+    <title>Calligraphy Tools Store - Smart Buys</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* JioMart Specific Colors */
+        .bg-jio-blue { background-color: #161616; }
+        .text-jio-blue { color: #161616; }
+        .border-jio-blue { border-color: #161616; }
+        .bg-jio-dark-blue { background-color: #161616; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Hide scrollbar for category scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Product Card Hover Effect */
+        .product-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-6">
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Product Admin Panel</h1>
-            <div class="flex items-center gap-4">
-                <button onclick="resetForm(); document.getElementById('title').focus();" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-medium text-sm">
-                    <i class="fas fa-plus mr-2"></i>Add New Product
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50">
+        <!-- Top Blue Bar -->
+        <div class="bg-jio-blue text-white shadow-md">
+            <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden text-2xl">
+                    <i class="fas fa-bars"></i>
                 </button>
-                <button onclick="downloadJSON()" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 font-medium text-sm">
-                    <i class="fas fa-download mr-2"></i>Export JSON
-                </button>
-                <a href="index.html" class="text-blue-600 hover:underline">Back to Store</a>
+
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2 flex-shrink-0">
+                    <img src="image/logo.png" alt="Logo" class="w-10 h-10 bg-white rounded-full p-1">
+                    <span class="text-xl font-bold tracking-tight hidden sm:block">Calligraphy Tools Store</span>
+                </a>
+
+                <!-- Right Actions -->
+                <div class="flex items-center gap-6 text-sm font-medium">
+                    <!-- Courier Tracking -->
+                    <a href="https://www.dtdc.com/track-your-shipment/" target="_blank" class="flex items-center gap-2 cursor-pointer hover:bg-white/10 p-2 rounded">
+                        <i class="fas fa-truck"></i>
+                        <span class="hidden lg:inline">Courier Tracking</span>
+                    </a>
+
+                    <!-- Cart -->
+                    <a href="cart.html" class="flex items-center gap-2 cursor-pointer hover:bg-white/10 p-2 rounded relative">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                        <span class="hidden lg:inline">Cart</span>
+                    </a>
+                </div>
             </div>
         </div>
+
+        <!-- Secondary Nav (Categories) -->
+        <div class="bg-white shadow-sm border-b border-gray-200 overflow-x-auto no-scrollbar">
+            <div class="container mx-auto px-4">
+                <ul class="flex items-center gap-8 text-sm font-medium text-gray-600 whitespace-nowrap py-3">
+                    <li id="nav-All" class="text-jio-blue border-b-2 border-jio-blue pb-3 -mb-3 cursor-pointer" onclick="filterCategory('All')">All</li>
+                    <li id="nav-Calligraphy-Kit" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Calligraphy Kit')">Calligraphy Kit</li>
+                    <li id="nav-Qalam" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Qalam')">Qalam</li>
+                    <li id="nav-Ink" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Ink')">Ink</li>
+                    <li id="nav-Ink-container" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Ink container')">Ink container</li>
+                    <li id="nav-Paper" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Paper')">Paper</li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-6">
         
-        <!-- Add/Edit Form -->
-        <form id="product-form" class="space-y-4 mb-8 border-b pb-8">
-            <input type="hidden" id="product-id">
+        <div class="flex flex-col lg:flex-row gap-6">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Title</label>
-                    <input type="text" id="title" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Category (Tag)</label>
-                    <select id="tag" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2">
-                        <option value="Calligraphy Kit">Calligraphy Kit</option>
-                        <option value="Qalam">Qalam</option>
-                        <option value="Ink">Ink</option>
-                        <option value="Ink container">Ink container</option>
-                        <option value="Paper">Paper</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Price (₹)</label>
-                    <input type="number" id="price" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">MRP (₹)</label>
-                    <input type="number" id="mrp" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2">
-                </div>
-                <div class="md:col-span-2" id="options-container">
-                    <label class="block text-sm font-medium text-gray-700">Options (Comma separated)</label>
-                    <input type="text" id="options" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" placeholder="e.g. Red, Blue, Green for Ink OR 1mm, 2mm for Qalam">
-                    <p class="text-xs text-gray-500 mt-1">Leave empty to use default lists for Qalam/Ink.</p>
-                </div>
-                <div class="md:col-span-2 hidden" id="description-container">
-                    <label class="block text-sm font-medium text-gray-700">Description / Kit Contents</label>
-                    <textarea id="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" placeholder="Enter product description or kit contents..."></textarea>
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Product Images <span id="image-count" class="text-gray-500 font-normal">(0/10)</span></label>
-                <div class="mt-1">
-                    <div class="flex gap-2">
-                        <input type="url" id="image-url-input" class="block w-full rounded-md border-gray-300 shadow-sm border p-2" placeholder="Paste image URL here...">
-                        <button type="button" onclick="addImageUrl()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 font-medium">Add</button>
+            <!-- Product Section -->
+            <div class="flex-grow">
+                
+                <!-- Hero Banner for Section -->
+                <div class="bg-gradient-to-r from-blue-100 to-blue-50 rounded-xl p-6 mb-6 flex items-center justify-between shadow-sm border border-blue-200">
+                    <div>
+                        <h1 id="category-title" class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">All</h1>
+                        <p class="text-gray-600 mb-4">Minimum 33% Off on Daily Essentials. Stock up now!</p>
+                        <button class="bg-jio-blue text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition shadow">View All Offers</button>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">Enter URL and click Add (Max 10 images)</p>
+                    <div class="hidden md:block text-6xl text-blue-300 opacity-80 pr-10">
+                        <i class="fas fa-percent"></i>
+                    </div>
                 </div>
-                <div id="image-preview-container" class="mt-2 hidden grid grid-cols-3 sm:grid-cols-4 gap-4">
-                    <!-- Images injected here -->
+
+                <!-- Product Grid -->
+                <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <!-- Products will be injected here via JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 mt-12 text-sm">
+        <div class="container mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h4 class="text-white font-bold mb-4">Contact Us</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-white">WhatsApp us: +91 77363 48312</a></li>
+                    <li><a href="#" class="hover:text-white">Call Us: +91 77363 48312</a></li>
+                    <li><a href="#" class="hover:text-white">cs@calligraphytoolsstore.com</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">WhatsApp</h4>
+                <div class="flex gap-2">
+                    <a href="https://wa.me/917736348312" target="_blank" class="flex items-center justify-center w-full max-w-[200px] h-10 bg-green-600 rounded text-white hover:bg-green-700 transition">
+                        <i class="fab fa-whatsapp mr-2 text-lg"></i> Chat on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 py-4 bg-gray-900">
+            <div class="container mx-auto px-4 text-center text-xs">
+                © 2025 Calligraphy Tools Store. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Overlay Mobile Menu -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden transition-opacity">
+        <div class="bg-white w-4/5 h-full shadow-lg transform -translate-x-full transition-transform duration-300 flex flex-col" id="mobile-menu-panel">
+            <div class="bg-jio-blue p-4 text-white flex justify-between items-center">
+                <div class="font-bold text-lg"><i class="fas fa-user-circle mr-2"></i> Welcome</div>
+                <button id="close-menu-btn" class="text-xl"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="flex-grow overflow-y-auto p-4 space-y-4">
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-2">Shop by Category</h3>
+                    <ul class="space-y-3 pl-2 text-gray-600">
+                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('All'); closeMenu();">All</li>
+                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Calligraphy Kit'); closeMenu();">Calligraphy Kit</li>
+                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Qalam'); closeMenu();">Qalam</li>
+                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Ink'); closeMenu();">Ink</li>
+                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Ink container'); closeMenu();">Ink container</li>
+                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Paper'); closeMenu();">Paper</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Zoom Lightbox -->
+    <div id="lightbox-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[60] hidden flex items-center justify-center transition-opacity duration-300" onclick="if(event.target === this) closeLightbox()">
+        <button class="absolute top-5 right-5 text-white text-4xl hover:text-gray-300 focus:outline-none z-50" onclick="closeLightbox()">&times;</button>
+        
+        <button class="absolute left-2 md:left-8 text-white text-4xl hover:text-gray-300 focus:outline-none z-50 p-4" onclick="changeLightboxImage(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <img id="lightbox-image" src="" alt="Zoomed Product" class="max-w-[90%] max-h-[90%] object-contain select-none">
+
+        <button class="absolute right-2 md:right-8 text-white text-4xl hover:text-gray-300 focus:outline-none z-50 p-4" onclick="changeLightboxImage(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        
+        <div id="lightbox-counter" class="absolute bottom-5 text-white bg-black/50 px-3 py-1 rounded-full text-sm font-medium"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg text-sm font-medium hidden transition-opacity z-50">
+        <!-- Message injected by JS -->
+    </div>
+
+    <!-- Options (e.g., Size) Selection Modal -->
+    <div id="options-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 w-11/12 max-w-sm shadow-xl">
+            <h3 id="options-modal-title" class="text-lg font-bold mb-4 text-gray-800">Select Options</h3>
+            <div id="options-modal-description" class="text-sm text-gray-600 mb-4 hidden whitespace-pre-line"></div>
+            <div id="options-modal-list" class="space-y-2 mb-4 max-h-60 overflow-y-auto custom-scrollbar">
+                <!-- Options will be injected here by JS -->
+            </div>
+            
+            <!-- Quantity Selector -->
+            <div id="global-quantity-div" class="flex items-center justify-between mb-6 border-t pt-4">
+                <span class="font-medium text-gray-700">Quantity:</span>
+                <div class="flex items-center border border-gray-300 rounded-lg">
+                    <button onclick="updateModalQuantity(-1)" class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-lg">-</button>
+                    <input type="number" id="modal-quantity" value="1" min="1" class="w-12 text-center border-x border-gray-300 py-1 focus:outline-none" readonly>
+                    <button onclick="updateModalQuantity(1)" class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-lg">+</button>
                 </div>
             </div>
 
-            <div class="flex gap-4">
-                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-medium">Save Product</button>
-                <button type="button" onclick="resetForm()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 font-medium">Cancel</button>
+            <div class="flex gap-3">
+                <button onclick="closeOptionsModal()" class="flex-1 border border-gray-300 py-2 rounded-full text-gray-600 hover:bg-gray-50 font-medium transition">Cancel</button>
+                <button onclick="confirmSelectionAndAddToCart()" class="flex-1 bg-jio-blue text-white py-2 rounded-full hover:bg-blue-600 font-medium transition shadow-md">Add to Cart</button>
             </div>
-        </form>
+        </div>
+    </div>
 
-        <!-- Product List -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="product-list" class="bg-white divide-y divide-gray-200">
-                    <!-- Items injected here -->
-                </tbody>
-            </table>
+    <!-- Generic Kit Contents Modal -->
+    <div id="kit-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 w-11/12 max-w-sm shadow-xl">
+            <h3 id="kit-modal-title" class="text-lg font-bold mb-4 text-gray-800">Kit Includes:</h3>
+            <ul id="kit-modal-list" class="space-y-3 mb-6 text-gray-600">
+                <!-- Kit contents will be injected here by JS -->
+            </ul>
+            <div class="flex gap-3">
+                <button onclick="closeKitModal()" class="flex-1 border border-gray-300 py-2 rounded-full text-gray-600 hover:bg-gray-50 font-medium transition">Cancel</button>
+                <button onclick="confirmKitAddToCart()" class="flex-1 bg-jio-blue text-white py-2 rounded-full hover:bg-blue-600 font-medium transition shadow-md">Add Kit to Cart</button>
+            </div>
         </div>
     </div>
 
     <script>
         const STORAGE_KEY = 'calligraphy_products_v4';
-        let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
-        const form = document.getElementById('product-form');
-        const imagePreviewContainer = document.getElementById('image-preview-container');
-        const productList = document.getElementById('product-list');
-        const tagSelect = document.getElementById('tag');
-        const optionsContainer = document.getElementById('options-container');
-        const descriptionContainer = document.getElementById('description-container');
+        // State
+        let products = [];
+        let selectedProductId = null;
 
-        let currentImages = [];
-
-        function toggleFields() {
-            const tag = tagSelect.value;
-            if (tag === 'Qalam' || tag === 'Ink') {
-                optionsContainer.classList.remove('hidden');
-                descriptionContainer.classList.add('hidden');
-            } else if (tag === 'Calligraphy Kit') {
-                optionsContainer.classList.add('hidden');
-                descriptionContainer.classList.remove('hidden');
-            } else {
-                optionsContainer.classList.add('hidden');
-                descriptionContainer.classList.add('hidden');
-            }
-        }
-
-        tagSelect.addEventListener('change', toggleFields);
-        toggleFields(); // Initialize on load
-
-        function renderList() {
-            productList.innerHTML = products.map(p => `
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap"><img src="${p.image || 'https://via.placeholder.com/50?text=No+Img'}" class="h-12 w-12 object-contain rounded border bg-gray-50"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${p.title}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹${p.price}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editProduct(${p.id})" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                        <button onclick="deleteProduct(${p.id})" class="text-red-600 hover:text-red-900">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function addImageUrl() {
-            const input = document.getElementById('image-url-input');
-            const url = input.value.trim();
-            
-            if (!url) return;
-            
-            if (currentImages.length >= 10) {
-                alert("You can only upload a maximum of 10 images.");
+        // Render Products
+        const productGrid = document.getElementById('product-grid');
+        function renderProducts(filter = 'All') {
+            if (products.length === 0) {
+                productGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">Loading products...</p>';
                 return;
             }
 
-            currentImages.push(url);
-            renderImagePreviews();
-            input.value = '';
+            let displayProducts = filter === 'All' 
+                ? products 
+                : products.filter(p => p.tag === filter || p.title.includes(filter));
+
+            productGrid.innerHTML = displayProducts.map(product => `
+                <div class="product-card bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col h-full relative">
+
+                    <!-- Image -->
+                    <div class="p-4 flex items-center justify-center h-48 bg-white cursor-zoom-in" onclick="openLightbox(${product.id})">
+                        <img src="${product.image || 'https://via.placeholder.com/300?text=No+Image'}" alt="${product.title}" class="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300">
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-4 flex flex-col flex-grow">
+                        <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 leading-snug" title="${product.title}">
+                            ${product.title}
+                        </h3>
+                        <p class="text-xs text-blue-600 bg-blue-50 inline-block px-2 py-1 rounded mb-2 font-medium">${product.tag}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-lg font-bold text-gray-900">₹${product.price}</span>
+                                <span class="text-xs text-gray-400 line-through">₹${product.mrp}</span>
+                                <span class="text-xs text-green-600 font-semibold hidden sm:inline">Save ₹${product.mrp - product.price}</span>
+                            </div>
+                            
+                            <button onclick="addToCart(${product.id}, this)" class="w-full bg-jio-blue text-white py-2 rounded-full font-bold text-sm hover:bg-blue-600 transition flex items-center justify-center gap-2 group">
+                                <span>Add to Cart</span>
+                                <i class="fas fa-plus-circle group-hover:rotate-90 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function renderImagePreviews() {
-            imagePreviewContainer.innerHTML = '';
-            document.getElementById('image-count').innerText = `(${currentImages.length}/10)`;
-            if (currentImages.length > 0) {
-                imagePreviewContainer.classList.remove('hidden');
-                currentImages.forEach((img, index) => {
-                    const div = document.createElement('div');
-                    div.className = 'relative group';
-                    div.innerHTML = `
-                        <img src="${img}" class="h-24 w-full object-cover rounded border bg-gray-50">
-                        <button type="button" onclick="removeImage(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition shadow-sm">
-                            <i class="fas fa-times text-xs"></i>
-                        </button>
-                    `;
-                    imagePreviewContainer.appendChild(div);
-                });
-            } else {
-                imagePreviewContainer.classList.add('hidden');
+        // Filter Category Logic
+        function filterCategory(category) {
+            // Update UI classes
+            const navContainer = document.querySelector('.bg-white.shadow-sm ul');
+            const navItems = navContainer.children;
+            for (let item of navItems) {
+                item.className = "hover:text-jio-blue cursor-pointer";
             }
-        }
 
-        function removeImage(index) {
-            currentImages.splice(index, 1);
-            renderImagePreviews();
-        }
-
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = document.getElementById('product-id').value;
-            const optionsStr = document.getElementById('options').value;
-
-            const productData = {
-                title: document.getElementById('title').value,
-                tag: document.getElementById('tag').value,
-                price: Number(document.getElementById('price').value),
-                mrp: Number(document.getElementById('mrp').value),
-                options: optionsStr ? optionsStr.split(',').map(s => s.trim()).filter(s => s) : [],
-                description: document.getElementById('description').value,
-                images: currentImages,
-                image: currentImages.length > 0 ? currentImages[0] : ''
-            };
-
-            if (id) {
-                const index = products.findIndex(p => p.id == id);
-                if (index !== -1) products[index] = { ...products[index], ...productData };
-            } else {
-                products.push({ ...productData, id: Date.now(), modalType: 'none' });
+            const safeCategory = category.replace(' ', '-');
+            const activeItem = document.getElementById(`nav-${safeCategory}`);
+            if (activeItem) {
+                activeItem.className = "text-jio-blue border-b-2 border-jio-blue pb-3 -mb-3 cursor-pointer";
             }
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-            renderList();
-            resetForm();
-        });
+            
+            document.getElementById('category-title').innerText = category === 'All' ? 'All' : category;
+            renderProducts(category);
+        }
 
-        function editProduct(id) {
+        // Add to Cart Logic
+        function addToCart(id, btn) {
             const product = products.find(p => p.id === id);
             if (!product) return;
-            document.getElementById('product-id').value = product.id;
-            document.getElementById('title').value = product.title;
-            document.getElementById('tag').value = product.tag;
-            document.getElementById('price').value = product.price;
-            document.getElementById('mrp').value = product.mrp;
-            document.getElementById('options').value = product.options ? product.options.join(', ') : '';
-            document.getElementById('description').value = product.description || '';
-            currentImages = product.images || (product.image ? [product.image] : []);
-            renderImagePreviews();
-            toggleFields();
-        }
 
-        function deleteProduct(id) {
-            if(confirm('Delete this product?')) {
-                products = products.filter(p => p.id !== id);
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-                renderList();
+            selectedProductId = id; // Set global reference to the product being processed
+            
+            // Determine options (Custom from Admin or Default Fallback)
+            let options = product.options || [];
+            if (options.length === 0) {
+                if (product.tag === 'Qalam') {
+                    options = ['1mm', '1.5mm', '2mm', '2.5mm', '3mm', '3.5mm', '4mm', '4.5mm', '5mm', '6mm', 'Mix Set'];
+                } else if (product.tag === 'Ink') {
+                    options = ['Black', 'Blue', 'Red', 'Green', 'Yellow', 'White', 'Gold', 'Silver', 'Copper', 'Purple', 'Pink'];
+                }
+            }
+
+            // Category & Modal Logic
+            if (product.tag === 'Qalam') {
+                openSelectionModal(product, 'Select Qalam Size', options);
+            } else if (product.tag === 'Ink') {
+                openSelectionModal(product, 'Select Ink Color', options);
+            } else if (product.tag === 'Paper') {
+                openSelectionModal(product, 'Select Quantity', []);
+            } else if (product.tag === 'Ink container') {
+                openSelectionModal(product, 'Select Quantity', []);
+            } else if (product.tag === 'Calligraphy Kit') {
+                openSelectionModal(product, 'Select Quantity', options);
+            } else if (product.modalType === 'kit') {
+                openKitModal(product);
+            } else if (product.modalType === 'size') {
+                // Legacy support
+                const options = product.modalData.options.map(o => o.text);
+                openSelectionModal(product, product.modalData.title, options);
+            } else {
+                processAddToCart(product);
+                selectedProductId = null; // Clear after use
             }
         }
 
-        function resetForm() {
-            form.reset();
-            document.getElementById('product-id').value = '';
-            document.getElementById('options').value = '';
-            document.getElementById('description').value = '';
-            document.getElementById('image-url-input').value = '';
-            currentImages = [];
-            renderImagePreviews();
-            toggleFields();
+        // --- Generic Modal Functions ---
+
+        function openKitModal(product) {
+            const modalList = document.getElementById('kit-modal-list');
+            modalList.innerHTML = product.modalData.items.map(item => `
+                <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> ${item}</li>
+            `).join('');
+            document.getElementById('kit-modal').classList.remove('hidden');
         }
 
-        function downloadJSON() {
-            const dataStr = JSON.stringify(products, null, 2);
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", url);
-            downloadAnchorNode.setAttribute("download", "products.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-            URL.revokeObjectURL(url);
+        function closeKitModal() {
+            document.getElementById('kit-modal').classList.add('hidden');
+            selectedProductId = null;
         }
 
-        renderList();
+        function confirmKitAddToCart() {
+            if (!selectedProductId) return;
+            const product = products.find(p => p.id === selectedProductId);
+            processAddToCart(product, 'Kit added to cart!');
+            closeKitModal();
+        }
+
+        function openSelectionModal(product, title, options) {
+            document.getElementById('options-modal-title').innerText = title;
+            const modalList = document.getElementById('options-modal-list');
+            const globalQtyDiv = document.getElementById('global-quantity-div');
+            const descDiv = document.getElementById('options-modal-description');
+            
+            if (product.description) {
+                descDiv.innerText = product.description;
+                descDiv.classList.remove('hidden');
+            } else {
+                descDiv.innerText = '';
+                descDiv.classList.add('hidden');
+            }
+            
+            if (options && options.length > 0) {
+                modalList.classList.remove('hidden');
+                if(globalQtyDiv) globalQtyDiv.classList.add('hidden');
+                
+                modalList.innerHTML = options.map(opt => `
+                    <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded border border-gray-100 mb-2 transition-colors">
+                        <span class="text-gray-700 font-medium">${opt}</span>
+                        <div class="flex items-center border border-gray-300 rounded-lg bg-white h-8">
+                            <button onclick="updateOptionQuantity(this, -1)" class="px-2 text-gray-600 hover:bg-gray-100 rounded-l-lg h-full flex items-center">-</button>
+                            <input type="number" data-option="${opt}" value="0" min="0" class="w-10 text-center border-x border-gray-300 h-full focus:outline-none text-sm option-quantity" readonly>
+                            <button onclick="updateOptionQuantity(this, 1)" class="px-2 text-gray-600 hover:bg-gray-100 rounded-r-lg h-full flex items-center">+</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                modalList.classList.add('hidden');
+                modalList.innerHTML = '';
+                if(globalQtyDiv) globalQtyDiv.classList.remove('hidden');
+            }
+
+            document.getElementById('modal-quantity').value = 1;
+            document.getElementById('options-modal').classList.remove('hidden');
+        }
+
+        function closeOptionsModal() {
+            document.getElementById('options-modal').classList.add('hidden');
+            selectedProductId = null;
+        }
+
+        function updateModalQuantity(change) {
+            const input = document.getElementById('modal-quantity');
+            let val = parseInt(input.value) + change;
+            if (val < 1) val = 1;
+            input.value = val;
+        }
+
+        function updateOptionQuantity(btn, change) {
+            const input = btn.parentElement.querySelector('input');
+            let val = parseInt(input.value) + change;
+            if (val < 0) val = 0;
+            input.value = val;
+            
+            // Visual feedback
+            const row = btn.closest('.justify-between');
+            if (val > 0) {
+                row.classList.add('bg-blue-50', 'border-blue-200');
+                row.classList.remove('border-gray-100');
+            } else {
+                row.classList.remove('bg-blue-50', 'border-blue-200');
+                row.classList.add('border-gray-100');
+            }
+        }
+
+        function confirmSelectionAndAddToCart() {
+            if (!selectedProductId) return;
+            
+            const product = products.find(p => p.id === selectedProductId);
+            const optionInputs = document.querySelectorAll('input.option-quantity');
+            const hasOptions = optionInputs.length > 0;
+            
+            if (hasOptions) {
+                let addedCount = 0;
+                optionInputs.forEach(input => {
+                    const qty = parseInt(input.value);
+                    if (qty > 0) {
+                        const variant = input.dataset.option;
+                        const productWithOption = {
+                            ...product,
+                            title: `${product.title} - ${variant}`,
+                            selectedSize: variant
+                        };
+                        _addOrUpdateCart(productWithOption, qty);
+                        addedCount += qty;
+                    }
+                });
+
+                if (addedCount === 0) {
+                    alert("Please select at least one item.");
+                    return;
+                }
+                // showToast(`${addedCount} item(s) added to cart!`);
+            } else {
+                const quantity = parseInt(document.getElementById('modal-quantity').value) || 1;
+                _addOrUpdateCart(product, quantity);
+                // showToast('Item added to cart!');
+            }
+            
+            updateCartCount();
+
+            closeOptionsModal();
+            window.location.href = 'cart.html';
+        }
+
+        // Toast notification
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.remove('hidden');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // --- Core Cart & UI Functions (largely unchanged) ---
+        function _addOrUpdateCart(product, qty = 1) {
+            let cart = JSON.parse(localStorage.getItem('calligraphy_cart')) || [];
+            // Check for existing item by ID and selectedSize.
+            // Treat undefined/null selectedSize as a match for other items without a size.
+            const existingItem = cart.find(item => item.id === product.id && (item.selectedSize || null) === (product.selectedSize || null));
+            
+            if (existingItem) {
+                existingItem.quantity += qty;
+            } else {
+                cart.push({ ...product, quantity: qty });
+            }
+            
+            localStorage.setItem('calligraphy_cart', JSON.stringify(cart));
+        }
+
+        function processAddToCart(product, toastMessage = 'Item added to cart!') {
+            _addOrUpdateCart(product, 1);
+            updateCartCount();
+            // showToast(toastMessage);
+            window.location.href = 'cart.html';
+        }
+
+        function updateCartCount() {
+            let cart = JSON.parse(localStorage.getItem('calligraphy_cart')) || [];
+            const count = cart.reduce((acc, item) => acc + item.quantity, 0);
+            document.getElementById('cart-count').innerText = count;
+        }
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+
+        function openMenu() {
+            mobileMenuOverlay.classList.remove('hidden');
+            // Small delay to allow display:block to apply before transform
+            setTimeout(() => {
+                mobileMenuPanel.classList.remove('-translate-x-full');
+            }, 10);
+        }
+
+        function closeMenu() {
+            mobileMenuPanel.classList.add('-translate-x-full');
+            setTimeout(() => {
+                mobileMenuOverlay.classList.add('hidden');
+            }, 300);
+        }
+
+        mobileMenuBtn.addEventListener('click', openMenu);
+        closeMenuBtn.addEventListener('click', closeMenu);
+        mobileMenuOverlay.addEventListener('click', (e) => {
+            if (e.target === mobileMenuOverlay) closeMenu();
+        });
+
+        // Lightbox Functions
+        let currentLightboxProductId = null;
+        let currentLightboxImageIndex = 0;
+
+        function openLightbox(productId) {
+            currentLightboxProductId = productId;
+            currentLightboxImageIndex = 0;
+            updateLightboxImage();
+            document.getElementById('lightbox-modal').classList.remove('hidden');
+        }
+
+        function updateLightboxImage() {
+            const product = products.find(p => p.id === currentLightboxProductId);
+            const images = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
+            
+            if (images.length > 0) {
+                document.getElementById('lightbox-image').src = images[currentLightboxImageIndex];
+                document.getElementById('lightbox-counter').innerText = `${currentLightboxImageIndex + 1} / ${images.length}`;
+            }
+        }
+
+        function changeLightboxImage(direction) {
+            const product = products.find(p => p.id === currentLightboxProductId);
+            const images = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
+            if (images.length > 0) {
+                currentLightboxImageIndex = (currentLightboxImageIndex + direction + images.length) % images.length;
+                updateLightboxImage();
+            }
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').classList.add('hidden');
+        }
+
+        async function initializeApp() {
+            try {
+                // Always try to fetch the latest data from the server file
+                const response = await fetch('products.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                products = await response.json();
+                // Update local storage to keep it in sync
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+            } catch (error) {
+                console.warn("Fetching from products.json failed, falling back to local storage:", error);
+                const storedProducts = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                if (storedProducts) {
+                    products = storedProducts;
+                }
+            }
+
+            renderProducts();
+            updateCartCount();
+        }
+
+        // Initialize
+        initializeApp();
+
     </script>
 </body>
 </html>

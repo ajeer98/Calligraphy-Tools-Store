@@ -15,6 +15,9 @@
                 <button onclick="resetForm(); document.getElementById('title').focus();" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-medium text-sm">
                     <i class="fas fa-plus mr-2"></i>Add New Product
                 </button>
+                <button onclick="downloadJSON()" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 font-medium text-sm">
+                    <i class="fas fa-download mr-2"></i>Export JSON
+                </button>
                 <a href="index.html" class="text-blue-600 hover:underline">Back to Store</a>
             </div>
         </div>
@@ -128,7 +131,7 @@
         function renderList() {
             productList.innerHTML = products.map(p => `
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap"><img src="${p.image}" class="h-12 w-12 object-contain rounded border"></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><img src="${p.image || 'https://via.placeholder.com/50?text=No+Img'}" class="h-12 w-12 object-contain rounded border bg-gray-50"></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${p.title}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹${p.price}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -236,9 +239,23 @@
             document.getElementById('product-id').value = '';
             document.getElementById('options').value = '';
             document.getElementById('description').value = '';
+            document.getElementById('image-url-input').value = '';
             currentImages = [];
             renderImagePreviews();
             toggleFields();
+        }
+
+        function downloadJSON() {
+            const dataStr = JSON.stringify(products, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", url);
+            downloadAnchorNode.setAttribute("download", "products.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            URL.revokeObjectURL(url);
         }
 
         renderList();

@@ -104,7 +104,7 @@
         const STORAGE_KEY = 'calligraphy_products_v4';
         let products = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
-        // Ensure ID 7 and 8 exist in Admin too (Migration for existing users)
+        // Ensure ID 7, 8, and 9 exist in Admin too (Migration for existing users)
         if (products && products.length > 0) {
             const newItems = [
                 {

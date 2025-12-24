@@ -60,14 +60,11 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700">Product Images <span id="image-count" class="text-gray-500 font-normal">(0/10)</span></label>
                 <div class="mt-1">
-                    <input type="file" id="image-upload" accept="image/*" multiple class="block w-full text-sm text-gray-500
-                        file:mr-4 file:py-2 file:px-4
-                        file:rounded-full file:border-0
-                        file:text-sm file:font-semibold
-                        file:bg-gray-50 file:text-gray-700
-                        hover:file:bg-gray-100
-                    ">
-                    <p class="text-xs text-gray-500 mt-1">Upload up to 10 images from Gallery / Files</p>
+                    <div class="flex gap-2">
+                        <input type="url" id="image-url-input" class="block w-full rounded-md border-gray-300 shadow-sm border p-2" placeholder="Paste image URL here...">
+                        <button type="button" onclick="addImageUrl()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 font-medium">Add</button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Enter URL and click Add (Max 10 images)</p>
                 </div>
                 <div id="image-preview-container" class="mt-2 hidden grid grid-cols-3 sm:grid-cols-4 gap-4">
                     <!-- Images injected here -->
@@ -103,7 +100,6 @@
         let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
         const form = document.getElementById('product-form');
-        const imageUpload = document.getElementById('image-upload');
         const imagePreviewContainer = document.getElementById('image-preview-container');
         const productList = document.getElementById('product-list');
         const tagSelect = document.getElementById('tag');
@@ -143,23 +139,21 @@
             `).join('');
         }
 
-        imageUpload.addEventListener('change', function(e) {
-            const files = Array.from(e.target.files);
-            if (currentImages.length + files.length > 10) {
+        function addImageUrl() {
+            const input = document.getElementById('image-url-input');
+            const url = input.value.trim();
+            
+            if (!url) return;
+            
+            if (currentImages.length >= 10) {
                 alert("You can only upload a maximum of 10 images.");
                 return;
             }
-            
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentImages.push(e.target.result);
-                    renderImagePreviews();
-                };
-                reader.readAsDataURL(file);
-            });
-            e.target.value = ''; // Reset to allow re-uploading same file if needed
-        });
+
+            currentImages.push(url);
+            renderImagePreviews();
+            input.value = '';
+        }
 
         function renderImagePreviews() {
             imagePreviewContainer.innerHTML = '';

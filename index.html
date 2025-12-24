@@ -126,7 +126,7 @@
                 </div>
 
                 <!-- Product Grid -->
-                <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                     <!-- Products will be injected here via JS -->
                 </div>
             </div>
@@ -142,6 +142,7 @@
                     <li><a href="#" class="hover:text-white">WhatsApp us: +91 77363 48312</a></li>
                     <li><a href="#" class="hover:text-white">Call Us: +91 77363 48312</a></li>
                     <li><a href="#" class="hover:text-white">cs@calligraphytoolsstore.com</a></li>
+                    <li><a href="admin.html" class="hover:text-white text-gray-500"><i class="fas fa-cog mr-2"></i>Admin Panel</a></li>
                 </ul>
             </div>
             <div>
@@ -339,8 +340,10 @@
                 openSelectionModal(product, 'Select Ink Color', options);
             } else if (product.tag === 'Paper') {
                 openSelectionModal(product, 'Select Quantity', []);
+                openSelectionModal(product, options.length > 0 ? 'Select Option' : 'Select Quantity', options);
             } else if (product.tag === 'Ink container') {
                 openSelectionModal(product, 'Select Quantity', []);
+                openSelectionModal(product, options.length > 0 ? 'Select Option' : 'Select Quantity', options);
             } else if (product.tag === 'Calligraphy Kit') {
                 openSelectionModal(product, 'Select Quantity', options);
             } else if (product.modalType === 'kit') {
@@ -588,18 +591,125 @@
         }
 
         async function initializeApp() {
-            try {
-                // Always try to fetch the latest data from the server file
-                const response = await fetch('products.json');
-                if (!response.ok) throw new Error('Network response was not ok');
-                products = await response.json();
-                // Update local storage to keep it in sync
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-            } catch (error) {
-                console.warn("Fetching from products.json failed, falling back to local storage:", error);
-                const storedProducts = JSON.parse(localStorage.getItem(STORAGE_KEY));
-                if (storedProducts) {
-                    products = storedProducts;
+            // Check Local Storage first to preserve Admin Panel edits
+            const storedProducts = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+            if (storedProducts && storedProducts.length > 0) {
+                products = storedProducts;
+
+                // Check and add missing new product (ID 9)
+                const newItems = [
+                    {
+                        id: 9,
+                        title: "Calligraphy Practice Pad (A4)",
+                        tag: "Paper",
+                        price: 150,
+                        mrp: 200,
+                        image: "https://via.placeholder.com/400?text=Practice+Pad",
+                        options: ['Grid', 'Lined', 'Blank']
+                    }
+                ];
+                let updated = false;
+                newItems.forEach(item => {
+                    if (!products.find(p => p.id === item.id)) {
+                        products.push(item);
+                        updated = true;
+                    }
+                });
+                if (updated) localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+            } else {
+                try {
+                    const response = await fetch('products.json');
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    products = await response.json();
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+                } catch (error) {
+                    console.warn("Fetching from products.json failed:", error);
+                    // Sample products to populate the grid
+                    products = [
+                        {
+                            id: 1,
+                            title: "Bamboo Qalam Set (7 Pens)",
+                            tag: "Qalam",
+                            price: 450,
+                            mrp: 600,
+                            image: "https://via.placeholder.com/400?text=Bamboo+Qalam",
+                            options: ['Mix Set']
+                        },
+                        {
+                            id: 2,
+                            title: "Calligraphy Ink - Black 30ml",
+                            tag: "Ink",
+                            price: 120,
+                            mrp: 150,
+                            image: "https://via.placeholder.com/400?text=Black+Ink",
+                            options: ['Black']
+                        },
+                        {
+                            id: 3,
+                            title: "Glossy Art Paper A4",
+                            tag: "Paper",
+                            price: 250,
+                            mrp: 350,
+                            image: "https://via.placeholder.com/400?text=Art+Paper",
+                            options: []
+                        },
+                        {
+                            id: 4,
+                            title: "Glass Inkwell Container",
+                            tag: "Ink container",
+                            price: 80,
+                            mrp: 120,
+                            image: "https://via.placeholder.com/400?text=Inkwell",
+                            options: []
+                        },
+                        {
+                            id: 5,
+                            title: "Beginner Calligraphy Kit",
+                            tag: "Calligraphy Kit",
+                            price: 999,
+                            mrp: 1499,
+                            image: "https://via.placeholder.com/400?text=Starter+Kit",
+                            options: [],
+                            description: "Complete set for beginners."
+                        },
+                        {
+                            id: 6,
+                            title: "Handmade Teak Qalam",
+                            tag: "Qalam",
+                            price: 300,
+                            mrp: 450,
+                            image: "https://via.placeholder.com/400?text=Teak+Qalam",
+                            options: ['3mm', '5mm']
+                        },
+                        {
+                            id: 7,
+                            title: "Copperplate Oblique Holder",
+                            tag: "Qalam",
+                            price: 550,
+                            mrp: 750,
+                            image: "https://via.placeholder.com/400?text=Oblique+Holder",
+                            options: ['Standard']
+                        },
+                        {
+                            id: 8,
+                            title: "Premium Gold Calligraphy Ink",
+                            tag: "Ink",
+                            price: 199,
+                            mrp: 299,
+                            image: "https://via.placeholder.com/400?text=Gold+Ink",
+                            options: ['Gold']
+                        },
+                        {
+                            id: 9,
+                            title: "Calligraphy Practice Pad (A4)",
+                            tag: "Paper",
+                            price: 150,
+                            mrp: 200,
+                            image: "https://via.placeholder.com/400?text=Practice+Pad",
+                            options: ['Grid', 'Lined', 'Blank']
+                        }
+                    ];
                 }
             }
 

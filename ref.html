@@ -1,0 +1,711 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calligraphy Tools Store | Premium Tools & Supplies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Clash Display Font -->
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap');
+
+        :root {
+            --ink: #111111;
+            --gold: #C5A059;
+            --paper: #F8F5F0;
+            --paper-dark: #EAE5DB;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--paper);
+            color: var(--ink);
+        }
+
+        .font-logo {
+            font-family: 'Clash Display', sans-serif;
+            font-weight: 400;
+        }
+
+        @keyframes textGlow {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .special-calligraphy-text {
+            animation: textGlow 3.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes floatWord {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .continuous-float {
+            animation: floatWord 3.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .text-gold {
+            color: var(--gold);
+        }
+
+        .bg-gold {
+            background-color: var(--gold);
+        }
+
+        .glass-nav {
+            background: rgba(248, 245, 240, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(17, 17, 17, 0.05);
+        }
+
+        .hero-section {
+            background-image: url('https://images.unsplash.com/photo-1544458920-569d2d0c2688?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(17, 17, 17, 0.95) 0%, rgba(17, 17, 17, 0.6) 100%);
+        }
+
+        .category-card {
+            border-radius: 1rem;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            aspect-ratio: 3/4;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .category-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .category-overlay {
+            background: linear-gradient(to top, rgba(17, 17, 17, 0.9) 0%, rgba(17, 17, 17, 0) 100%);
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem;
+            transition: all 0.4s ease;
+            border: 1px solid transparent;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+            border-color: var(--paper-dark);
+        }
+
+        .product-img-wrapper {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background-color: var(--paper);
+            aspect-ratio: 1/1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .add-to-cart-btn {
+            position: absolute;
+            bottom: -3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--ink);
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .product-card:hover .add-to-cart-btn {
+            bottom: 1rem;
+            opacity: 1;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: var(--gold);
+        }
+
+        .btn-primary {
+            background-color: var(--gold);
+            color: white;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gold);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--gold);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--paper-dark);
+            color: var(--ink);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--ink);
+            background-color: var(--ink);
+            color: white;
+        }
+
+        .feature-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background-color: rgba(197, 160, 89, 0.1);
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover .feature-icon {
+            background-color: var(--gold);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        /* Smooth scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--paper);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 4px;
+        }
+
+        /* Mobile menu transition */
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        #mobile-menu.active {
+            max-height: 400px;
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-yellow-100 selection:text-black">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-2 md:py-4 glass-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-2xl text-[#111111] p-2 -ml-2">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <!-- Logo -->
+                <a class='flex items-center gap-3 leading-none mx-auto md:mx-0' href='/'>
+                    <img src="https://i.ibb.co/wNzx8Mgr/logo.png" alt="Calligraphy Tools Store Logo"
+                        class="h-8 md:h-12 w-auto object-contain block opacity-90">
+                    <div class="flex flex-col text-center md:text-left items-center md:items-start">
+                        <span
+                            class="font-logo text-lg sm:text-2xl lg:text-3xl text-[#111111] leading-tight">Calligraphy</span>
+                        <span
+                            class="font-sans text-xs sm:text-sm font-normal tracking-[0.2em] text-[#111111] uppercase mt-0.5">Tools
+                            Store</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-10 text-sm font-medium">
+                    <a class='hover:text-[#C5A059] transition-colors' href='/'>Home</a>
+                    <a class='hover:text-[#C5A059] transition-colors' href='/categories'>Categories</a>
+                    <a class='hover:text-[#C5A059] transition-colors' href='/bestsellers'>Bestsellers</a>
+                    <a class='hover:text-[#C5A059] transition-colors' href='/about'>Our Story</a>
+                </div>
+
+                <!-- Icons -->
+                <div class="flex items-center space-x-3 md:space-x-5">
+                    <a class='hidden sm:flex text-[#111111] hover:text-[#C5A059] transition-colors p-2' href='/search'>
+                        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                    </a>
+                    <a class='hidden sm:flex text-[#111111] hover:text-[#C5A059] transition-colors p-2' href='/login'>
+                        <i class="fa-regular fa-user text-lg"></i>
+                    </a>
+                    <a class='flex text-[#111111] hover:text-[#C5A059] transition-colors relative p-2' href='/cart'>
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        <span
+                            class="absolute top-0 right-0 bg-[#C5A059] text-white text-[0.6rem] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-100 mt-4 absolute w-full left-0 shadow-lg">
+            <div class="flex flex-col px-6 py-2">
+                <a class='text-base font-medium text-[#111111] hover:text-[#C5A059] py-4 border-b border-gray-50' href='/'>Home</a>
+                <a class='text-base font-medium text-[#111111] hover:text-[#C5A059] py-4 border-b border-gray-50' href='/categories'>Categories</a>
+                <a class='text-base font-medium text-[#111111] hover:text-[#C5A059] py-4 border-b border-gray-50' href='/bestsellers'>Bestsellers</a>
+                <a class='text-base font-medium text-[#111111] hover:text-[#C5A059] py-4' href='/about'>Our
+                    Story</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section min-h-[100svh] flex items-center pt-20">
+        <div class="absolute inset-0 hero-overlay"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
+            <div class="max-w-4xl mx-auto">
+                <span data-aos="fade-down" data-aos-duration="1000"
+                    class="text-[#C5A059] font-medium tracking-[0.2em] uppercase text-xs mb-4 block">The Art of
+                    Beautiful Writing</span>
+                <h1 class="font-serif text-5xl sm:text-6xl md:text-8xl lg:text-[6.5rem] font-medium text-white leading-[1.1] mb-6">
+                    <span data-aos="fade-right" data-aos-duration="1200" class="inline-block">
+                        <span class="continuous-float">Elevate Your</span>
+                    </span> <br>
+                    <span data-aos="zoom-in-up" data-aos-duration="1500" data-aos-delay="200"
+                        data-aos-easing="ease-out-back" class="italic text-[#C5A059] inline-block text-6xl sm:text-7xl md:text-9xl lg:text-[9rem] mt-2 md:mt-0">
+                        <span class="special-calligraphy-text" style="animation-delay: 0.5s;">Calligraphy</span>
+                    </span>
+                </h1>
+                <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"
+                    class="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                    Discover our thoughtfully curated collection of artisanal nibs, finest inks, and premium papers
+                    designed for the perfect stroke.
+                </p>
+                <div
+                    class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+                    <a href="#shop"
+                        class="btn-primary w-auto px-5 py-2.5 rounded-full text-sm font-medium uppercase tracking-wider text-center shadow-lg">
+                        Shop Collection
+                    </a>
+                    <a href="#categories"
+                        class="w-auto px-5 sm:px-0 text-white border border-white/30 sm:border-transparent sm:border-b hover:border-white transition-all text-sm font-medium uppercase tracking-wider py-2.5 sm:py-0 sm:pb-1 mt-3 sm:mt-0 text-center rounded-full sm:rounded-none">
+                        View Categories
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-16 bg-white border-b border-[#EAE5DB]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-6 lg:gap-10">
+                <div class="feature-item flex flex-col items-center text-center group cursor-default">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-feather-pointed"></i>
+                    </div>
+                    <h4 class="font-serif text-xl font-medium mb-2">Artisan Crafted</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs">Each tool is meticulously crafted by
+                        master artisans worldwide.</p>
+                </div>
+                <div class="feature-item flex flex-col items-center text-center group cursor-default">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-droplet"></i>
+                    </div>
+                    <h4 class="font-serif text-xl font-medium mb-2">Premium Inks</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs">Rich, highly pigmented inks that flow
+                        flawlessly from dip to paper.</p>
+                </div>
+                <div class="feature-item flex flex-col items-center text-center group cursor-default">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-earth-americas"></i>
+                    </div>
+                    <h4 class="font-serif text-xl font-medium mb-2">Global Shipping</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs">We safely deliver our premium calligraphy
+                        supplies across the globe.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section id="categories" class="py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10 md:mb-16">
+                <span class="text-[#C5A059] font-medium tracking-[0.2em] uppercase text-xs mb-3 block">Explore</span>
+                <h2 class="font-serif text-3xl md:text-5xl font-medium">Curated Categories</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Category 1 -->
+                <div class="category-card group">
+                    <img src="https://images.unsplash.com/photo-1583089892943-e02e5ee6f2bc?auto=format&fit=crop&q=80&w=800"
+                        alt="Dip Pens & Nibs">
+                    <div class="category-overlay">
+                        <div>
+                            <h3 class="font-serif text-white text-2xl font-medium mb-1">Pens & Nibs</h3>
+                            <p class="text-gray-300 text-sm hover:text-white transition-colors flex items-center gap-2">
+                                Shop Now <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 2 -->
+                <div class="category-card group">
+                    <img src="https://images.unsplash.com/photo-1599813233869-7d04f14182f2?auto=format&fit=crop&q=80&w=800"
+                        alt="Premium Inks">
+                    <div class="category-overlay">
+                        <div>
+                            <h3 class="font-serif text-white text-2xl font-medium mb-1">Premium Inks</h3>
+                            <p class="text-gray-300 text-sm hover:text-white transition-colors flex items-center gap-2">
+                                Shop Now <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="category-card group">
+                    <img src="https://images.unsplash.com/photo-1518608298413-582fc89d9804?auto=format&fit=crop&q=80&w=800"
+                        alt="Fine Papers">
+                    <div class="category-overlay">
+                        <div>
+                            <h3 class="font-serif text-white text-2xl font-medium mb-1">Fine Papers</h3>
+                            <p class="text-gray-300 text-sm hover:text-white transition-colors flex items-center gap-2">
+                                Shop Now <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bestsellers Section -->
+    <section id="shop" class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-10 md:mb-12">
+                <div>
+                    <span class="text-[#C5A059] font-medium tracking-[0.2em] uppercase text-xs mb-3 block">Calligraphy</span>
+                    <h2 class="font-serif text-3xl md:text-5xl font-medium">Kits</h2>
+                </div>
+                <a class='hidden sm:inline-block border-b border-[#111111] text-sm font-medium uppercase tracking-wider pb-1 hover:text-[#C5A059] hover:border-[#C5A059] transition-all' href='/bestsellers'>
+                    View All
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                <!-- Product 1 -->
+                <div class="product-card group">
+                    <div class="product-img-wrapper mb-4">
+                        <!-- We use specific high quality tools images where possible -->
+                        <img src="https://images.unsplash.com/photo-1533424922832-a7aecbc75db2?auto=format&fit=crop&q=80&w=600"
+                            alt="Oblique Pen Holder">
+                        <button class="add-to-cart-btn">
+                            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Holders</p>
+                        <h4 class="font-serif text-lg mb-2">Rosewood Oblique Holder</h4>
+                        <p class="text-[#C5A059] font-medium">$45.00</p>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card group">
+                    <div class="product-img-wrapper mb-4">
+                        <img src="https://images.unsplash.com/photo-1581423402450-482f347eb108?auto=format&fit=crop&q=80&w=600"
+                            alt="Walnut Ink">
+                        <button class="add-to-cart-btn">
+                            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Inks</p>
+                        <h4 class="font-serif text-lg mb-2">Artisan Walnut Ink</h4>
+                        <p class="text-[#C5A059] font-medium">$18.50</p>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card group">
+                    <div class="product-img-wrapper mb-4">
+                        <img src="https://images.unsplash.com/photo-1574677949673-c155d8f6ccdb?auto=format&fit=crop&q=80&w=600"
+                            alt="Nib Set">
+                        <button class="add-to-cart-btn">
+                            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Nibs</p>
+                        <h4 class="font-serif text-lg mb-2">Pointed Pen Nib Set (5 PC)</h4>
+                        <p class="text-[#C5A059] font-medium">$24.00</p>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card group">
+                    <div class="product-img-wrapper mb-4">
+                        <img src="https://images.unsplash.com/photo-1603484477859-abe6a73f9366?auto=format&fit=crop&q=80&w=600"
+                            alt="Practice Pad">
+                        <button class="add-to-cart-btn">
+                            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Paper</p>
+                        <h4 class="font-serif text-lg mb-2">Calligraphy Practice Pad</h4>
+                        <p class="text-[#C5A059] font-medium">$15.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center sm:hidden w-full">
+                <a class='btn-outline block w-full px-8 py-4 rounded-full text-base font-medium uppercase tracking-wider text-center' href='/bestsellers'>
+                    View All Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to action/About -->
+    <section id="about" class="py-16 md:py-24 bg-[#111111] text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div class="order-2 lg:order-1 relative w-[90%] sm:w-full mx-auto mt-6 sm:mt-0 mb-4 sm:mb-0">
+                    <div class="absolute inset-0 bg-[#C5A059] translate-x-4 translate-y-4 sm:translate-x-6 sm:translate-y-6 rounded-2xl"></div>
+                    <img src="https://images.unsplash.com/photo-1455390582262-044cdead2708?auto=format&fit=crop&q=80&w=1000"
+                        alt="Calligrapher at work"
+                        class="relative z-10 w-full h-[350px] sm:h-[450px] lg:h-[500px] object-cover rounded-2xl shadow-2xl">
+                </div>
+                <div class="order-1 lg:order-2">
+                    <span class="text-[#C5A059] font-medium tracking-[0.2em] uppercase text-xs mb-4 block">Our
+                        Story</span>
+                    <h2 class="font-serif text-3xl md:text-5xl font-medium mb-6">A Passion for the Written Word</h2>
+                    <p class="text-gray-400 text-base md:text-lg leading-relaxed mb-6 md:mb-8">
+                        Founded by master calligraphers, Calligraphy Tools Store was born from a simple desire: to
+                        provide artists with
+                        tools worthy of their talent. We source the finest materials and partner with generational
+                        artisans to create supplies that inspire beautiful writing.
+                    </p>
+                    <p class="text-gray-400 text-base md:text-lg leading-relaxed mb-8 md:mb-10">
+                        Whether you are beginning your journey into modern calligraphy or are a seasoned professional
+                        pointing Spencerian script, our curated selection is designed to perfectly accompany your
+                        artistic expression.
+                    </p>
+                    <a class='inline-flex items-center gap-2 text-[#C5A059] font-medium uppercase tracking-widest text-sm hover:text-white transition-colors' href='/about'>
+                        Read Our Full Story <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 md:py-20 bg-[#C5A059] text-[#111111]">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-serif text-2xl sm:text-3xl md:text-4xl font-medium mb-3 md:mb-4">Join Our Community</h2>
+            <p class="mb-6 md:mb-8 font-medium text-sm md:text-base">Subscribe to receive calligraphy tips, product news, and 10% off your first
+                order.</p>
+            <form class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto w-full"
+                onsubmit="event.preventDefault(); alert('Thank you for subscribing!');">
+                <input type="email" placeholder="Your email address"
+                    class="w-full sm:flex-1 bg-white border-none rounded-full px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[#111111] placeholder-gray-400 text-base"
+                    required>
+                <button type="submit"
+                    class="w-full sm:w-auto bg-[#111111] text-white px-8 py-4 rounded-full font-medium uppercase tracking-wider text-base sm:text-sm hover:bg-gray-800 transition-colors mt-2 sm:mt-0">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white pt-16 pb-8 border-t border-[#EAE5DB]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-12 md:mb-16">
+                <!-- Brand -->
+                <div class="md:col-span-12 lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left">
+                    <a class='flex flex-col items-center lg:items-start leading-none mb-6' href='/'>
+                        <span class="font-logo text-3xl text-[#111111] leading-tight">Calligraphy</span>
+                        <span class="font-sans text-[10px] font-medium tracking-[0.3em] text-[#C5A059] uppercase mt-2">Tools Store</span>
+                    </a>
+                    <p class="text-sm text-gray-500 leading-relaxed mb-8 max-w-sm px-4 lg:px-0">
+                        Curators of fine calligraphy tools, inks, and papers for modern and traditional letterers alike.
+                    </p>
+                    <div class="flex space-x-6 text-gray-400">
+                        <a href="#" class="hover:text-[#C5A059] transition-colors text-lg"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="hover:text-[#C5A059] transition-colors text-lg"><i class="fa-brands fa-pinterest"></i></a>
+                        <a href="#" class="hover:text-[#C5A059] transition-colors text-lg"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!-- Support -->
+                <div class="md:col-span-6 lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left">
+                    <h5 class="text-[#111111] font-serif text-lg font-medium mb-6">Support</h5>
+                    <ul class="space-y-4 text-sm text-gray-500">
+                        <li><a class='hover:text-[#C5A059] transition-colors' href='/contact'>Contact Us</a></li>
+                        <li><a class='hover:text-[#C5A059] transition-colors' href='/shipping-returns'>Shipping & Returns</a></li>
+                        <li><a class='hover:text-[#C5A059] transition-colors' href='/faqs'>FAQs</a></li>
+                        <li><a class='hover:text-[#C5A059] transition-colors' href='/calligraphy-guide'>Calligraphy Guide</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="md:col-span-6 lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left">
+                    <h5 class="text-[#111111] font-serif text-lg font-medium mb-6">Get in Touch</h5>
+                    <ul class="space-y-4 text-sm text-gray-500">
+                        <li class="flex items-center gap-3 justify-center lg:justify-start">
+                            <i class="fa-regular fa-envelope text-[#C5A059]"></i> hello@calligraphystore.com
+                        </li>
+                        <li class="flex items-center gap-3 justify-center lg:justify-start">
+                            <i class="fa-solid fa-phone text-[#C5A059]"></i> +1 (555) 123-4567
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-[#EAE5DB] flex flex-col md:flex-row justify-between items-center text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-[0.15em] gap-4">
+                <p class="text-center md:text-left">&copy; 2026 Calligraphy Tools Store. All Rights Reserved.</p>
+                <div class="flex flex-wrap justify-center gap-6">
+                    <a class='hover:text-[#111111] transition-colors' href='/privacy-policy'>Privacy Policy</a>
+                    <a class='hover:text-[#111111] transition-colors' href='/terms-of-service'>Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Navbar blur on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-sm');
+                navbar.style.background = 'rgba(248, 245, 240, 0.98)';
+            } else {
+                navbar.classList.remove('shadow-sm');
+                navbar.style.background = 'rgba(248, 245, 240, 0.85)';
+            }
+        });
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            const icon = menuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile menu on click (for anchor links)
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                menuBtn.querySelector('i').classList.remove('fa-xmark');
+                menuBtn.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+    </script>
+
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 700,
+            once: true,
+            offset: 50,
+            disable: 'mobile',
+            easing: 'ease-out-quad'
+        });
+    </script>
+</body>
+
+</html>

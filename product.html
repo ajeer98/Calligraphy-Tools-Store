@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Product — Ajeer Calligraphy Store</title>
+  <meta name="description" content="View product details, images and add to cart."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{gold:'#C9A84C','gold-dark':'#A07832',cream:'#F7F4EF',green:'#1C3D2E'},fontFamily:{serif:['Playfair Display','serif'],sans:['Inter','sans-serif']}}}}</script>
+</head>
+<body class="bg-[#F7F4EF]">
+
+<!-- NAV -->
+<nav id="main-nav" style="background:rgba(247,244,239,.97);backdrop-filter:blur(20px);border-bottom:1px solid #E0D8CC;" class="scrolled">
+  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between" style="padding-top:14px;padding-bottom:14px;">
+    <a href="index.html" class="flex items-center gap-2" style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#0D0D0D;">
+      <span>🖊️</span> Ajeer <span style="color:var(--gold);">Calligraphy</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="nav-link" style="color:#555;">Home</a>
+      <a href="products.html" class="nav-link" style="color:#555;">Shop</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="cart.html" class="relative" style="color:#333;">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge" style="display:none;"></span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- LOADING STATE -->
+<div id="page-loading" style="padding:160px 0;text-align:center;">
+  <div style="font-size:48px;margin-bottom:16px;">🖊️</div>
+  <p style="color:var(--text-light);">Loading product…</p>
+</div>
+
+<!-- PRODUCT CONTENT (hidden until loaded) -->
+<div id="product-content" class="hidden page-pad">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- BREADCRUMB -->
+    <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8">
+      <a href="index.html" class="hover:text-yellow-600 transition-colors">Home</a>
+      <span>›</span>
+      <a href="products.html" class="hover:text-yellow-600 transition-colors">Shop</a>
+      <span>›</span>
+      <span id="breadcrumb-name" class="text-gray-600 font-medium"></span>
+    </nav>
+
+    <!-- MAIN PRODUCT LAYOUT -->
+    <div class="grid md:grid-cols-2 gap-12 items-start">
+
+      <!-- LEFT: IMAGES -->
+      <div data-aos="fade-right">
+        <div class="zoom-wrap" id="main-img-wrap">
+          <img id="main-img" src="" alt="Product" style="width:100%;border-radius:18px;min-height:360px;object-fit:cover;background:var(--cream-2);"/>
+        </div>
+        <div class="thumb-grid" id="thumb-grid" style="margin-top:12px;flex-wrap:wrap;"></div>
+      </div>
+
+      <!-- RIGHT: INFO -->
+      <div data-aos="fade-left">
+        <!-- Tags -->
+        <div class="flex flex-wrap gap-2 mb-4" id="product-tags"></div>
+
+        <!-- Name & Category -->
+        <h1 id="product-name" class="font-playfair font-bold text-gray-900" style="font-size:clamp(26px,4vw,38px);line-height:1.2;margin-bottom:8px;"></h1>
+        <p id="product-category" class="text-sm text-gray-400 capitalize mb-6 tracking-wider"></p>
+
+        <!-- Price -->
+        <div class="flex items-end gap-4 mb-2" id="price-block">
+          <div id="product-price" class="prod-price" style="font-size:32px;"></div>
+          <div id="product-orig-price" class="prod-orig hidden"></div>
+          <div id="product-savings" class="savings hidden"></div>
+        </div>
+
+        <!-- Stock -->
+        <div id="stock-info" class="mb-6"></div>
+
+        <!-- Description -->
+        <div class="mb-8">
+          <p id="product-desc" class="text-gray-600 leading-relaxed text-base"></p>
+        </div>
+
+        <!-- Font Styles (for bundles) -->
+        <div id="font-styles-info" class="hidden mb-6 p-4 rounded-xl" style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-yellow-600 font-bold text-sm">✦ FONT STYLES INCLUDED</span>
+          </div>
+          <div id="font-styles-list" class="flex gap-3 flex-wrap"></div>
+        </div>
+
+        <!-- Quantity + Add to Cart -->
+        <div class="flex items-center gap-4 mb-6">
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <input class="qty-val" id="qty-input" type="number" value="1" min="1" max="20" readonly/>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+          <button id="add-cart-btn" onclick="addToCart()" class="btn-gold" style="flex:1;justify-content:center;">
+            Add to Cart 🛒
+          </button>
+        </div>
+
+        <!-- Buy via WhatsApp -->
+        <button id="buy-wa-btn" onclick="buyNowWhatsApp()" class="btn-wa w-full justify-center mb-4">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Order Directly on WhatsApp
+        </button>
+
+        <!-- Trust badges -->
+        <div class="flex flex-wrap gap-4 text-xs text-gray-400 mt-4">
+          <span>🔒 Secure Ordering</span>
+          <span>🚚 Fast Delivery</span>
+          <span>📦 Safe Packaging</span>
+          <span>✅ Quality Guaranteed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUNDLE DETAILS SECTION -->
+    <div id="bundle-section" class="hidden mt-16">
+      <div class="bundle-box">
+        <div style="position:relative;z-index:1;">
+          <div class="flex items-center gap-3 mb-8">
+            <div class="tag tag-premium" style="font-size:12px;">⭐ Premium Bundle</div>
+            <h2 class="font-playfair font-bold text-white" style="font-size:clamp(20px,3vw,30px);">What's Inside the Kit</h2>
+          </div>
+          <!-- Value comparison -->
+          <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="text-center p-4" style="background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(201,168,76,.1);">
+              <div id="bundle-item-count" class="font-playfair text-3xl font-bold" style="color:var(--gold);">0</div>
+              <div class="text-white/50 text-xs mt-1 uppercase tracking-widest">Items Included</div>
+            </div>
+            <div class="text-center p-4" style="background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(201,168,76,.1);">
+              <div id="bundle-orig-display" class="font-playfair text-3xl font-bold" style="color:var(--gold);">—</div>
+              <div class="text-white/50 text-xs mt-1 uppercase tracking-widest">If Bought Separately</div>
+            </div>
+            <div class="text-center p-4" style="background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(201,168,76,.1);">
+              <div id="bundle-save-display" class="font-playfair text-3xl font-bold" style="color:#4ade80;">—</div>
+              <div class="text-white/50 text-xs mt-1 uppercase tracking-widest">Your Savings</div>
+            </div>
+          </div>
+          <!-- Bundle Items List -->
+          <div id="bundle-items-list" class="grid sm:grid-cols-2 gap-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RELATED PRODUCTS -->
+    <div class="mt-16" data-aos="fade-up">
+      <h2 class="font-playfair font-bold text-gray-900 text-2xl mb-8">You May Also Like</h2>
+      <div id="related-grid" class="grid grid-cols-2 md:grid-cols-4 gap-5"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NOT FOUND -->
+<div id="not-found" class="hidden empty-state" style="padding-top:160px;">
+  <div class="empty-icon">😕</div>
+  <h2 class="font-playfair text-2xl font-bold mb-2">Product Not Found</h2>
+  <p class="text-gray-500 mb-6">This product doesn't exist or was removed.</p>
+  <a href="products.html" class="btn-gold">Browse All Products</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <div class="footer-logo mb-3">Ajeer <span>Calligraphy</span></div>
+    <hr class="footer-hr"/>
+    <p class="footer-copy">© 2024 Ajeer Calligraphy Store</p>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/utils.js"></script>
+<script>
+let currentProduct = null;
+const placeholder = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%23EDE8DF' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='60'%3E🖊️%3C/text%3E%3C/svg%3E`;
+
+async function loadProduct() {
+  const id = new URLSearchParams(location.search).get('id');
+  if (!id) { showNotFound(); return; }
+  try {
+    const doc = await db.collection('products').doc(id).get();
+    if (!doc.exists) { showNotFound(); return; }
+    currentProduct = {id: doc.id, ...doc.data()};
+    renderProduct(currentProduct);
+    loadRelated(currentProduct.category, id);
+  } catch(e) {
+    console.error(e);
+    showNotFound();
+  }
+}
+
+function renderProduct(p) {
+  document.title = `${p.name} — Ajeer Calligraphy Store`;
+  document.getElementById('page-loading').classList.add('hidden');
+  document.getElementById('product-content').classList.remove('hidden');
+
+  document.getElementById('breadcrumb-name').textContent = p.name;
+  document.getElementById('product-name').textContent = p.name;
+  document.getElementById('product-category').textContent = (p.category || '').toUpperCase() + (p.type ? ' · ' + p.type : '');
+  document.getElementById('product-desc').textContent = p.description || 'Premium calligraphy tool crafted for exceptional performance.';
+
+  // Tags
+  let tagsHTML = '';
+  if (p.isBundle || p.type === 'bundle') tagsHTML += '<span class="tag tag-bundle">Bundle Kit</span>';
+  if (p.tags?.includes('bestseller')) tagsHTML += '<span class="tag tag-bestseller">⭐ Bestseller</span>';
+  if (p.tags?.includes('premium')) tagsHTML += '<span class="tag tag-premium">✨ Premium</span>';
+  if (p.tags?.includes('beginner')) tagsHTML += '<span class="tag tag-beginner">🎓 Best for Beginners</span>';
+  if (p.tags?.includes('new')) tagsHTML += '<span class="tag tag-new">🆕 New Arrival</span>';
+  document.getElementById('product-tags').innerHTML = tagsHTML;
+
+  // Price
+  document.getElementById('product-price').textContent = rupees(p.price);
+  if (p.originalPrice && p.originalPrice > p.price) {
+    document.getElementById('product-orig-price').textContent = rupees(p.originalPrice);
+    document.getElementById('product-orig-price').classList.remove('hidden');
+    document.getElementById('product-savings').textContent = `Save ${rupees(p.originalPrice - p.price)}`;
+    document.getElementById('product-savings').classList.remove('hidden');
+  }
+
+  // Stock
+  const stockEl = document.getElementById('stock-info');
+  if (p.stock !== undefined) {
+    if (p.stock <= 0) stockEl.innerHTML = '<span class="stock-low">❌ Out of Stock</span>';
+    else if (p.stock < 5) stockEl.innerHTML = `<span class="stock-low">⚡ Only ${p.stock} left in stock!</span>`;
+    else stockEl.innerHTML = '<span class="stock-ok">✓ In Stock</span>';
+  }
+
+  // Images
+  const images = p.images?.filter(Boolean) || [];
+  if (images.length > 0) {
+    document.getElementById('main-img').src = images[0];
+    if (images.length > 1) {
+      document.getElementById('thumb-grid').innerHTML = images.map((src, i) =>
+        `<img class="thumb ${i===0?'active':''}" src="${src}" alt="View ${i+1}" onclick="switchImg('${src}', this)"/>`
+      ).join('');
+    }
+  } else {
+    document.getElementById('main-img').src = placeholder;
+  }
+
+  // Font styles
+  if (p.fontStylesCount || (p.fontStyles && p.fontStyles.length > 0)) {
+    document.getElementById('font-styles-info').classList.remove('hidden');
+    const styles = p.fontStyles || ['Naskh', 'Nastaliq'];
+    document.getElementById('font-styles-list').innerHTML = styles.map(s =>
+      `<span class="tag tag-premium" style="font-size:12px;">✦ ${s}</span>`
+    ).join('');
+  }
+
+  // Bundle section
+  if (p.isBundle && p.bundleItems?.length > 0) {
+    document.getElementById('bundle-section').classList.remove('hidden');
+    document.getElementById('bundle-item-count').textContent = p.bundleItems.length;
+    if (p.originalPrice) {
+      document.getElementById('bundle-orig-display').textContent = rupees(p.originalPrice);
+      document.getElementById('bundle-save-display').textContent = rupees(p.originalPrice - p.price);
+    }
+    document.getElementById('bundle-items-list').innerHTML = p.bundleItems.map(item => `
+      <div class="bundle-item" style="background:rgba(255,255,255,.04);border-radius:12px;padding:14px;border:1px solid rgba(201,168,76,.1);">
+        ${item.image ? `<img class="bundle-item-img" src="${item.image}" alt="${item.name}"/>` : `<div style="width:52px;height:52px;border-radius:8px;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">🖊️</div>`}
+        <div>
+          <div class="text-white font-semibold text-sm">${item.name}</div>
+          ${item.description ? `<div class="text-white/40 text-xs mt-1">${item.description}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+function switchImg(src, thumbEl) {
+  document.getElementById('main-img').src = src;
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  thumbEl.classList.add('active');
+}
+
+function changeQty(delta) {
+  const input = document.getElementById('qty-input');
+  const newVal = Math.max(1, Math.min(20, Number(input.value) + delta));
+  input.value = newVal;
+}
+
+function addToCart() {
+  if (!currentProduct) return;
+  const qty = Number(document.getElementById('qty-input').value);
+  Cart.add({
+    id: currentProduct.id,
+    name: currentProduct.name,
+    price: currentProduct.price,
+    image: currentProduct.images?.[0] || ''
+  }, qty);
+}
+
+async function buyNowWhatsApp() {
+  if (!currentProduct) return;
+  const qty = Number(document.getElementById('qty-input').value);
+  const s = await getSettings();
+  const phone = (s.whatsappNumber || '919999999999').replace(/\D/g, '');
+  const total = currentProduct.price * qty;
+  let msg = `🖊️ *Order Request — ${s.storeName || 'Calligraphy Store'}*\n\n`;
+  msg += `• ${currentProduct.name} × ${qty} = ${rupees(total)}\n`;
+  msg += `\n*Total: ${rupees(total)}*\n\nI'd like to place this order. Please share payment & delivery details.`;
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+async function loadRelated(category, excludeId) {
+  try {
+    const snap = await db.collection('products').where('category', '==', category).limit(5).get();
+    const related = [];
+    snap.forEach(d => { if (d.id !== excludeId) related.push({id: d.id, ...d.data()}); });
+    if (related.length === 0) return;
+    document.getElementById('related-grid').innerHTML = related.slice(0,4).map(p => `
+      <div class="prod-card">
+        <a href="product.html?id=${p.id}">
+          <div class="prod-card-img-wrap">
+            <img class="prod-card-img" src="${p.images?.[0] || placeholder}" alt="${p.name}"/>
+          </div>
+        </a>
+        <div class="prod-card-body">
+          <a href="product.html?id=${p.id}"><div class="prod-name" style="font-size:16px;">${p.name}</div></a>
+          <div class="prod-price" style="font-size:18px;">${rupees(p.price)}</div>
+          <button onclick="Cart.add({id:'${p.id}',name:'${(p.name||'').replace(/'/g,"\\'")}',price:${p.price},image:'${p.images?.[0]||''}'})" class="btn-gold w-full justify-center" style="padding:9px;font-size:12px;margin-top:8px;">+ Add to Cart</button>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) { console.error(e); }
+}
+
+function showNotFound() {
+  document.getElementById('page-loading').classList.add('hidden');
+  document.getElementById('not-found').classList.remove('hidden');
+}
+
+loadProduct();
+</script>
+</body>
+</html>

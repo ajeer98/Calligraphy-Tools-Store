@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Shop — Ajeer Calligraphy Store</title>
+  <meta name="description" content="Browse our full collection of premium calligraphy pens, inks, nibs, and starter kits."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{gold:'#C9A84C','gold-dark':'#A07832',cream:'#F7F4EF',green:'#1C3D2E'},fontFamily:{serif:['Playfair Display','serif'],sans:['Inter','sans-serif']}}}}</script>
+</head>
+<body class="bg-[#F7F4EF]">
+
+<!-- NAV (light) -->
+<nav id="main-nav" style="background:rgba(247,244,239,.97);backdrop-filter:blur(20px);border-bottom:1px solid #E0D8CC;" class="scrolled">
+  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between" style="padding-top:14px;padding-bottom:14px;">
+    <a href="index.html" class="nav-logo nav-light flex items-center gap-2" style="color:#0D0D0D;">
+      <span class="text-2xl">🖊️</span>
+      <span>Ajeer <span style="color:var(--gold);">Calligraphy</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="nav-link" style="color:#555;">Home</a>
+      <a href="products.html" class="nav-link" style="color:var(--gold);font-weight:700;">Shop</a>
+      <a href="products.html?cat=kits" class="nav-link" style="color:#555;">Kits</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="cart.html" class="relative" style="color:#333;">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge" style="display:none;"></span>
+      </a>
+      <button id="mob-menu-btn" class="md:hidden" style="color:#333;">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mob-menu" class="hidden bg-white border-t px-6 py-4 md:hidden">
+    <a href="index.html" class="block text-gray-700 py-2">Home</a>
+    <a href="products.html" class="block py-2" style="color:var(--gold);font-weight:600;">Shop</a>
+    <a href="cart.html" class="block text-gray-700 py-2">Cart</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div style="background:linear-gradient(135deg,#0D0D0D,#1C3D2E);padding:80px 0 50px;">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <span class="lbl">Everything You Need</span>
+    <h1 class="sec-title light" style="font-size:clamp(32px,5vw,54px);">Our Collection</h1>
+    <div class="divider center"></div>
+    <p style="color:rgba(255,255,255,.6);max-width:500px;margin:0 auto;">Premium calligraphy tools handpicked for beginners & masters alike.</p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="max-w-7xl mx-auto px-6 py-10">
+  <!-- SEARCH + SORT BAR -->
+  <div class="flex flex-wrap items-center gap-4 mb-8">
+    <div class="search-bar flex-1" style="min-width:200px;">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Search products…" oninput="applyFilters()"/>
+    </div>
+    <select id="sort-select" onchange="applyFilters()" class="form-ctrl" style="width:auto;padding:11px 16px;">
+      <option value="default">Sort: Featured</option>
+      <option value="price-asc">Price: Low → High</option>
+      <option value="price-desc">Price: High → Low</option>
+      <option value="name">Name A→Z</option>
+    </select>
+    <button id="filter-toggle-btn" class="btn-dark md:hidden" style="padding:11px 20px;" onclick="document.getElementById('filter-panel').classList.toggle('hidden')">
+      ⚙ Filters
+    </button>
+    <div id="results-count" class="text-sm text-gray-500 ml-auto"></div>
+  </div>
+
+  <div class="flex gap-8">
+    <!-- FILTER SIDEBAR -->
+    <aside id="filter-panel" class="hidden md:block w-64 flex-shrink-0">
+      <div class="filter-box">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="filter-section-title" style="margin:0;border:none;padding:0;">Filters</h3>
+          <button onclick="clearFilters()" class="text-xs text-gray-400 hover:text-yellow-600 transition-colors">Clear All</button>
+        </div>
+
+        <!-- Category -->
+        <div class="mb-6">
+          <div class="filter-section-title">Category</div>
+          <label class="f-opt"><input type="checkbox" value="pens" onchange="applyFilters()" class="cat-filter"/> Calligraphy Pens</label>
+          <label class="f-opt"><input type="checkbox" value="inks" onchange="applyFilters()" class="cat-filter"/> Premium Inks</label>
+          <label class="f-opt"><input type="checkbox" value="nibs" onchange="applyFilters()" class="cat-filter"/> Nibs & Tips</label>
+          <label class="f-opt"><input type="checkbox" value="kits" onchange="applyFilters()" class="cat-filter"/> Kits & Bundles</label>
+          <label class="f-opt"><input type="checkbox" value="paper" onchange="applyFilters()" class="cat-filter"/> Practice Paper</label>
+        </div>
+
+        <!-- Type -->
+        <div class="mb-6">
+          <div class="filter-section-title">Type</div>
+          <label class="f-opt"><input type="radio" name="type-filter" value="" onchange="applyFilters()" checked/> All</label>
+          <label class="f-opt"><input type="radio" name="type-filter" value="individual" onchange="applyFilters()"/> Individual</label>
+          <label class="f-opt"><input type="radio" name="type-filter" value="bundle" onchange="applyFilters()"/> Bundle / Kit</label>
+        </div>
+
+        <!-- Price -->
+        <div class="mb-6">
+          <div class="filter-section-title">Max Price: <span id="price-display" class="gold-text">₹2000</span></div>
+          <input type="range" id="price-range" min="0" max="5000" value="5000" step="50" oninput="document.getElementById('price-display').textContent='₹'+this.value;applyFilters()"/>
+        </div>
+
+        <!-- Tags -->
+        <div>
+          <div class="filter-section-title">Tags</div>
+          <label class="f-opt"><input type="checkbox" value="bestseller" onchange="applyFilters()" class="tag-filter"/> ⭐ Bestseller</label>
+          <label class="f-opt"><input type="checkbox" value="premium" onchange="applyFilters()" class="tag-filter"/> ✨ Premium</label>
+          <label class="f-opt"><input type="checkbox" value="beginner" onchange="applyFilters()" class="tag-filter"/> 🎓 Beginner</label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PRODUCT GRID -->
+    <div class="flex-1">
+      <!-- Active filters chips -->
+      <div id="active-filters" class="flex flex-wrap gap-2 mb-6 hidden"></div>
+
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Skeleton loaders -->
+        <div class="prod-card"><div class="skeleton" style="height:220px;border-radius:12px 12px 0 0;"></div><div class="prod-card-body"><div class="skeleton" style="height:20px;"></div><div class="skeleton" style="height:14px;margin-top:8px;width:55%;"></div></div></div>
+        <div class="prod-card"><div class="skeleton" style="height:220px;border-radius:12px 12px 0 0;"></div><div class="prod-card-body"><div class="skeleton" style="height:20px;"></div><div class="skeleton" style="height:14px;margin-top:8px;width:55%;"></div></div></div>
+        <div class="prod-card"><div class="skeleton" style="height:220px;border-radius:12px 12px 0 0;"></div><div class="prod-card-body"><div class="skeleton" style="height:20px;"></div><div class="skeleton" style="height:14px;margin-top:8px;width:55%;"></div></div></div>
+      </div>
+
+      <div id="empty-state" class="empty-state hidden">
+        <div class="empty-icon">🔍</div>
+        <h3 class="font-playfair text-xl font-bold mb-2">No Products Found</h3>
+        <p class="text-gray-500 mb-6">Try adjusting your filters or search term.</p>
+        <button onclick="clearFilters()" class="btn-gold">Clear Filters</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <div class="footer-logo mb-4">Ajeer <span>Calligraphy</span></div>
+    <div class="flex justify-center gap-6 flex-wrap mb-6">
+      <a href="index.html" class="footer-link">Home</a>
+      <a href="products.html" class="footer-link">Shop</a>
+      <a href="cart.html" class="footer-link">Cart</a>
+    </div>
+    <hr class="footer-hr"/>
+    <p class="footer-copy">© 2024 Ajeer Calligraphy Store</p>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/utils.js"></script>
+<script>
+let allProducts = [];
+
+// Read URL params on load
+(function readParams(){
+  const p = new URLSearchParams(location.search);
+  const cat = p.get('cat');
+  const type = p.get('type');
+  if (cat) {
+    document.querySelectorAll('.cat-filter').forEach(cb => { if(cb.value === cat) cb.checked = true; });
+  }
+  if (type) {
+    document.querySelectorAll('[name=type-filter]').forEach(r => { if(r.value === type) r.checked = true; });
+  }
+})();
+
+// Load products from Firestore
+async function loadProducts() {
+  try {
+    const snap = await db.collection('products').get();
+    allProducts = [];
+    snap.forEach(d => allProducts.push({id:d.id,...d.data()}));
+    applyFilters();
+  } catch(e) {
+    console.error(e);
+    document.getElementById('products-grid').innerHTML = `<div class="col-span-3 text-center py-16 text-gray-400">Failed to load products. Check Firebase connection.</div>`;
+  }
+}
+
+function applyFilters() {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const maxPrice = Number(document.getElementById('price-range').value);
+  const sort = document.getElementById('sort-select').value;
+  const selCats = [...document.querySelectorAll('.cat-filter:checked')].map(c=>c.value);
+  const selType = document.querySelector('[name=type-filter]:checked')?.value || '';
+  const selTags = [...document.querySelectorAll('.tag-filter:checked')].map(c=>c.value);
+
+  let filtered = allProducts.filter(p => {
+    if (search && !p.name?.toLowerCase().includes(search) && !p.description?.toLowerCase().includes(search)) return false;
+    if (p.price > maxPrice) return false;
+    if (selCats.length && !selCats.includes(p.category)) return false;
+    if (selType) {
+      const pType = p.isBundle || p.type === 'bundle' ? 'bundle' : 'individual';
+      if (pType !== selType) return false;
+    }
+    if (selTags.length && !selTags.some(t => p.tags?.includes(t))) return false;
+    return true;
+  });
+
+  // Sort
+  if (sort === 'price-asc') filtered.sort((a,b) => a.price - b.price);
+  else if (sort === 'price-desc') filtered.sort((a,b) => b.price - a.price);
+  else if (sort === 'name') filtered.sort((a,b) => (a.name||'').localeCompare(b.name||''));
+
+  document.getElementById('results-count').textContent = `${filtered.length} product${filtered.length!==1?'s':''}`;
+  renderProducts(filtered);
+}
+
+function renderProducts(products) {
+  const grid = document.getElementById('products-grid');
+  const empty = document.getElementById('empty-state');
+  if (products.length === 0) {
+    grid.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  grid.innerHTML = products.map(p => {
+    const isBundle = p.isBundle || p.type === 'bundle';
+    const img = p.images?.[0] || '';
+    const placeholder = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%23EDE8DF' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='60'%3E🖊️%3C/text%3E%3C/svg%3E`;
+    return `
+      <div class="prod-card" data-aos="fade-up">
+        ${isBundle ? '<div style="position:relative;"><div class="tag tag-bundle" style="position:absolute;top:12px;left:12px;z-index:2;">Bundle</div></div>' : ''}
+        <a href="product.html?id=${p.id}">
+          <div class="prod-card-img-wrap">
+            <img class="prod-card-img" data-src="${img}" src="${placeholder}" alt="${p.name}" loading="lazy"/>
+          </div>
+        </a>
+        <div class="prod-card-body">
+          <div class="flex flex-wrap gap-1">
+            ${isBundle ? '<span class="tag tag-bundle">Bundle</span>' : ''}
+            ${p.tags?.includes('bestseller') ? '<span class="tag tag-bestseller">⭐ Bestseller</span>' : ''}
+            ${p.tags?.includes('premium') ? '<span class="tag tag-premium">✨ Premium</span>' : ''}
+            ${p.tags?.includes('beginner') ? '<span class="tag tag-beginner">🎓 Beginner</span>' : ''}
+          </div>
+          <a href="product.html?id=${p.id}"><div class="prod-name hover:text-yellow-600 transition-colors">${p.name}</div></a>
+          <div class="text-sm text-gray-400 capitalize">${p.category || ''}</div>
+          <div class="flex items-center gap-3 flex-wrap">
+            <div class="prod-price">${rupees(p.price)}</div>
+            ${p.originalPrice ? `<div class="prod-orig">${rupees(p.originalPrice)}</div><div class="savings">Save ${rupees(p.originalPrice-p.price)}</div>` : ''}
+          </div>
+          ${p.stock && p.stock < 5 ? `<div class="stock-low">⚡ Only ${p.stock} left!</div>` : ''}
+          <div class="flex gap-2 mt-2">
+            <a href="product.html?id=${p.id}" class="btn-dark" style="flex:1;justify-content:center;padding:10px;font-size:12px;">Details</a>
+            <button onclick="Cart.add({id:'${p.id}',name:'${(p.name||'').replace(/'/g,"\\'")}',price:${p.price},image:'${img}'})" class="btn-gold" style="flex:1;justify-content:center;padding:10px;font-size:12px;">+ Cart 🛒</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+  lazyLoad();
+  if(typeof AOS!=='undefined') AOS.refreshHard();
+}
+
+function clearFilters() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('sort-select').value = 'default';
+  document.getElementById('price-range').value = 5000;
+  document.getElementById('price-display').textContent = '₹5000';
+  document.querySelectorAll('.cat-filter,.tag-filter').forEach(cb => cb.checked = false);
+  document.querySelector('[name=type-filter][value=""]').checked = true;
+  applyFilters();
+}
+
+// Lazy load helper
+function lazyLoad() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ const img=e.target; if(img.dataset.src){img.src=img.dataset.src;img.removeAttribute('data-src');} obs.unobserve(img); } });
+  },{rootMargin:'200px'});
+  document.querySelectorAll('img[data-src]').forEach(i=>obs.observe(i));
+}
+
+loadProducts();
+</script>
+</body>
+</html>

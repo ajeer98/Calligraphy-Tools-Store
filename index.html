@@ -1,796 +1,555 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calligraphy Tools Store - Smart Buys</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f5f5;
-        }
-
-        /* JioMart Specific Colors */
-        .bg-jio-blue { background-color: #161616; }
-        .text-jio-blue { color: #161616; }
-        .border-jio-blue { border-color: #161616; }
-        .bg-jio-dark-blue { background-color: #161616; }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
-
-        /* Hide scrollbar for category scroll */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Product Card Hover Effect */
-        .product-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .product-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ajeer Calligraphy Store — Premium Calligraphy Tools</title>
+  <meta name="description"
+    content="Discover premium calligraphy pens, inks, nibs and starter kits. Handpicked tools for beginners and masters. Shop now via WhatsApp." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { colors: { gold: '#C9A84C', 'gold-dark': '#A07832', cream: '#F7F4EF', 'dark-bg': '#0D0D0D', green: '#1C3D2E' }, fontFamily: { serif: ['Playfair Display', 'serif'], sans: ['Inter', 'sans-serif'] } } } }</script>
 </head>
-<body class="flex flex-col min-h-screen">
 
-    <!-- Navbar -->
-    <header class="sticky top-0 z-50">
-        <!-- Top Blue Bar -->
-        <div class="bg-jio-blue text-white shadow-md">
-            <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
-                
-                <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="lg:hidden text-2xl">
-                    <i class="fas fa-bars"></i>
-                </button>
+<body class="bg-[#F7F4EF]">
 
-                <!-- Logo -->
-                <a href="#" class="flex items-center gap-2 flex-shrink-0">
-                    <img src="image/logo.png" alt="Logo" class="w-10 h-10 bg-white rounded-full p-1">
-                    <span class="text-xl font-bold tracking-tight hidden sm:block">Calligraphy Tools Store</span>
-                </a>
-
-                <!-- Right Actions -->
-                <div class="flex items-center gap-6 text-sm font-medium">
-                    <!-- Courier Tracking -->
-                    <a href="https://www.dtdc.com/track-your-shipment/" target="_blank" class="flex items-center gap-2 cursor-pointer hover:bg-white/10 p-2 rounded">
-                        <i class="fas fa-truck"></i>
-                        <span class="hidden lg:inline">Courier Tracking</span>
-                    </a>
-
-                    <!-- Cart -->
-                    <a href="cart.html" class="flex items-center gap-2 cursor-pointer hover:bg-white/10 p-2 rounded relative">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">0</span>
-                        <span class="hidden lg:inline">Cart</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Secondary Nav (Categories) -->
-        <div class="bg-white shadow-sm border-b border-gray-200 overflow-x-auto no-scrollbar">
-            <div class="container mx-auto px-4">
-                <ul class="flex items-center gap-8 text-sm font-medium text-gray-600 whitespace-nowrap py-3">
-                    <li id="nav-All" class="text-jio-blue border-b-2 border-jio-blue pb-3 -mb-3 cursor-pointer" onclick="filterCategory('All')">All</li>
-                    <li id="nav-Calligraphy-Kit" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Calligraphy Kit')">Calligraphy Kit</li>
-                    <li id="nav-Qalam" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Qalam')">Qalam</li>
-                    <li id="nav-Ink" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Ink')">Ink</li>
-                    <li id="nav-Ink-container" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Ink container')">Ink container</li>
-                    <li id="nav-Paper" class="hover:text-jio-blue cursor-pointer" onclick="filterCategory('Paper')">Paper</li>
-                </ul>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-grow container mx-auto px-4 py-6">
-        
-        <div class="flex flex-col lg:flex-row gap-6">
-            
-            <!-- Product Section -->
-            <div class="flex-grow">
-                
-                <!-- Hero Banner for Section -->
-                <div class="bg-gradient-to-r from-blue-100 to-blue-50 rounded-xl p-6 mb-6 flex items-center justify-between shadow-sm border border-blue-200">
-                    <div>
-                        <h1 id="category-title" class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">All</h1>
-                        <p class="text-gray-600 mb-4">Minimum 33% Off on Daily Essentials. Stock up now!</p>
-                        <button class="bg-jio-blue text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition shadow">View All Offers</button>
-                    </div>
-                    <div class="hidden md:block text-6xl text-blue-300 opacity-80 pr-10">
-                        <i class="fas fa-percent"></i>
-                    </div>
-                </div>
-
-                <!-- Product Grid -->
-                <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
-                    <!-- Products will be injected here via JS -->
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-300 mt-12 text-sm">
-        <div class="container mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-                <h4 class="text-white font-bold mb-4">Contact Us</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="hover:text-white">WhatsApp us: +91 77363 48312</a></li>
-                    <li><a href="#" class="hover:text-white">Call Us: +91 77363 48312</a></li>
-                    <li><a href="#" class="hover:text-white">cs@calligraphytoolsstore.com</a></li>
-                    <li><a href="admin.html" class="hover:text-white text-gray-500"><i class="fas fa-cog mr-2"></i>Admin Panel</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">WhatsApp</h4>
-                <div class="flex gap-2">
-                    <a href="https://wa.me/917736348312" target="_blank" class="flex items-center justify-center w-full max-w-[200px] h-10 bg-green-600 rounded text-white hover:bg-green-700 transition">
-                        <i class="fab fa-whatsapp mr-2 text-lg"></i> Chat on WhatsApp
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="border-t border-gray-700 py-4 bg-gray-900">
-            <div class="container mx-auto px-4 text-center text-xs">
-                © 2025 Calligraphy Tools Store. All rights reserved.
-            </div>
-        </div>
-    </footer>
-
-    <!-- Overlay Mobile Menu -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden transition-opacity">
-        <div class="bg-white w-4/5 h-full shadow-lg transform -translate-x-full transition-transform duration-300 flex flex-col" id="mobile-menu-panel">
-            <div class="bg-jio-blue p-4 text-white flex justify-between items-center">
-                <div class="font-bold text-lg"><i class="fas fa-user-circle mr-2"></i> Welcome</div>
-                <button id="close-menu-btn" class="text-xl"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="flex-grow overflow-y-auto p-4 space-y-4">
-                <div>
-                    <h3 class="font-bold text-gray-800 mb-2">Shop by Category</h3>
-                    <ul class="space-y-3 pl-2 text-gray-600">
-                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('All'); closeMenu();">All</li>
-                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Calligraphy Kit'); closeMenu();">Calligraphy Kit</li>
-                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Qalam'); closeMenu();">Qalam</li>
-                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Ink'); closeMenu();">Ink</li>
-                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Ink container'); closeMenu();">Ink container</li>
-                        <li class="cursor-pointer py-1 hover:text-jio-blue" onclick="filterCategory('Paper'); closeMenu();">Paper</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Image Zoom Lightbox -->
-    <div id="lightbox-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[60] hidden flex items-center justify-center transition-opacity duration-300" onclick="if(event.target === this) closeLightbox()">
-        <button class="absolute top-5 right-5 text-white text-4xl hover:text-gray-300 focus:outline-none z-50" onclick="closeLightbox()">&times;</button>
-        
-        <button class="absolute left-2 md:left-8 text-white text-4xl hover:text-gray-300 focus:outline-none z-50 p-4" onclick="changeLightboxImage(-1)">
-            <i class="fas fa-chevron-left"></i>
+  <!-- ===== NAVIGATION ===== -->
+  <nav id="main-nav">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <a href="index.html" class="nav-logo flex items-center gap-2">
+        <span class="text-2xl">🖊️</span>
+        <span>Ajeer <span>Calligraphy</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link">Shop</a>
+        <a href="products.html?cat=kits" class="nav-link">Kits</a>
+        <a href="#categories" class="nav-link">Categories</a>
+        <a href="#testimonials" class="nav-link">Reviews</a>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="cart.html" class="relative text-white hover:text-yellow-400 transition-colors">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
+          <span class="cart-badge" style="display:none;"></span>
+        </a>
+        <a href="products.html" class="btn-gold hidden md:inline-flex">Shop Now</a>
+        <button id="mob-menu-btn" class="text-white md:hidden">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
         </button>
-
-        <img id="lightbox-image" src="" alt="Zoomed Product" class="max-w-[90%] max-h-[90%] object-contain select-none">
-
-        <button class="absolute right-2 md:right-8 text-white text-4xl hover:text-gray-300 focus:outline-none z-50 p-4" onclick="changeLightboxImage(1)">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-        
-        <div id="lightbox-counter" class="absolute bottom-5 text-white bg-black/50 px-3 py-1 rounded-full text-sm font-medium"></div>
+      </div>
     </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg text-sm font-medium hidden transition-opacity z-50">
-        <!-- Message injected by JS -->
+    <div id="mob-menu" class="hidden bg-black/90 backdrop-blur px-6 py-4 md:hidden">
+      <a href="products.html" class="block text-white/80 py-2 hover:text-yellow-400">Shop</a>
+      <a href="products.html?cat=kits" class="block text-white/80 py-2 hover:text-yellow-400">Kits</a>
+      <a href="cart.html" class="block text-white/80 py-2 hover:text-yellow-400">Cart</a>
     </div>
+  </nav>
 
-    <!-- Options (e.g., Size) Selection Modal -->
-    <div id="options-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-        <div class="bg-white rounded-lg p-6 w-11/12 max-w-sm shadow-xl">
-            <h3 id="options-modal-title" class="text-lg font-bold mb-4 text-gray-800">Select Options</h3>
-            <div id="options-modal-description" class="text-sm text-gray-600 mb-4 hidden whitespace-pre-line"></div>
-            <div id="options-modal-list" class="space-y-2 mb-4 max-h-60 overflow-y-auto custom-scrollbar">
-                <!-- Options will be injected here by JS -->
-            </div>
-            
-            <!-- Quantity Selector -->
-            <div id="global-quantity-div" class="flex items-center justify-between mb-6 border-t pt-4">
-                <span class="font-medium text-gray-700">Quantity:</span>
-                <div class="flex items-center border border-gray-300 rounded-lg">
-                    <button onclick="updateModalQuantity(-1)" class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-lg">-</button>
-                    <input type="number" id="modal-quantity" value="1" min="1" class="w-12 text-center border-x border-gray-300 py-1 focus:outline-none" readonly>
-                    <button onclick="updateModalQuantity(1)" class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-lg">+</button>
-                </div>
-            </div>
-
-            <div class="flex gap-3">
-                <button onclick="closeOptionsModal()" class="flex-1 border border-gray-300 py-2 rounded-full text-gray-600 hover:bg-gray-50 font-medium transition">Cancel</button>
-                <button onclick="confirmSelectionAndAddToCart()" class="flex-1 bg-jio-blue text-white py-2 rounded-full hover:bg-blue-600 font-medium transition shadow-md">Add to Cart</button>
-            </div>
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="floating-el"
+      style="width:300px;height:300px;background:radial-gradient(circle,#C9A84C,transparent);top:-100px;right:-80px;border-radius:50%;">
+    </div>
+    <div class="floating-el"
+      style="width:200px;height:200px;background:radial-gradient(circle,#1C3D2E,transparent);bottom:-60px;left:-40px;border-radius:50%;animation-delay:3s;">
+    </div>
+    <div class="max-w-7xl mx-auto px-6 py-32 grid md:grid-cols-2 gap-16 items-center w-full relative z-10">
+      <div>
+        <div class="hero-badge fade-up">
+          <span>✦</span> Premium Calligraphy Tools
         </div>
-    </div>
-
-    <!-- Generic Kit Contents Modal -->
-    <div id="kit-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-        <div class="bg-white rounded-lg p-6 w-11/12 max-w-sm shadow-xl">
-            <h3 id="kit-modal-title" class="text-lg font-bold mb-4 text-gray-800">Kit Includes:</h3>
-            <ul id="kit-modal-list" class="space-y-3 mb-6 text-gray-600">
-                <!-- Kit contents will be injected here by JS -->
-            </ul>
-            <div class="flex gap-3">
-                <button onclick="closeKitModal()" class="flex-1 border border-gray-300 py-2 rounded-full text-gray-600 hover:bg-gray-50 font-medium transition">Cancel</button>
-                <button onclick="confirmKitAddToCart()" class="flex-1 bg-jio-blue text-white py-2 rounded-full hover:bg-blue-600 font-medium transition shadow-md">Add Kit to Cart</button>
-            </div>
+        <h1 class="hero-title fade-up" style="animation-delay:.1s">
+          Elevate Your<br><span class="italic-gold">Calligraphy</span>
+        </h1>
+        <p class="hero-sub fade-up" style="animation-delay:.2s">Handpicked pens, inks & nibs for every level. 2 stunning
+          font styles — Nastaliq & Naskh. Beginners to masters welcome.</p>
+        <div class="flex flex-wrap gap-4 fade-up" style="animation-delay:.3s">
+          <a href="products.html" class="btn-gold">Shop Collection ✦</a>
+          <a href="#categories" class="btn-outline">View Categories</a>
         </div>
+        <div class="flex gap-8 mt-10 fade-up" style="animation-delay:.4s">
+          <div>
+            <p class="font-bold text-[var(--gold)] text-xl font-playfair">500+</p>
+            <p class="text-white/50 text-xs tracking-widest uppercase">Happy Students</p>
+          </div>
+          <div class="w-px bg-white/10"></div>
+          <div>
+            <p class="font-bold text-[var(--gold)] text-xl font-playfair">2</p>
+            <p class="text-white/50 text-xs tracking-widest uppercase">Font Styles</p>
+          </div>
+          <div class="w-px bg-white/10"></div>
+          <div>
+            <p class="font-bold text-[var(--gold)] text-xl font-playfair">50+</p>
+            <p class="text-white/50 text-xs tracking-widest uppercase">Products</p>
+          </div>
+        </div>
+      </div>
+      <div class="hidden md:flex flex-col gap-4 relative">
+        <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-8 text-center">
+          <div class="font-preview-script text-5xl mb-4"
+            style="color:var(--gold);font-family:'Playfair Display',serif;font-style:italic;">بسم الله</div>
+          <p class="text-white/50 text-xs tracking-widest uppercase">Naskh Style</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white/5 backdrop-blur border border-[var(--gold)]/20 rounded-2xl p-6 text-center">
+            <div class="text-3xl mb-2">🖊️</div>
+            <div class="text-white text-sm font-semibold">Premium Nibs</div>
+            <div class="text-white/40 text-xs mt-1">15+ Types</div>
+          </div>
+          <div class="bg-white/5 backdrop-blur border border-[var(--gold)]/20 rounded-2xl p-6 text-center">
+            <div class="text-3xl mb-2">🎨</div>
+            <div class="text-white text-sm font-semibold">Luxury Inks</div>
+            <div class="text-white/40 text-xs mt-1">20+ Colors</div>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <script>
-        const STORAGE_KEY = 'calligraphy_products_v4';
+  <!-- ===== STATS ===== -->
+  <div class="stats-bar">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div data-aos="fade-up">
+        <div class="stat-num">500+</div>
+        <div class="stat-lbl">Happy Students</div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-num">50+</div>
+        <div class="stat-lbl">Products</div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-num">2</div>
+        <div class="stat-lbl">Font Styles</div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="300">
+        <div class="stat-num">5★</div>
+        <div class="stat-lbl">Avg. Rating</div>
+      </div>
+    </div>
+  </div>
 
-        // State
-        let products = [];
-        let selectedProductId = null;
+  <!-- ===== FEATURED PRODUCTS ===== -->
+  <section id="featured">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="lbl">Our Collection</span>
+        <h2 class="sec-title">Featured Products</h2>
+        <div class="divider center"></div>
+      </div>
+      <div id="featured-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Populated by JS -->
+        <div class="prod-card">
+          <div class="skeleton" style="height:240px;border-radius:12px 12px 0 0;"></div>
+          <div class="prod-card-body">
+            <div class="skeleton" style="height:20px;"></div>
+            <div class="skeleton" style="height:14px;margin-top:8px;width:60%;"></div>
+          </div>
+        </div>
+        <div class="prod-card">
+          <div class="skeleton" style="height:240px;border-radius:12px 12px 0 0;"></div>
+          <div class="prod-card-body">
+            <div class="skeleton" style="height:20px;"></div>
+            <div class="skeleton" style="height:14px;margin-top:8px;width:60%;"></div>
+          </div>
+        </div>
+        <div class="prod-card">
+          <div class="skeleton" style="height:240px;border-radius:12px 12px 0 0;"></div>
+          <div class="prod-card-body">
+            <div class="skeleton" style="height:20px;"></div>
+            <div class="skeleton" style="height:14px;margin-top:8px;width:60%;"></div>
+          </div>
+        </div>
+        <div class="prod-card">
+          <div class="skeleton" style="height:240px;border-radius:12px 12px 0 0;"></div>
+          <div class="prod-card-body">
+            <div class="skeleton" style="height:20px;"></div>
+            <div class="skeleton" style="height:14px;margin-top:8px;width:60%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-10" data-aos="fade-up"><a href="products.html" class="btn-dark">View All Products →</a>
+      </div>
+    </div>
+  </section>
 
-        // Render Products
-        const productGrid = document.getElementById('product-grid');
-        function renderProducts(filter = 'All') {
-            if (products.length === 0) {
-                productGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">Loading products...</p>';
-                return;
-            }
+  <!-- ===== FONT STYLES SECTION ===== -->
+  <section style="background:var(--dark);">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="lbl">Exclusive</span>
+        <h2 class="sec-title light">2 Font Styles Included</h2>
+        <div class="divider center"></div>
+        <p class="text-white/60 max-w-lg mx-auto">Our premium bundle kits come with tools optimized for two classic
+          Arabic calligraphy styles.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="font-preview" data-aos="fade-right">
+          <div style="position:relative;z-index:1;">
+            <div class="tag tag-premium mb-4" style="margin:0 auto 16px;width:fit-content;">Style 01</div>
+            <div class="font-preview-script" style="font-size:clamp(36px,5vw,56px);">النسخ</div>
+            <div class="font-preview-label">Naskh — Classical & Clear</div>
+            <p class="text-white/40 text-sm mt-4">Perfect for beginners. Round strokes, clear letterforms. Used in Quran
+              and books.</p>
+          </div>
+        </div>
+        <div class="font-preview" data-aos="fade-left"
+          style="border-color:rgba(28,61,46,.5);background:linear-gradient(135deg,#0D0D0D,#1C3D2E20);">
+          <div style="position:relative;z-index:1;">
+            <div class="tag tag-bundle mb-4"
+              style="margin:0 auto 16px;width:fit-content;background:rgba(28,61,46,.3);color:#4ade80;">Style 02</div>
+            <div class="font-preview-script" style="font-size:clamp(36px,5vw,56px);">النستعليق</div>
+            <div class="font-preview-label">Nastaliq — Flowing & Elegant</div>
+            <p class="text-white/40 text-sm mt-4">Advanced style. Diagonal flow, artistic curves. Famous in Persian
+              poetry.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-10 text-center" data-aos="fade-up">
+        <a href="products.html?cat=kits" class="btn-gold">Get Bundle Kit with Both Styles ✦</a>
+      </div>
+    </div>
+  </section>
 
-            let displayProducts = filter === 'All' 
-                ? products 
-                : products.filter(p => p.tag === filter || p.title.includes(filter));
+  <!-- ===== STARTER KIT HIGHLIGHT ===== -->
+  <section>
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="bundle-box relative" data-aos="fade-up">
+        <div class="grid md:grid-cols-2 gap-8 items-center" style="position:relative;z-index:1;">
+          <div>
+            <div class="tag tag-premium mb-4">⭐ Best Seller</div>
+            <h2 class="sec-title light" style="color:#fff;font-size:clamp(28px,4vw,44px);">Starter Kit for Beginners
+            </h2>
+            <p class="text-white/60 mt-4 mb-6">Everything you need to start your calligraphy journey. Includes 2 font
+              style guides, premium nibs, ink, practice sheets, and a carrying case.</p>
+            <div class="flex items-center gap-4 mb-8">
+              <div class="prod-price" style="color:var(--gold);font-size:28px;">₹999</div>
+              <div class="prod-orig" style="color:rgba(255,255,255,.4);">₹1,499</div>
+              <div class="savings">Save ₹500</div>
+            </div>
+            <a href="products.html?type=bundle&highlight=starter" class="btn-gold">Shop Starter Kit ✦</a>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bundle-item"
+              style="border-color:rgba(201,168,76,.1);background:rgba(255,255,255,.03);border-radius:12px;padding:14px;">
+              <span class="text-2xl">🖊️</span>
+              <div>
+                <div class="text-white text-sm font-semibold">Calligraphy Pen</div>
+                <div class="text-white/40 text-xs">2 sizes included</div>
+              </div>
+            </div>
+            <div class="bundle-item"
+              style="border-color:rgba(201,168,76,.1);background:rgba(255,255,255,.03);border-radius:12px;padding:14px;">
+              <span class="text-2xl">🎨</span>
+              <div>
+                <div class="text-white text-sm font-semibold">Premium Ink</div>
+                <div class="text-white/40 text-xs">2 bottles, 30ml each</div>
+              </div>
+            </div>
+            <div class="bundle-item"
+              style="border-color:rgba(201,168,76,.1);background:rgba(255,255,255,.03);border-radius:12px;padding:14px;">
+              <span class="text-2xl">📄</span>
+              <div>
+                <div class="text-white text-sm font-semibold">Practice Sheets</div>
+                <div class="text-white/40 text-xs">50 ruled sheets</div>
+              </div>
+            </div>
+            <div class="bundle-item"
+              style="border-color:rgba(201,168,76,.1);background:rgba(255,255,255,.03);border-radius:12px;padding:14px;">
+              <span class="text-2xl">📘</span>
+              <div>
+                <div class="text-white text-sm font-semibold">Font Guides</div>
+                <div class="text-white/40 text-xs">Naskh & Nastaliq</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            productGrid.innerHTML = displayProducts.map(product => `
-                <div class="product-card bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col h-full relative">
+  <!-- ===== CATEGORIES ===== -->
+  <section id="categories" style="background:var(--cream-2);">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="lbl">Browse By</span>
+        <h2 class="sec-title">Shop Categories</h2>
+        <div class="divider center"></div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <a href="products.html?cat=pens" class="cat-card" data-aos="fade-up">
+          <div
+            style="width:100%;height:100%;background:linear-gradient(135deg,#1a0a00,#3d1f00);display:flex;align-items:center;justify-content:center;font-size:80px;">
+            🖊️</div>
+          <div class="cat-card-info">
+            <div class="cat-card-name">Pens</div>
+            <div class="cat-card-count">Dip & Reed Pens</div>
+            <div class="cat-arrow">Shop Now →</div>
+          </div>
+        </a>
+        <a href="products.html?cat=inks" class="cat-card" data-aos="fade-up" data-aos-delay="100">
+          <div
+            style="width:100%;height:100%;background:linear-gradient(135deg,#001a0a,#003d1f);display:flex;align-items:center;justify-content:center;font-size:80px;">
+            🎨</div>
+          <div class="cat-card-info">
+            <div class="cat-card-name">Inks</div>
+            <div class="cat-card-count">Premium Calligraphy Inks</div>
+            <div class="cat-arrow">Shop Now →</div>
+          </div>
+        </a>
+        <a href="products.html?cat=nibs" class="cat-card" data-aos="fade-up" data-aos-delay="200">
+          <div
+            style="width:100%;height:100%;background:linear-gradient(135deg,#0a0a1a,#1f1f3d);display:flex;align-items:center;justify-content:center;font-size:80px;">
+            ✒️</div>
+          <div class="cat-card-info">
+            <div class="cat-card-name">Nibs</div>
+            <div class="cat-card-count">Reed & Metal Nibs</div>
+            <div class="cat-arrow">Shop Now →</div>
+          </div>
+        </a>
+        <a href="products.html?cat=kits" class="cat-card" data-aos="fade-up" data-aos-delay="300">
+          <div
+            style="width:100%;height:100%;background:linear-gradient(135deg,#1a1000,#3d2d00);display:flex;align-items:center;justify-content:center;font-size:80px;">
+            🎁</div>
+          <div class="cat-card-info">
+            <div class="cat-card-name">Kits & Bundles</div>
+            <div class="cat-card-count">Complete Starter Sets</div>
+            <div class="cat-arrow">Shop Now →</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
 
-                    <!-- Image -->
-                    <div class="p-4 flex items-center justify-center h-48 bg-white cursor-zoom-in" onclick="openLightbox(${product.id})">
-                        <img src="${product.image || 'https://via.placeholder.com/300?text=No+Image'}" alt="${product.title}" class="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300">
-                    </div>
+  <!-- ===== WHY CHOOSE US ===== -->
+  <section>
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="lbl">Why Ajeer</span>
+        <h2 class="sec-title">Crafted for Excellence</h2>
+        <div class="divider center"></div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="why-card" data-aos="fade-up">
+          <div class="why-icon">✨</div>
+          <h3 class="font-playfair text-lg font-bold mb-2">Premium Quality</h3>
+          <p class="text-sm text-gray-500">Every tool is hand-selected by master calligraphers for perfect performance.
+          </p>
+        </div>
+        <div class="why-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="why-icon">📲</div>
+          <h3 class="font-playfair text-lg font-bold mb-2">Easy WhatsApp Order</h3>
+          <p class="text-sm text-gray-500">No complicated checkout. Just add to cart and send your order via WhatsApp.
+          </p>
+        </div>
+        <div class="why-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="why-icon">🎓</div>
+          <h3 class="font-playfair text-lg font-bold mb-2">Beginner Friendly</h3>
+          <p class="text-sm text-gray-500">Our starter kits come with guides and practice sheets for both font styles.
+          </p>
+        </div>
+        <div class="why-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="why-icon">🚚</div>
+          <h3 class="font-playfair text-lg font-bold mb-2">Fast Delivery</h3>
+          <p class="text-sm text-gray-500">Orders shipped within 24 hours. Carefully packed to protect every tool.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-                    <!-- Content -->
-                    <div class="p-4 flex flex-col flex-grow">
-                        <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 leading-snug" title="${product.title}">
-                            ${product.title}
-                        </h3>
-                        <p class="text-xs text-blue-600 bg-blue-50 inline-block px-2 py-1 rounded mb-2 font-medium">${product.tag}</p>
-                        
-                        <div class="mt-auto">
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="text-lg font-bold text-gray-900">₹${product.price}</span>
-                                <span class="text-xs text-gray-400 line-through">₹${product.mrp}</span>
-                                <span class="text-xs text-green-600 font-semibold hidden sm:inline">Save ₹${product.mrp - product.price}</span>
-                            </div>
-                            
-                            <button onclick="addToCart(${product.id}, this)" class="w-full bg-jio-blue text-white py-2 rounded-full font-bold text-sm hover:bg-blue-600 transition flex items-center justify-center gap-2 group">
-                                <span>Add to Cart</span>
-                                <i class="fas fa-plus-circle group-hover:rotate-90 transition-transform"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+  <!-- ===== TESTIMONIALS ===== -->
+  <section id="testimonials" style="background:var(--dark);">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="lbl">Reviews</span>
+        <h2 class="sec-title light">What Our Students Say</h2>
+        <div class="divider center"></div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="testi-card" data-aos="fade-up"
+          style="background:rgba(255,255,255,.05);border-color:rgba(201,168,76,.2);">
+          <div class="stars mb-3">★★★★★</div>
+          <p class="text-white/70 text-sm leading-relaxed mb-6">"The starter kit is absolutely perfect! The nibs glide
+            smoothly and the ink quality is exceptional. My Naskh has improved so much in just a week!"</p>
+          <div class="flex items-center gap-3">
+            <div
+              style="width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--dark);">
+              A</div>
+            <div>
+              <div class="text-white font-semibold text-sm">Ahmad Karimi</div>
+              <div class="text-white/40 text-xs">Calligraphy Student</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card" data-aos="fade-up" data-aos-delay="100"
+          style="background:rgba(255,255,255,.05);border-color:rgba(201,168,76,.2);">
+          <div class="stars mb-3">★★★★★</div>
+          <p class="text-white/70 text-sm leading-relaxed mb-6">"Ordered via WhatsApp and received my kit the next day!
+            The Nastaliq guide included in the premium kit is worth every rupee. Highly recommended!"</p>
+          <div class="flex items-center gap-3">
+            <div
+              style="width:40px;height:40px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;">
+              F</div>
+            <div>
+              <div class="text-white font-semibold text-sm">Fatima Noor</div>
+              <div class="text-white/40 text-xs">Art Teacher</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card" data-aos="fade-up" data-aos-delay="200"
+          style="background:rgba(255,255,255,.05);border-color:rgba(201,168,76,.2);">
+          <div class="stars mb-3">★★★★★</div>
+          <p class="text-white/70 text-sm leading-relaxed mb-6">"Best calligraphy tools I've found online. The WhatsApp
+            ordering is so convenient. Aziz ji responds instantly and packing is excellent!"</p>
+          <div class="flex items-center gap-3">
+            <div
+              style="width:40px;height:40px;border-radius:50%;background:#1a3d2e;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);">
+              M</div>
+            <div>
+              <div class="text-white font-semibold text-sm">Mohammed Hassan</div>
+              <div class="text-white/40 text-xs">Online Student</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section style="background:linear-gradient(135deg,var(--gold-dark),var(--gold));">
+    <div class="max-w-3xl mx-auto px-6 text-center" data-aos="zoom-in">
+      <h2 class="font-playfair text-white font-bold mb-4" style="font-size:clamp(28px,4vw,44px);">Ready to Start Your
+        Calligraphy Journey?</h2>
+      <p class="text-white/80 mb-8">Browse our full collection and order easily on WhatsApp. No complicated checkout!
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="products.html" class="btn-dark">Browse Collection</a>
+        <a id="hero-wa-btn" href="#" class="btn-wa">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          </svg>
+          Order on WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-10">
+        <div>
+          <div class="footer-logo mb-4">Ajeer <span>Calligraphy</span></div>
+          <p class="text-sm text-white/40 leading-relaxed">Premium calligraphy tools for every artist. Handpicked,
+            tested, and delivered with love.</p>
+          <div class="mt-6 flex gap-4">
+            <a id="footer-wa" href="#" class="btn-wa" style="padding:10px 18px;font-size:12px;">WhatsApp Us</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Quick Links</div>
+          <a href="index.html" class="footer-link">Home</a>
+          <a href="products.html" class="footer-link">All Products</a>
+          <a href="products.html?cat=kits" class="footer-link">Starter Kits</a>
+          <a href="cart.html" class="footer-link">My Cart</a>
+        </div>
+        <div>
+          <div class="footer-title">Categories</div>
+          <a href="products.html?cat=pens" class="footer-link">Calligraphy Pens</a>
+          <a href="products.html?cat=inks" class="footer-link">Premium Inks</a>
+          <a href="products.html?cat=nibs" class="footer-link">Nibs & Tips</a>
+          <a href="products.html?cat=kits" class="footer-link">Bundle Kits</a>
+        </div>
+        <div>
+          <div class="footer-title">Contact</div>
+          <p class="footer-link">📲 Order via WhatsApp</p>
+          <p class="footer-link">🚚 Fast Delivery</p>
+          <p class="footer-link">📦 Secure Packaging</p>
+          <a href="admin.html" class="footer-link text-white/20 text-xs mt-4 block">Admin Panel</a>
+        </div>
+      </div>
+      <hr class="footer-hr" />
+      <p class="footer-copy">© 2024 Ajeer Calligraphy Store. All rights reserved. Designed with ❤️ for calligraphers.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Firebase + Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script>
+      (async function () {
+        // Set WhatsApp links
+        const s = await getSettings();
+        const phone = (s.whatsappNumber || '919999999999').replace(/\D/g, '');
+        const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent('Hello! I would like to know more about your calligraphy products.')}`;
+        document.getElementById('hero-wa-btn').href = waUrl;
+        document.getElementById('footer-wa').href = waUrl;
+
+        // Load featured products
+        try {
+          const snap = await db.collection('products').where('featured', '==', true).limit(4).get();
+          let products = [];
+          snap.forEach(d => products.push({ id: d.id, ...d.data() }));
+          if (products.length === 0) {
+            // Also try to get any first 4 products
+            const all = await db.collection('products').limit(4).get();
+            all.forEach(d => products.push({ id: d.id, ...d.data() }));
+          }
+          if (products.length > 0) {
+            document.getElementById('featured-grid').innerHTML = products.map(p => `
+        <div class="prod-card" data-aos="fade-up">
+          <div class="prod-card-img-wrap">
+            <img class="prod-card-img" data-src="${p.images?.[0] || ''}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%23EDE8DF' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='60'%3E🖊️%3C/text%3E%3C/svg%3E" alt="${p.name}" loading="lazy"/>
+          </div>
+          <div class="prod-card-body">
+            <div class="flex flex-wrap gap-1">${renderTags(p)}</div>
+            <div class="prod-name">${p.name}</div>
+            <div class="flex items-center gap-2">
+              <div class="prod-price">${rupees(p.price)}</div>
+              ${p.originalPrice ? `<div class="prod-orig">${rupees(p.originalPrice)}</div>` : ''}
+            </div>
+            ${p.stock && p.stock < 5 ? `<div class="stock-low">⚡ Only ${p.stock} left!</div>` : ''}
+            <div class="flex gap-2 mt-2">
+              <a href="product.html?id=${p.id}" class="btn-dark" style="flex:1;justify-content:center;padding:10px;">View</a>
+              <button onclick="Cart.add({id:'${p.id}',name:'${p.name.replace(/'/g, "\\'")}',price:${p.price},image:'${p.images?.[0] || ''}'})" class="btn-gold" style="flex:1;justify-content:center;padding:10px;">Add 🛒</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+            lazyLoad();
+          }
+        } catch (e) { console.error(e); }
+
+        function renderTags(p) {
+          let tags = '';
+          if (p.isBundle || p.type === 'bundle') tags += '<span class="tag tag-bundle">Bundle</span>';
+          if (p.tags?.includes('bestseller')) tags += '<span class="tag tag-bestseller">⭐ Bestseller</span>';
+          if (p.tags?.includes('premium')) tags += '<span class="tag tag-premium">Premium</span>';
+          if (p.tags?.includes('beginner')) tags += '<span class="tag tag-beginner">Beginner</span>';
+          return tags;
         }
-
-        // Filter Category Logic
-        function filterCategory(category) {
-            // Update UI classes
-            const navContainer = document.querySelector('.bg-white.shadow-sm ul');
-            const navItems = navContainer.children;
-            for (let item of navItems) {
-                item.className = "hover:text-jio-blue cursor-pointer";
-            }
-
-            const safeCategory = category.replace(' ', '-');
-            const activeItem = document.getElementById(`nav-${safeCategory}`);
-            if (activeItem) {
-                activeItem.className = "text-jio-blue border-b-2 border-jio-blue pb-3 -mb-3 cursor-pointer";
-            }
-            
-            document.getElementById('category-title').innerText = category === 'All' ? 'All' : category;
-            renderProducts(category);
-        }
-
-        // Add to Cart Logic
-        function addToCart(id, btn) {
-            const product = products.find(p => p.id === id);
-            if (!product) return;
-
-            selectedProductId = id; // Set global reference to the product being processed
-            
-            // Determine options (Custom from Admin or Default Fallback)
-            let options = product.options || [];
-            if (options.length === 0) {
-                if (product.tag === 'Qalam') {
-                    options = ['1mm', '1.5mm', '2mm', '2.5mm', '3mm', '3.5mm', '4mm', '4.5mm', '5mm', '6mm', 'Mix Set'];
-                } else if (product.tag === 'Ink') {
-                    options = ['Black', 'Blue', 'Red', 'Green', 'Yellow', 'White', 'Gold', 'Silver', 'Copper', 'Purple', 'Pink'];
-                }
-            }
-
-            // Category & Modal Logic
-            if (product.tag === 'Qalam') {
-                openSelectionModal(product, 'Select Qalam Size', options);
-            } else if (product.tag === 'Ink') {
-                openSelectionModal(product, 'Select Ink Color', options);
-            } else if (product.tag === 'Paper') {
-                openSelectionModal(product, options.length > 0 ? 'Select Option' : 'Select Quantity', options);
-            } else if (product.tag === 'Ink container') {
-                openSelectionModal(product, options.length > 0 ? 'Select Option' : 'Select Quantity', options);
-            } else if (product.tag === 'Calligraphy Kit') {
-                openSelectionModal(product, 'Select Quantity', options);
-            } else if (product.modalType === 'kit') {
-                openKitModal(product);
-            } else if (product.modalType === 'size') {
-                // Legacy support
-                const options = product.modalData.options.map(o => o.text);
-                openSelectionModal(product, product.modalData.title, options);
-            } else {
-                processAddToCart(product);
-                selectedProductId = null; // Clear after use
-            }
-        }
-
-        // --- Generic Modal Functions ---
-
-        function openKitModal(product) {
-            const modalList = document.getElementById('kit-modal-list');
-            modalList.innerHTML = product.modalData.items.map(item => `
-                <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> ${item}</li>
-            `).join('');
-            document.getElementById('kit-modal').classList.remove('hidden');
-        }
-
-        function closeKitModal() {
-            document.getElementById('kit-modal').classList.add('hidden');
-            selectedProductId = null;
-        }
-
-        function confirmKitAddToCart() {
-            if (!selectedProductId) return;
-            const product = products.find(p => p.id === selectedProductId);
-            processAddToCart(product, 'Kit added to cart!');
-            closeKitModal();
-        }
-
-        function openSelectionModal(product, title, options) {
-            document.getElementById('options-modal-title').innerText = title;
-            const modalList = document.getElementById('options-modal-list');
-            const globalQtyDiv = document.getElementById('global-quantity-div');
-            const descDiv = document.getElementById('options-modal-description');
-            
-            if (product.description) {
-                descDiv.innerText = product.description;
-                descDiv.classList.remove('hidden');
-            } else {
-                descDiv.innerText = '';
-                descDiv.classList.add('hidden');
-            }
-            
-            if (options && options.length > 0) {
-                modalList.classList.remove('hidden');
-                if(globalQtyDiv) globalQtyDiv.classList.add('hidden');
-                
-                modalList.innerHTML = options.map(opt => `
-                    <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded border border-gray-100 mb-2 transition-colors">
-                        <span class="text-gray-700 font-medium">${opt}</span>
-                        <div class="flex items-center border border-gray-300 rounded-lg bg-white h-8">
-                            <button onclick="updateOptionQuantity(this, -1)" class="px-2 text-gray-600 hover:bg-gray-100 rounded-l-lg h-full flex items-center">-</button>
-                            <input type="number" data-option="${opt}" value="0" min="0" class="w-10 text-center border-x border-gray-300 h-full focus:outline-none text-sm option-quantity" readonly>
-                            <button onclick="updateOptionQuantity(this, 1)" class="px-2 text-gray-600 hover:bg-gray-100 rounded-r-lg h-full flex items-center">+</button>
-                        </div>
-                    </div>
-                `).join('');
-            } else {
-                modalList.classList.add('hidden');
-                modalList.innerHTML = '';
-                if(globalQtyDiv) globalQtyDiv.classList.remove('hidden');
-            }
-
-            document.getElementById('modal-quantity').value = 1;
-            document.getElementById('options-modal').classList.remove('hidden');
-        }
-
-        function closeOptionsModal() {
-            document.getElementById('options-modal').classList.add('hidden');
-            selectedProductId = null;
-        }
-
-        function updateModalQuantity(change) {
-            const input = document.getElementById('modal-quantity');
-            let val = parseInt(input.value) + change;
-            if (val < 1) val = 1;
-            input.value = val;
-        }
-
-        function updateOptionQuantity(btn, change) {
-            const input = btn.parentElement.querySelector('input');
-            let val = parseInt(input.value) + change;
-            if (val < 0) val = 0;
-            input.value = val;
-            
-            // Visual feedback
-            const row = btn.closest('.justify-between');
-            if (val > 0) {
-                row.classList.add('bg-blue-50', 'border-blue-200');
-                row.classList.remove('border-gray-100');
-            } else {
-                row.classList.remove('bg-blue-50', 'border-blue-200');
-                row.classList.add('border-gray-100');
-            }
-        }
-
-        function confirmSelectionAndAddToCart() {
-            if (!selectedProductId) return;
-            
-            const product = products.find(p => p.id === selectedProductId);
-            const optionInputs = document.querySelectorAll('input.option-quantity');
-            const hasOptions = optionInputs.length > 0;
-            
-            if (hasOptions) {
-                let addedCount = 0;
-                optionInputs.forEach(input => {
-                    const qty = parseInt(input.value);
-                    if (qty > 0) {
-                        const variant = input.dataset.option;
-                        const productWithOption = {
-                            ...product,
-                            title: `${product.title} - ${variant}`,
-                            selectedSize: variant
-                        };
-                        _addOrUpdateCart(productWithOption, qty);
-                        addedCount += qty;
-                    }
-                });
-
-                if (addedCount === 0) {
-                    alert("Please select at least one item.");
-                    return;
-                }
-                // showToast(`${addedCount} item(s) added to cart!`);
-            } else {
-                const quantity = parseInt(document.getElementById('modal-quantity').value) || 1;
-                _addOrUpdateCart(product, quantity);
-                // showToast('Item added to cart!');
-            }
-            
-            updateCartCount();
-
-            closeOptionsModal();
-            window.location.href = 'cart.html';
-        }
-
-        // Toast notification
-        let toastTimeout;
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.innerText = message;
-            toast.classList.remove('hidden');
-            
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
-
-        // --- Core Cart & UI Functions (largely unchanged) ---
-        function _addOrUpdateCart(product, qty = 1) {
-            let cart = JSON.parse(localStorage.getItem('calligraphy_cart')) || [];
-            // Check for existing item by ID and selectedSize.
-            // Treat undefined/null selectedSize as a match for other items without a size.
-            const existingItem = cart.find(item => item.id === product.id && (item.selectedSize || null) === (product.selectedSize || null));
-            
-            if (existingItem) {
-                existingItem.quantity += qty;
-            } else {
-                cart.push({ ...product, quantity: qty });
-            }
-            
-            localStorage.setItem('calligraphy_cart', JSON.stringify(cart));
-        }
-
-        function processAddToCart(product, toastMessage = 'Item added to cart!') {
-            _addOrUpdateCart(product, 1);
-            updateCartCount();
-            // showToast(toastMessage);
-            window.location.href = 'cart.html';
-        }
-
-        function updateCartCount() {
-            let cart = JSON.parse(localStorage.getItem('calligraphy_cart')) || [];
-            const count = cart.reduce((acc, item) => acc + item.quantity, 0);
-            document.getElementById('cart-count').innerText = count;
-        }
-
-        // Mobile Menu Logic
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const closeMenuBtn = document.getElementById('close-menu-btn');
-        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-        const mobileMenuPanel = document.getElementById('mobile-menu-panel');
-
-        function openMenu() {
-            mobileMenuOverlay.classList.remove('hidden');
-            // Small delay to allow display:block to apply before transform
-            setTimeout(() => {
-                mobileMenuPanel.classList.remove('-translate-x-full');
-            }, 10);
-        }
-
-        function closeMenu() {
-            mobileMenuPanel.classList.add('-translate-x-full');
-            setTimeout(() => {
-                mobileMenuOverlay.classList.add('hidden');
-            }, 300);
-        }
-
-        mobileMenuBtn.addEventListener('click', openMenu);
-        closeMenuBtn.addEventListener('click', closeMenu);
-        mobileMenuOverlay.addEventListener('click', (e) => {
-            if (e.target === mobileMenuOverlay) closeMenu();
-        });
-
-        // Lightbox Functions
-        let currentLightboxProductId = null;
-        let currentLightboxImageIndex = 0;
-
-        function openLightbox(productId) {
-            currentLightboxProductId = productId;
-            currentLightboxImageIndex = 0;
-            updateLightboxImage();
-            document.getElementById('lightbox-modal').classList.remove('hidden');
-        }
-
-        function updateLightboxImage() {
-            const product = products.find(p => p.id === currentLightboxProductId);
-            const images = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
-            
-            if (images.length > 0) {
-                document.getElementById('lightbox-image').src = images[currentLightboxImageIndex];
-                document.getElementById('lightbox-counter').innerText = `${currentLightboxImageIndex + 1} / ${images.length}`;
-            }
-        }
-
-        function changeLightboxImage(direction) {
-            const product = products.find(p => p.id === currentLightboxProductId);
-            const images = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
-            if (images.length > 0) {
-                currentLightboxImageIndex = (currentLightboxImageIndex + direction + images.length) % images.length;
-                updateLightboxImage();
-            }
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox-modal').classList.add('hidden');
-        }
-
-        async function initializeApp() {
-            // Check Local Storage first to preserve Admin Panel edits
-            const storedProducts = JSON.parse(localStorage.getItem(STORAGE_KEY));
-
-            if (storedProducts && storedProducts.length > 0) {
-                products = storedProducts;
-
-                // Check and add missing new products (ID 7, 8, 9)
-                const newItems = [
-                    {
-                            id: 1,
-                            title: "Bamboo Qalam Set (7 Pens)",
-                            tag: "Qalam",
-                            price: 450,
-                            mrp: 600,
-                            image: "https://via.placeholder.com/400?text=Bamboo+Qalam",
-                            options: ['Mix Set']
-                        },
-                        {
-                            id: 2,
-                            title: "Calligraphy Ink - Black 30ml",
-                            tag: "Ink",
-                            price: 120,
-                            mrp: 150,
-                            image: "https://via.placeholder.com/400?text=Black+Ink",
-                            options: ['Black']
-                        },
-                        {
-                            id: 3,
-                            title: "Glossy Art Paper A4",
-                            tag: "Paper",
-                            price: 250,
-                            mrp: 350,
-                            image: "https://via.placeholder.com/400?text=Art+Paper",
-                            options: []
-                        },
-                        {
-                            id: 4,
-                            title: "Glass Inkwell Container",
-                            tag: "Ink container",
-                            price: 80,
-                            mrp: 120,
-                            image: "https://via.placeholder.com/400?text=Inkwell",
-                            options: []
-                        },
-                        {
-                            id: 5,
-                            title: "Beginner Calligraphy Kit",
-                            tag: "Calligraphy Kit",
-                            price: 999,
-                            mrp: 1499,
-                            image: "https://via.placeholder.com/400?text=Starter+Kit",
-                            options: [],
-                            description: "Complete set for beginners."
-                        },
-                        {
-                            id: 6,
-                            title: "Handmade Teak Qalam",
-                            tag: "Qalam",
-                            price: 300,
-                            mrp: 450,
-                            image: "https://via.placeholder.com/400?text=Teak+Qalam",
-                            options: ['3mm', '5mm']
-                        },
-                        {
-                            id: 7,
-                            title: "Copperplate Oblique Holder",
-                            tag: "Qalam",
-                            price: 550,
-                            mrp: 750,
-                            image: "https://via.placeholder.com/400?text=Oblique+Holder",
-                            options: ['Standard']
-                        },
-                        {
-                            id: 8,
-                            title: "Premium Gold Calligraphy Ink",
-                            tag: "Ink",
-                            price: 199,
-                            mrp: 299,
-                            image: "https://via.placeholder.com/400?text=Gold+Ink",
-                            options: ['Gold']
-                        },
-                        {
-                            id: 9,
-                            title: "Calligraphy Practice Pad (A4)",
-                            tag: "Paper",
-                            price: 150,
-                            mrp: 200,
-                            image: "https://via.placeholder.com/400?text=Practice+Pad",
-                            options: ['Grid', 'Lined', 'Blank']
-                        }
-                ];
-                let updated = false;
-                newItems.forEach(item => {
-                    if (!products.find(p => p.id === item.id)) {
-                        products.push(item);
-                        updated = true;
-                    }
-                });
-                if (updated) localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-            } else {
-                try {
-                    const response = await fetch('products.json');
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    products = await response.json();
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-                } catch (error) {
-                    console.warn("Fetching from products.json failed:", error);
-                    // Sample products to populate the grid
-                    products = [
-                        {
-                            id: 1,
-                            title: "Bamboo Qalam Set (7 Pens)",
-                            tag: "Qalam",
-                            price: 450,
-                            mrp: 600,
-                            image: "https://via.placeholder.com/400?text=Bamboo+Qalam",
-                            options: ['Mix Set']
-                        },
-                        {
-                            id: 2,
-                            title: "Calligraphy Ink - Black 30ml",
-                            tag: "Ink",
-                            price: 120,
-                            mrp: 150,
-                            image: "https://via.placeholder.com/400?text=Black+Ink",
-                            options: ['Black']
-                        },
-                        {
-                            id: 3,
-                            title: "Glossy Art Paper A4",
-                            tag: "Paper",
-                            price: 250,
-                            mrp: 350,
-                            image: "https://via.placeholder.com/400?text=Art+Paper",
-                            options: []
-                        },
-                        {
-                            id: 4,
-                            title: "Glass Inkwell Container",
-                            tag: "Ink container",
-                            price: 80,
-                            mrp: 120,
-                            image: "https://via.placeholder.com/400?text=Inkwell",
-                            options: []
-                        },
-                        {
-                            id: 5,
-                            title: "Beginner Calligraphy Kit",
-                            tag: "Calligraphy Kit",
-                            price: 999,
-                            mrp: 1499,
-                            image: "https://via.placeholder.com/400?text=Starter+Kit",
-                            options: [],
-                            description: "Complete set for beginners."
-                        },
-                        {
-                            id: 6,
-                            title: "Handmade Teak Qalam",
-                            tag: "Qalam",
-                            price: 300,
-                            mrp: 450,
-                            image: "https://via.placeholder.com/400?text=Teak+Qalam",
-                            options: ['3mm', '5mm']
-                        },
-                        {
-                            id: 7,
-                            title: "Copperplate Oblique Holder",
-                            tag: "Qalam",
-                            price: 550,
-                            mrp: 750,
-                            image: "https://via.placeholder.com/400?text=Oblique+Holder",
-                            options: ['Standard']
-                        },
-                        {
-                            id: 8,
-                            title: "Premium Gold Calligraphy Ink",
-                            tag: "Ink",
-                            price: 199,
-                            mrp: 299,
-                            image: "https://via.placeholder.com/400?text=Gold+Ink",
-                            options: ['Gold']
-                        },
-                        {
-                            id: 9,
-                            title: "Calligraphy Practice Pad (A4)",
-                            tag: "Paper",
-                            price: 150,
-                            mrp: 200,
-                            image: "https://via.placeholder.com/400?text=Practice+Pad",
-                            options: ['Grid', 'Lined', 'Blank']
-                        }
-                    ];
-                }
-            }
-
-            renderProducts();
-            updateCartCount();
-        }
-
-        // Initialize
-        initializeApp();
-
-    </script>
+      })();
+  </script>
 </body>
+
 </html>

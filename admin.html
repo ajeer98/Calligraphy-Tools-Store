@@ -1,421 +1,484 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Panel — Calligraphy Tools Store</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{gold:'#C9A84C','gold-dark':'#A07832',cream:'#F7F4EF',green:'#1C3D2E'},fontFamily:{serif:['Playfair Display','serif'],sans:['Inter','sans-serif']}}}}</script>
+  <script>tailwind.config = { theme: { extend: { colors: { gold: '#C9A84C', 'gold-dark': '#A07832', cream: '#F7F4EF', green: '#1C3D2E' }, fontFamily: { serif: ['Playfair Display', 'serif'], sans: ['Inter', 'sans-serif'] } } } }</script>
 </head>
+
 <body style="background:var(--cream);">
 
-<!-- LOGIN SCREEN -->
-<div id="login-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0D0D0D,#1C3D2E);">
-  <div style="background:#fff;border-radius:20px;padding:48px 40px;width:380px;max-width:90%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.3);">
-    <div style="font-size:48px;margin-bottom:12px;">🖊️</div>
-    <h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#0D0D0D;margin-bottom:4px;">Admin Panel</h1>
-    <p style="font-size:13px;color:#888;margin-bottom:32px;">Calligraphy Tools Store</p>
-    <div class="form-row">
-      <label class="form-lbl" style="text-align:left;">Password</label>
-      <input id="login-pwd" type="password" class="form-ctrl" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()"/>
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen"
+    style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0D0D0D,#1C3D2E);">
+    <div
+      style="background:#fff;border-radius:20px;padding:48px 40px;width:380px;max-width:90%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.3);">
+      <div style="font-size:48px;margin-bottom:12px;">🖊️</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#0D0D0D;margin-bottom:4px;">
+        Admin Panel</h1>
+      <p style="font-size:13px;color:#888;margin-bottom:32px;">Calligraphy Tools Store</p>
+      <div class="form-row">
+        <label class="form-lbl" style="text-align:left;">Password</label>
+        <input id="login-pwd" type="password" class="form-ctrl" placeholder="Enter admin password"
+          onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+      <button onclick="doLogin()" class="btn-gold w-full justify-center" style="margin-top:8px;">Sign In →</button>
+      <p id="login-err" class="hidden text-red-500 text-sm mt-4">Incorrect password. Try again.</p>
+      <p class="text-xs text-gray-300 mt-6">Default password: <code
+          style="background:#f0f0f0;padding:2px 6px;border-radius:4px;">admin123</code></p>
     </div>
-    <button onclick="doLogin()" class="btn-gold w-full justify-center" style="margin-top:8px;">Sign In →</button>
-    <p id="login-err" class="hidden text-red-500 text-sm mt-4">Incorrect password. Try again.</p>
-    <p class="text-xs text-gray-300 mt-6">Default password: <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;">admin123</code></p>
   </div>
-</div>
 
-<!-- ADMIN PANEL (hidden until login) -->
-<div id="admin-panel" class="hidden" style="display:none;">
-  <div class="admin-wrap">
+  <!-- ADMIN PANEL (hidden until login) -->
+  <div id="admin-panel" class="hidden" style="display:none;">
+    <div class="admin-wrap">
 
-    <!-- SIDEBAR -->
-    <aside class="admin-side">
-      <div class="admin-logo" style="display:flex; align-items:center; gap:10px; justify-content:center;">
-        <img src="https://i.ibb.co/xS6JG15G/logo.png" alt="Logo" style="height:32px; width:32px; border-radius:50%;">
-        <div style="text-align:left;">
-          <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff;line-height:1.1;">Calligraphy</div>
-          <div style="font-size:9px;color:#fff;margin-top:2px;letter-spacing:1px;text-transform:uppercase;opacity:0.8;">Tools Store</div>
-        </div>
-      </div>
-      <nav style="padding:16px 0;">
-        <button class="a-nav-item active" onclick="showSection('dashboard')" id="nav-dashboard">
-          <span>📊</span> Dashboard
-        </button>
-        <button class="a-nav-item" onclick="showSection('products')" id="nav-products">
-          <span>🛍️</span> Products
-        </button>
-        <button class="a-nav-item" onclick="showSection('add-product')" id="nav-add-product">
-          <span>➕</span> Add Product
-        </button>
-        <button class="a-nav-item" onclick="showSection('settings')" id="nav-settings">
-          <span>⚙️</span> Settings
-        </button>
-        <div style="height:1px;background:rgba(255,255,255,.07);margin:16px 24px;"></div>
-        <a href="index.html" target="_blank" class="a-nav-item">
-          <span>🌐</span> View Store
-        </a>
-        <button onclick="doLogout()" class="a-nav-item" style="color:rgba(255,100,100,.6);">
-          <span>🚪</span> Logout
-        </button>
-      </nav>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main class="admin-main">
-
-      <!-- ===== DASHBOARD ===== -->
-      <div id="section-dashboard">
-        <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:6px;">Dashboard</h1>
-        <p style="color:var(--text-light);font-size:14px;margin-bottom:28px;">Welcome back, Admin! 👋</p>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-          <div class="a-stat">
-            <div class="a-stat-num" id="stat-total">—</div>
-            <div class="a-stat-lbl">Total Products</div>
-          </div>
-          <div class="a-stat">
-            <div class="a-stat-num" id="stat-bundles">—</div>
-            <div class="a-stat-lbl">Bundles / Kits</div>
-          </div>
-          <div class="a-stat">
-            <div class="a-stat-num" id="stat-individual">—</div>
-            <div class="a-stat-lbl">Individual Items</div>
-          </div>
-          <div class="a-stat">
-            <div class="a-stat-num" id="stat-low">—</div>
-            <div class="a-stat-lbl">Low Stock (&lt;5)</div>
+      <!-- SIDEBAR -->
+      <aside class="admin-side">
+        <div class="admin-logo" style="display:flex; align-items:center; gap:10px; justify-content:center;">
+          <img src="https://i.ibb.co/xS6JG15G/logo.png" alt="Logo" style="height:32px; width:32px; border-radius:50%;">
+          <div style="text-align:left;">
+            <div
+              style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff;line-height:1.1;">
+              Calligraphy</div>
+            <div
+              style="font-size:9px;color:#fff;margin-top:2px;letter-spacing:1px;text-transform:uppercase;opacity:0.8;">
+              Tools Store</div>
           </div>
         </div>
-        <div class="a-card">
-          <h2 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:16px;">Recent Products</h2>
-          <div id="recent-products-list"></div>
-        </div>
-      </div>
-
-      <!-- ===== PRODUCTS LIST ===== -->
-      <div id="section-products" class="hidden">
-        <div class="flex items-center justify-between mb-6">
-          <div>
-            <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;">All Products</h1>
-            <p style="color:var(--text-light);font-size:14px;" id="prod-count-label"></p>
-          </div>
-          <button onclick="showSection('add-product')" class="btn-gold">+ Add Product</button>
-        </div>
-        <!-- Search -->
-        <div class="search-bar mb-6" style="max-width:360px;">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input type="text" id="admin-search" placeholder="Search products…" oninput="filterAdminProducts()"/>
-        </div>
-        <div class="a-card" style="padding:0;overflow:hidden;">
-          <table class="a-table">
-            <thead>
-              <tr>
-                <th style="width:60px;">Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Type</th>
-                <th>Stock</th>
-                <th>Featured</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-products-tbody">
-              <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-light);">Loading…</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ===== ADD / EDIT PRODUCT ===== -->
-      <div id="section-add-product" class="hidden">
-        <div class="flex items-center gap-4 mb-6">
-          <button onclick="showSection('products')" style="background:none;border:none;cursor:pointer;color:var(--text-light);font-size:14px;">← Back</button>
-          <h1 id="form-title" style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;">Add Product</h1>
-        </div>
-        <input type="hidden" id="edit-product-id"/>
-
-        <div class="grid lg:grid-cols-3 gap-6">
-          <!-- Main Form -->
-          <div class="lg:col-span-2 space-y-6">
-
-            <!-- Basic Info -->
-            <div class="a-card">
-              <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">Basic Information</h2>
-              <div class="form-row">
-                <label class="form-lbl">Product Name *</label>
-                <input id="p-name" type="text" class="form-ctrl" placeholder="e.g. Premium Naskh Calligraphy Pen"/>
-              </div>
-              <div class="grid sm:grid-cols-2 gap-4">
-                <div class="form-row">
-                  <label class="form-lbl">Category *</label>
-                  <select id="p-category" class="form-ctrl">
-                    <option value="">Select category</option>
-                    <option value="pens">Calligraphy Pens</option>
-                    <option value="inks">Premium Inks</option>
-                    <option value="nibs">Nibs & Tips</option>
-                    <option value="kits">Kits & Bundles</option>
-                    <option value="paper">Practice Paper</option>
-                    <option value="accessories">Accessories</option>
-                  </select>
-                </div>
-                <div class="form-row">
-                  <label class="form-lbl">Type *</label>
-                  <select id="p-type" class="form-ctrl" onchange="toggleBundleOptions()">
-                    <option value="individual">Individual</option>
-                    <option value="bundle">Bundle / Kit</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-row">
-                <label class="form-lbl">Description</label>
-                <textarea id="p-desc" class="form-ctrl" rows="4" placeholder="Describe the product — materials, usage, included items…" style="resize:vertical;"></textarea>
-              </div>
-            </div>
-
-            <!-- Pricing & Stock -->
-            <div class="a-card">
-              <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">Pricing & Stock</h2>
-              <div class="grid sm:grid-cols-3 gap-4">
-                <div class="form-row">
-                  <label class="form-lbl">Price (₹) *</label>
-                  <input id="p-price" type="number" class="form-ctrl" placeholder="999" min="0"/>
-                </div>
-                <div class="form-row">
-                  <label class="form-lbl">Original Price (₹)</label>
-                  <input id="p-orig-price" type="number" class="form-ctrl" placeholder="1499 (for discount)"/>
-                </div>
-                <div class="form-row">
-                  <label class="form-lbl">Stock Qty</label>
-                  <input id="p-stock" type="number" class="form-ctrl" placeholder="50"/>
-                </div>
-              </div>
-            </div>
-
-            <!-- Tags & Options -->
-            <div class="a-card">
-              <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">Tags & Visibility</h2>
-              <div class="grid sm:grid-cols-2 gap-4 mb-4">
-                <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
-                  <input type="checkbox" id="tag-bestseller" style="accent-color:var(--gold);width:16px;height:16px;"/>
-                  <span>⭐ Bestseller</span>
-                </label>
-                <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
-                  <input type="checkbox" id="tag-premium" style="accent-color:var(--gold);width:16px;height:16px;"/>
-                  <span>✨ Premium</span>
-                </label>
-                <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
-                  <input type="checkbox" id="tag-beginner" style="accent-color:var(--gold);width:16px;height:16px;"/>
-                  <span>🎓 Best for Beginners</span>
-                </label>
-                <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
-                  <input type="checkbox" id="tag-new" style="accent-color:var(--gold);width:16px;height:16px;"/>
-                  <span>🆕 New Arrival</span>
-                </label>
-              </div>
-              <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
-                <input type="checkbox" id="p-featured" style="accent-color:var(--gold);width:16px;height:16px;"/>
-                <span style="font-weight:600;">⭐ Feature on Homepage</span>
-              </label>
-            </div>
-
-            <!-- Bundle Options -->
-            <div id="bundle-options" class="a-card hidden">
-              <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:6px;padding-bottom:12px;border-bottom:1px solid var(--border);">Bundle / Kit Details</h2>
-              <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">Add each item that comes inside this bundle or kit.</p>
-
-              <!-- Font Styles -->
-              <div class="form-row">
-                <label class="form-lbl">Font Styles Included</label>
-                <div class="flex gap-3 flex-wrap">
-                  <label class="f-opt"><input type="checkbox" value="Naskh" class="font-style-cb" style="accent-color:var(--gold);"/> Naskh</label>
-                  <label class="f-opt"><input type="checkbox" value="Nastaliq" class="font-style-cb" style="accent-color:var(--gold);"/> Nastaliq</label>
-                  <label class="f-opt"><input type="checkbox" value="Thuluth" class="font-style-cb" style="accent-color:var(--gold);"/> Thuluth</label>
-                  <label class="f-opt"><input type="checkbox" value="Diwani" class="font-style-cb" style="accent-color:var(--gold);"/> Diwani</label>
-                </div>
-              </div>
-              <label class="f-opt mb-4" style="gap:10px;cursor:pointer;">
-                <input type="checkbox" id="p-is-premium-bundle" style="accent-color:var(--gold);width:16px;height:16px;"/>
-                <span style="font-weight:600;">Mark as Premium Bundle</span>
-              </label>
-
-              <!-- Bundle Items -->
-              <div style="border-top:1px solid var(--border);padding-top:20px;">
-                <div class="flex items-center justify-between mb-4">
-                  <label class="form-lbl" style="margin:0;">Bundle Contents</label>
-                  <button type="button" onclick="addBundleItem()" class="a-btn-sm btn-gold" style="padding:7px 14px;">+ Add Item</button>
-                </div>
-                <div id="bundle-items-editor" class="space-y-3"></div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Right: Images -->
-          <div>
-            <div class="a-card" style="position:sticky;top:20px;">
-              <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">Product Images</h2>
-              <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">Upload via ImgBB. Images are hosted externally.</p>
-
-              <!-- Image Upload Area -->
-              <div id="upload-zone" onclick="document.getElementById('img-file-input').click()"
-                style="border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all .3s;margin-bottom:16px;"
-                onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-                <div style="font-size:32px;margin-bottom:8px;">📸</div>
-                <div style="font-size:14px;font-weight:600;color:var(--text);">Click to upload image</div>
-                <div style="font-size:12px;color:var(--text-light);margin-top:4px;">JPG, PNG, WebP — max 10MB</div>
-                <input type="file" id="img-file-input" accept="image/*" style="display:none;" onchange="uploadImage(this)"/>
-              </div>
-
-              <div id="upload-progress" class="hidden mb-3">
-                <div style="font-size:13px;color:var(--text-light);margin-bottom:6px;">Uploading…</div>
-                <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
-                  <div id="upload-bar" style="height:100%;background:var(--gold);width:0%;transition:width .3s;"></div>
-                </div>
-              </div>
-
-              <!-- Image Previews -->
-              <div id="image-previews" class="grid grid-cols-2 gap-2 mb-4"></div>
-
-              <!-- Or paste URL -->
-              <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px;">
-                <label class="form-lbl">Or paste image URL</label>
-                <div class="flex gap-2">
-                  <input id="img-url-input" type="url" class="form-ctrl" placeholder="https://…" style="flex:1;"/>
-                  <button onclick="addImageUrl()" class="btn-dark" style="padding:10px 14px;white-space:nowrap;font-size:12px;">Add</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SAVE BUTTONS -->
-        <div class="flex gap-4 mt-6">
-          <button onclick="saveProduct()" class="btn-gold" style="padding:16px 40px;font-size:14px;" id="save-btn">
-            💾 Save Product
+        <nav style="padding:16px 0;">
+          <button class="a-nav-item active" onclick="showSection('dashboard')" id="nav-dashboard">
+            <span>📊</span> Dashboard
           </button>
-          <button onclick="showSection('products')" class="btn-dark" style="padding:16px 28px;">Cancel</button>
-        </div>
-      </div>
+          <button class="a-nav-item" onclick="showSection('products')" id="nav-products">
+            <span>🛍️</span> Products
+          </button>
+          <button class="a-nav-item" onclick="showSection('add-product')" id="nav-add-product">
+            <span>➕</span> Add Product
+          </button>
+          <button class="a-nav-item" onclick="showSection('settings')" id="nav-settings">
+            <span>⚙️</span> Settings
+          </button>
+          <div style="height:1px;background:rgba(255,255,255,.07);margin:16px 24px;"></div>
+          <a href="index.html" target="_blank" class="a-nav-item">
+            <span>🌐</span> View Store
+          </a>
+          <button onclick="doLogout()" class="a-nav-item" style="color:rgba(255,100,100,.6);">
+            <span>🚪</span> Logout
+          </button>
+        </nav>
+      </aside>
 
-      <!-- ===== SETTINGS ===== -->
-      <div id="section-settings" class="hidden">
-        <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:6px;">Settings</h1>
-        <p style="color:var(--text-light);font-size:14px;margin-bottom:28px;">Configure your store settings.</p>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="a-card">
-            <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">📲 WhatsApp & Store Info</h2>
-            <div class="form-row">
-              <label class="form-lbl">Store Name</label>
-              <input id="s-store-name" type="text" class="form-ctrl" placeholder="Calligraphy Tools Store"/>
+      <!-- MAIN CONTENT -->
+      <main class="admin-main">
+
+        <!-- ===== DASHBOARD ===== -->
+        <div id="section-dashboard">
+          <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:6px;">Dashboard
+          </h1>
+          <p style="color:var(--text-light);font-size:14px;margin-bottom:28px;">Welcome back, Admin! 👋</p>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+            <div class="a-stat">
+              <div class="a-stat-num" id="stat-total">—</div>
+              <div class="a-stat-lbl">Total Products</div>
             </div>
-            <div class="form-row">
-              <label class="form-lbl">WhatsApp Number</label>
-              <input id="s-wa-number" type="text" class="form-ctrl" placeholder="919876543210 (country code + number, no +)"/>
-              <p style="font-size:12px;color:var(--text-light);margin-top:6px;">Include country code. e.g., 919876543210 for India.</p>
+            <div class="a-stat">
+              <div class="a-stat-num" id="stat-bundles">—</div>
+              <div class="a-stat-lbl">Bundles / Kits</div>
             </div>
-            <button onclick="saveSettings_admin()" class="btn-gold">Save Settings</button>
+            <div class="a-stat">
+              <div class="a-stat-num" id="stat-individual">—</div>
+              <div class="a-stat-lbl">Individual Items</div>
+            </div>
+            <div class="a-stat">
+              <div class="a-stat-num" id="stat-low">—</div>
+              <div class="a-stat-lbl">Low Stock (&lt;5)</div>
+            </div>
           </div>
           <div class="a-card">
-            <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">🔐 Change Password</h2>
-            <div class="form-row">
-              <label class="form-lbl">New Password</label>
-              <input id="s-new-pwd" type="password" class="form-ctrl" placeholder="Enter new password"/>
-            </div>
-            <div class="form-row">
-              <label class="form-lbl">Confirm Password</label>
-              <input id="s-confirm-pwd" type="password" class="form-ctrl" placeholder="Re-enter new password"/>
-            </div>
-            <button onclick="changePassword()" class="btn-dark">Update Password</button>
+            <h2 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:16px;">Recent
+              Products</h2>
+            <div id="recent-products-list"></div>
           </div>
         </div>
-        <!-- WhatsApp Test -->
-        <div class="a-card mt-6">
-          <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:12px;">🧪 Test WhatsApp Link</h2>
-          <p style="font-size:14px;color:var(--text-light);margin-bottom:16px;">Send a test message to your WhatsApp number to verify it's working.</p>
-          <button onclick="testWhatsApp()" class="btn-wa" style="display:inline-flex;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Send Test Message
-          </button>
+
+        <!-- ===== PRODUCTS LIST ===== -->
+        <div id="section-products" class="hidden">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;">All Products</h1>
+              <p style="color:var(--text-light);font-size:14px;" id="prod-count-label"></p>
+            </div>
+            <button onclick="showSection('add-product')" class="btn-gold">+ Add Product</button>
+          </div>
+          <!-- Search -->
+          <div class="search-bar mb-6" style="max-width:360px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input type="text" id="admin-search" placeholder="Search products…" oninput="filterAdminProducts()" />
+          </div>
+          <div class="a-card" style="padding:0;overflow:hidden;">
+            <table class="a-table">
+              <thead>
+                <tr>
+                  <th style="width:60px;">Image</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Type</th>
+                  <th>Stock</th>
+                  <th>Featured</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-tbody">
+                <tr>
+                  <td colspan="8" style="text-align:center;padding:40px;color:var(--text-light);">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-    </main>
+        <!-- ===== ADD / EDIT PRODUCT ===== -->
+        <div id="section-add-product" class="hidden">
+          <div class="flex items-center gap-4 mb-6">
+            <button onclick="showSection('products')"
+              style="background:none;border:none;cursor:pointer;color:var(--text-light);font-size:14px;">← Back</button>
+            <h1 id="form-title" style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;">Add Product
+            </h1>
+          </div>
+          <input type="hidden" id="edit-product-id" />
+
+          <div class="grid lg:grid-cols-3 gap-6">
+            <!-- Main Form -->
+            <div class="lg:col-span-2 space-y-6">
+
+              <!-- Basic Info -->
+              <div class="a-card">
+                <h2
+                  style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+                  Basic Information</h2>
+                <div class="form-row">
+                  <label class="form-lbl">Product Name *</label>
+                  <input id="p-name" type="text" class="form-ctrl" placeholder="e.g. Premium Naskh Calligraphy Pen" />
+                </div>
+                <div class="grid sm:grid-cols-2 gap-4">
+                  <div class="form-row">
+                    <label class="form-lbl">Category *</label>
+                    <select id="p-category" class="form-ctrl">
+                      <option value="">Select category</option>
+                      <option value="pens">Calligraphy Pens</option>
+                      <option value="inks">Premium Inks</option>
+                      <option value="nibs">Nibs & Tips</option>
+                      <option value="kits">Kits & Bundles</option>
+                      <option value="paper">Practice Paper</option>
+                      <option value="accessories">Accessories</option>
+                    </select>
+                  </div>
+                  <div class="form-row">
+                    <label class="form-lbl">Type *</label>
+                    <select id="p-type" class="form-ctrl" onchange="toggleBundleOptions()">
+                      <option value="individual">Individual</option>
+                      <option value="bundle">Bundle / Kit</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <label class="form-lbl">Description</label>
+                  <textarea id="p-desc" class="form-ctrl" rows="4"
+                    placeholder="Describe the product — materials, usage, included items…"
+                    style="resize:vertical;"></textarea>
+                </div>
+              </div>
+
+              <!-- Pricing & Stock -->
+              <div class="a-card">
+                <h2
+                  style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+                  Pricing & Stock</h2>
+                <div class="grid sm:grid-cols-3 gap-4">
+                  <div class="form-row">
+                    <label class="form-lbl">Price (₹) *</label>
+                    <input id="p-price" type="number" class="form-ctrl" placeholder="999" min="0" />
+                  </div>
+                  <div class="form-row">
+                    <label class="form-lbl">Original Price (₹)</label>
+                    <input id="p-orig-price" type="number" class="form-ctrl" placeholder="1499 (for discount)" />
+                  </div>
+                  <div class="form-row">
+                    <label class="form-lbl">Stock Qty</label>
+                    <input id="p-stock" type="number" class="form-ctrl" placeholder="50" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tags & Options -->
+              <div class="a-card">
+                <h2
+                  style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+                  Tags & Visibility</h2>
+                <div class="grid sm:grid-cols-2 gap-4 mb-4">
+                  <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
+                    <input type="checkbox" id="tag-bestseller"
+                      style="accent-color:var(--gold);width:16px;height:16px;" />
+                    <span>⭐ Bestseller</span>
+                  </label>
+                  <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
+                    <input type="checkbox" id="tag-premium" style="accent-color:var(--gold);width:16px;height:16px;" />
+                    <span>✨ Premium</span>
+                  </label>
+                  <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
+                    <input type="checkbox" id="tag-beginner" style="accent-color:var(--gold);width:16px;height:16px;" />
+                    <span>🎓 Best for Beginners</span>
+                  </label>
+                  <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
+                    <input type="checkbox" id="tag-new" style="accent-color:var(--gold);width:16px;height:16px;" />
+                    <span>🆕 New Arrival</span>
+                  </label>
+                </div>
+                <label class="f-opt" style="align-items:center;gap:10px;cursor:pointer;">
+                  <input type="checkbox" id="p-featured" style="accent-color:var(--gold);width:16px;height:16px;" />
+                  <span style="font-weight:600;">⭐ Feature on Homepage</span>
+                </label>
+              </div>
+
+              <!-- Bundle Options -->
+              <div id="bundle-options" class="a-card hidden">
+                <h2
+                  style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:6px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+                  Bundle / Kit Details</h2>
+                <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">Add each item that comes inside
+                  this bundle or kit.</p>
+
+                <!-- Font Styles -->
+                <div class="form-row">
+                  <label class="form-lbl">Font Styles Included</label>
+                  <div class="flex gap-3 flex-wrap">
+                    <label class="f-opt"><input type="checkbox" value="Naskh" class="font-style-cb"
+                        style="accent-color:var(--gold);" /> Naskh</label>
+                    <label class="f-opt"><input type="checkbox" value="Nastaliq" class="font-style-cb"
+                        style="accent-color:var(--gold);" /> Nastaliq</label>
+                    <label class="f-opt"><input type="checkbox" value="Thuluth" class="font-style-cb"
+                        style="accent-color:var(--gold);" /> Thuluth</label>
+                    <label class="f-opt"><input type="checkbox" value="Diwani" class="font-style-cb"
+                        style="accent-color:var(--gold);" /> Diwani</label>
+                  </div>
+                </div>
+                <label class="f-opt mb-4" style="gap:10px;cursor:pointer;">
+                  <input type="checkbox" id="p-is-premium-bundle"
+                    style="accent-color:var(--gold);width:16px;height:16px;" />
+                  <span style="font-weight:600;">Mark as Premium Bundle</span>
+                </label>
+
+                <!-- Bundle Items -->
+                <div style="border-top:1px solid var(--border);padding-top:20px;">
+                  <div class="flex items-center justify-between mb-4">
+                    <label class="form-lbl" style="margin:0;">Bundle Contents</label>
+                    <button type="button" onclick="addBundleItem()" class="a-btn-sm btn-gold"
+                      style="padding:7px 14px;">+ Add Item</button>
+                  </div>
+                  <div id="bundle-items-editor" class="space-y-3"></div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right: Images -->
+            <div>
+              <div class="a-card" style="position:sticky;top:20px;">
+                <h2
+                  style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+                  Product Images</h2>
+                <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">Upload via ImgBB. Images are
+                  hosted externally.</p>
+
+                <!-- Image Upload Area -->
+                <div id="upload-zone" onclick="document.getElementById('img-file-input').click()"
+                  style="border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all .3s;margin-bottom:16px;"
+                  onmouseover="this.style.borderColor='var(--gold)'"
+                  onmouseout="this.style.borderColor='var(--border)'">
+                  <div style="font-size:32px;margin-bottom:8px;">📸</div>
+                  <div style="font-size:14px;font-weight:600;color:var(--text);">Click to upload image</div>
+                  <div style="font-size:12px;color:var(--text-light);margin-top:4px;">JPG, PNG, WebP — max 10MB</div>
+                  <input type="file" id="img-file-input" accept="image/*" style="display:none;"
+                    onchange="uploadImage(this)" />
+                </div>
+
+                <div id="upload-progress" class="hidden mb-3">
+                  <div style="font-size:13px;color:var(--text-light);margin-bottom:6px;">Uploading…</div>
+                  <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
+                    <div id="upload-bar" style="height:100%;background:var(--gold);width:0%;transition:width .3s;">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Image Previews -->
+                <div id="image-previews" class="grid grid-cols-2 gap-2 mb-4"></div>
+
+                <!-- Or paste URL -->
+                <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px;">
+                  <label class="form-lbl">Or paste image URL</label>
+                  <div class="flex gap-2">
+                    <input id="img-url-input" type="url" class="form-ctrl" placeholder="https://…" style="flex:1;" />
+                    <button onclick="addImageUrl()" class="btn-dark"
+                      style="padding:10px 14px;white-space:nowrap;font-size:12px;">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SAVE BUTTONS -->
+          <div class="flex gap-4 mt-6">
+            <button onclick="saveProduct()" class="btn-gold" style="padding:16px 40px;font-size:14px;" id="save-btn">
+              💾 Save Product
+            </button>
+            <button onclick="showSection('products')" class="btn-dark" style="padding:16px 28px;">Cancel</button>
+          </div>
+        </div>
+
+        <!-- ===== SETTINGS ===== -->
+        <div id="section-settings" class="hidden">
+          <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:6px;">Settings
+          </h1>
+          <p style="color:var(--text-light);font-size:14px;margin-bottom:28px;">Configure your store settings.</p>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="a-card">
+              <h2
+                style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+                📲 WhatsApp & Store Info</h2>
+              <div class="form-row">
+                <label class="form-lbl">Store Name</label>
+                <input id="s-store-name" type="text" class="form-ctrl" placeholder="Calligraphy Tools Store" />
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">WhatsApp Number</label>
+                <input id="s-wa-number" type="text" class="form-ctrl"
+                  placeholder="919876543210 (country code + number, no +)" />
+                <p style="font-size:12px;color:var(--text-light);margin-top:6px;">Include country code. e.g.,
+                  919876543210 for India.</p>
+              </div>
+              <button onclick="saveSettings_admin()" class="btn-gold">Save Settings</button>
+            </div>
+            <div class="a-card">
+              <h2
+                style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+                🔐 Change Password</h2>
+              <div class="form-row">
+                <label class="form-lbl">New Password</label>
+                <input id="s-new-pwd" type="password" class="form-ctrl" placeholder="Enter new password" />
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Confirm Password</label>
+                <input id="s-confirm-pwd" type="password" class="form-ctrl" placeholder="Re-enter new password" />
+              </div>
+              <button onclick="changePassword()" class="btn-dark">Update Password</button>
+            </div>
+          </div>
+          <!-- WhatsApp Test -->
+          <div class="a-card mt-6">
+            <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:12px;">🧪 Test
+              WhatsApp Link</h2>
+            <p style="font-size:14px;color:var(--text-light);margin-bottom:16px;">Send a test message to your WhatsApp
+              number to verify it's working.</p>
+            <button onclick="testWhatsApp()" class="btn-wa" style="display:inline-flex;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              Send Test Message
+            </button>
+          </div>
+        </div>
+
+      </main>
+    </div>
   </div>
-</div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-<script src="js/firebase-config.js"></script>
-<script src="js/utils.js"></script>
-<script>
-// ============ AUTH ============
-const IMGBB_KEY = 'ddc6a206ac44240be3c33de7d18bf8f8';
-let allAdminProducts = [];
-let imageUrls = [];
-let bundleItems = [];
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script>
+    // ============ AUTH ============
+    const IMGBB_KEY = 'ddc6a206ac44240be3c33de7d18bf8f8';
+    let allAdminProducts = [];
+    let imageUrls = [];
+    let bundleItems = [];
 
-async function doLogin() {
-  const pwd = document.getElementById('login-pwd').value;
-  const s = await getSettings();
-  const correctPwd = s.adminPassword || 'admin123';
-  if (pwd === correctPwd) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    sessionStorage.setItem('admin_auth', '1');
-    loadDashboard();
-    loadAdminProducts();
-  } else {
-    document.getElementById('login-err').classList.remove('hidden');
-    document.getElementById('login-pwd').value = '';
-  }
-}
+    async function doLogin() {
+      const pwd = document.getElementById('login-pwd').value;
+      const s = await getSettings();
+      const correctPwd = s.adminPassword || 'admin123';
+      if (pwd === correctPwd) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+        sessionStorage.setItem('admin_auth', '1');
+        loadDashboard();
+        loadAdminProducts();
+      } else {
+        document.getElementById('login-err').classList.remove('hidden');
+        document.getElementById('login-pwd').value = '';
+      }
+    }
 
-function doLogout() {
-  sessionStorage.removeItem('admin_auth');
-  location.reload();
-}
+    function doLogout() {
+      sessionStorage.removeItem('admin_auth');
+      location.reload();
+    }
 
-// Check session on load
-window.addEventListener('load', () => {
-  if (sessionStorage.getItem('admin_auth')) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    loadDashboard();
-    loadAdminProducts();
-  }
-});
+    // Check session on load
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('admin_auth')) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+        loadDashboard();
+        loadAdminProducts();
+      }
+    });
 
-// ============ NAVIGATION ============
-function showSection(name) {
-  ['dashboard','products','add-product','settings'].forEach(s => {
-    document.getElementById(`section-${s}`).classList.add('hidden');
-    document.getElementById(`nav-${s}`)?.classList.remove('active');
-  });
-  document.getElementById(`section-${name}`).classList.remove('hidden');
-  document.getElementById(`nav-${name}`)?.classList.add('active');
-  if (name === 'add-product' && !document.getElementById('edit-product-id').value) {
-    resetForm();
-  }
-}
+    // ============ NAVIGATION ============
+    function showSection(name) {
+      ['dashboard', 'products', 'add-product', 'settings'].forEach(s => {
+        document.getElementById(`section-${s}`).classList.add('hidden');
+        document.getElementById(`nav-${s}`)?.classList.remove('active');
+      });
+      document.getElementById(`section-${name}`).classList.remove('hidden');
+      document.getElementById(`nav-${name}`)?.classList.add('active');
+      if (name === 'add-product' && !document.getElementById('edit-product-id').value) {
+        resetForm();
+      }
+    }
 
-// ============ DASHBOARD ============
-async function loadDashboard() {
-  try {
-    const snap = await db.collection('products').get();
-    const products = [];
-    snap.forEach(d => products.push({id:d.id,...d.data()}));
-    const bundles = products.filter(p => p.isBundle || p.type==='bundle').length;
-    const lowStock = products.filter(p => p.stock !== undefined && p.stock < 5).length;
-    document.getElementById('stat-total').textContent = products.length;
-    document.getElementById('stat-bundles').textContent = bundles;
-    document.getElementById('stat-individual').textContent = products.length - bundles;
-    document.getElementById('stat-low').textContent = lowStock;
-    document.getElementById('recent-products-list').innerHTML = products.slice(0,5).map(p => `
+    // ============ DASHBOARD ============
+    async function loadDashboard() {
+      try {
+        const snap = await db.collection('products').get();
+        const products = [];
+        snap.forEach(d => products.push({ id: d.id, ...d.data() }));
+        const bundles = products.filter(p => p.isBundle || p.type === 'bundle').length;
+        const lowStock = products.filter(p => p.stock !== undefined && p.stock < 5).length;
+        document.getElementById('stat-total').textContent = products.length;
+        document.getElementById('stat-bundles').textContent = bundles;
+        document.getElementById('stat-individual').textContent = products.length - bundles;
+        document.getElementById('stat-low').textContent = lowStock;
+
+        const recentList = document.getElementById('recent-products-list');
+        if (products.length === 0) { recentList.innerHTML = '<p class="text-gray-400 text-sm">No products found.</p>'; }
+        else {
+          recentList.innerHTML = products.slice(0, 5).map(p => `
       <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);">
         <div style="width:44px;height:44px;border-radius:8px;background:var(--cream-2);overflow:hidden;flex-shrink:0;">
           ${p.images?.[0] ? `<img src="${p.images[0]}" style="width:100%;height:100%;object-fit:cover;"/>` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;">🖊️</div>'}
@@ -427,312 +490,322 @@ async function loadDashboard() {
         <button onclick="editProduct('${p.id}')" class="a-btn-sm" style="background:rgba(201,168,76,.1);color:var(--gold-dark);">Edit</button>
       </div>
     `).join('');
-  } catch(e) { console.error(e); }
-}
+        }
+      } catch (e) {
+        console.error(e);
+        // The previous suggestion to add this line was incorporated.
+        showToast("Dashboard failed to load. Check Firebase API status and your internet connection.", "error");
+      }
+    }
 
-// ============ PRODUCTS LIST ============
-async function loadAdminProducts() {
-  try {
-    const snap = await db.collection('products').orderBy('name').get();
-    allAdminProducts = [];
-    snap.forEach(d => allAdminProducts.push({id:d.id,...d.data()}));
-    renderAdminTable(allAdminProducts);
-  } catch(e) { console.error(e); }
-}
+    // ============ PRODUCTS LIST ============
+    async function loadAdminProducts() {
+      try {
+        const snap = await db.collection('products').orderBy('name').get();
+        allAdminProducts = [];
+        snap.forEach(d => allAdminProducts.push({ id: d.id, ...d.data() }));
+        renderAdminTable(allAdminProducts);
+      } catch (e) {
+        console.error(e);
+        document.getElementById('admin-products-tbody').innerHTML =
+          `<tr><td colspan="8" style="text-align:center;padding:40px;color:#ef4444;">Error: ${e.message}</td></tr>`;
+      }
+    }
 
-function renderAdminTable(products) {
-  document.getElementById('prod-count-label').textContent = `${products.length} product${products.length!==1?'s':''}`;
-  const placeholder = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%23EDE8DF' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='60'%3E🖊️%3C/text%3E%3C/svg%3E`;
-  document.getElementById('admin-products-tbody').innerHTML = products.length === 0 ?
-    `<tr><td colspan="8" style="text-align:center;padding:48px;color:var(--text-light);">No products yet. <button onclick="showSection('add-product')" style="color:var(--gold);text-decoration:underline;background:none;border:none;cursor:pointer;">Add your first product!</button></td></tr>` :
-    products.map(p => `
+    function renderAdminTable(products) {
+      document.getElementById('prod-count-label').textContent = `${products.length} product${products.length !== 1 ? 's' : ''}`;
+      const placeholder = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%23EDE8DF' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='60'%3E🖊️%3C/text%3E%3C/svg%3E`;
+      document.getElementById('admin-products-tbody').innerHTML = products.length === 0 ?
+        `<tr><td colspan="8" style="text-align:center;padding:48px;color:var(--text-light);">No products yet. <button onclick="showSection('add-product')" style="color:var(--gold);text-decoration:underline;background:none;border:none;cursor:pointer;">Add your first product!</button></td></tr>` :
+        products.map(p => `
       <tr>
-        <td><div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:var(--cream-2);">${p.images?.[0]?`<img src="${p.images[0]}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='${placeholder}'"/>`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">🖊️</div>'}</div></td>
+        <td><div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:var(--cream-2);">${p.images?.[0] ? `<img src="${p.images[0]}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='${placeholder}'"/>` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">🖊️</div>'}</div></td>
         <td style="max-width:200px;"><div style="font-weight:600;font-size:14px;truncate:ellipsis;overflow:hidden;white-space:nowrap;">${p.name}</div></td>
-        <td><span class="tag ${p.category==='kits'?'tag-bundle':'tag-bestseller'}" style="font-size:10px;">${p.category||'—'}</span></td>
+        <td><span class="tag ${p.category === 'kits' ? 'tag-bundle' : 'tag-bestseller'}" style="font-size:10px;">${p.category || '—'}</span></td>
         <td style="font-weight:700;color:var(--dark);">${rupees(p.price)}</td>
-        <td>${p.isBundle||p.type==='bundle'?'<span class="tag tag-bundle" style="font-size:10px;">Bundle</span>':'<span style="font-size:12px;color:var(--text-light);">Individual</span>'}</td>
-        <td>${p.stock!==undefined?`<span class="${p.stock<5?'stock-low':'stock-ok'}">${p.stock}</span>`:'<span style="color:var(--text-light);">—</span>'}</td>
-        <td>${p.featured?'<span style="color:var(--gold);font-size:14px;" title="Featured on homepage">⭐</span>':'<span style="color:var(--border);">○</span>'}</td>
+        <td>${p.isBundle || p.type === 'bundle' ? '<span class="tag tag-bundle" style="font-size:10px;">Bundle</span>' : '<span style="font-size:12px;color:var(--text-light);">Individual</span>'}</td>
+        <td>${p.stock !== undefined ? `<span class="${p.stock < 5 ? 'stock-low' : 'stock-ok'}">${p.stock}</span>` : '<span style="color:var(--text-light);">—</span>'}</td>
+        <td>${p.featured ? '<span style="color:var(--gold);font-size:14px;" title="Featured on homepage">⭐</span>' : '<span style="color:var(--border);">○</span>'}</td>
         <td>
           <div style="display:flex;gap:6px;">
             <button onclick="editProduct('${p.id}')" class="a-btn-sm" style="background:rgba(201,168,76,.12);color:var(--gold-dark);">Edit</button>
-            <button onclick="deleteProduct('${p.id}','${(p.name||'').replace(/'/g,"\\'")}',this)" class="a-btn-sm" style="background:rgba(239,68,68,.1);color:#ef4444;">Delete</button>
+            <button onclick="deleteProduct('${p.id}','${(p.name || '').replace(/'/g, "\\'")}',this)" class="a-btn-sm" style="background:rgba(239,68,68,.1);color:#ef4444;">Delete</button>
           </div>
         </td>
       </tr>
     `).join('');
-}
-
-function filterAdminProducts() {
-  const q = document.getElementById('admin-search').value.toLowerCase();
-  renderAdminTable(q ? allAdminProducts.filter(p => p.name?.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q)) : allAdminProducts);
-}
-
-// ============ ADD / EDIT PRODUCT ============
-function resetForm() {
-  document.getElementById('edit-product-id').value = '';
-  document.getElementById('form-title').textContent = 'Add Product';
-  document.getElementById('save-btn').textContent = '💾 Save Product';
-  ['p-name','p-desc','p-price','p-orig-price','p-stock'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('p-category').value = '';
-  document.getElementById('p-type').value = 'individual';
-  ['tag-bestseller','tag-premium','tag-beginner','tag-new','p-featured','p-is-premium-bundle'].forEach(id => document.getElementById(id).checked = false);
-  document.querySelectorAll('.font-style-cb').forEach(cb => cb.checked = false);
-  imageUrls = [];
-  bundleItems = [];
-  renderImagePreviews();
-  renderBundleItemsEditor();
-  toggleBundleOptions();
-}
-
-async function editProduct(id) {
-  showSection('add-product');
-  const doc = await db.collection('products').doc(id).get();
-  if (!doc.exists) return;
-  const p = {id: doc.id, ...doc.data()};
-  document.getElementById('edit-product-id').value = id;
-  document.getElementById('form-title').textContent = 'Edit Product';
-  document.getElementById('save-btn').textContent = '💾 Update Product';
-  document.getElementById('p-name').value = p.name || '';
-  document.getElementById('p-desc').value = p.description || '';
-  document.getElementById('p-price').value = p.price || '';
-  document.getElementById('p-orig-price').value = p.originalPrice || '';
-  document.getElementById('p-stock').value = p.stock !== undefined ? p.stock : '';
-  document.getElementById('p-category').value = p.category || '';
-  document.getElementById('p-type').value = (p.isBundle || p.type==='bundle') ? 'bundle' : 'individual';
-  document.getElementById('tag-bestseller').checked = p.tags?.includes('bestseller') || false;
-  document.getElementById('tag-premium').checked = p.tags?.includes('premium') || false;
-  document.getElementById('tag-beginner').checked = p.tags?.includes('beginner') || false;
-  document.getElementById('tag-new').checked = p.tags?.includes('new') || false;
-  document.getElementById('p-featured').checked = p.featured || false;
-  document.getElementById('p-is-premium-bundle').checked = p.isPremiumBundle || false;
-  document.querySelectorAll('.font-style-cb').forEach(cb => { cb.checked = p.fontStyles?.includes(cb.value) || false; });
-  imageUrls = p.images || [];
-  bundleItems = p.bundleItems || [];
-  renderImagePreviews();
-  renderBundleItemsEditor();
-  toggleBundleOptions();
-}
-
-async function saveProduct() {
-  const name = document.getElementById('p-name').value.trim();
-  const price = Number(document.getElementById('p-price').value);
-  const category = document.getElementById('p-category').value;
-  if (!name || !price || !category) {
-    showToast('Please fill in Name, Price and Category.', 'error'); return;
-  }
-  const tags = [];
-  if (document.getElementById('tag-bestseller').checked) tags.push('bestseller');
-  if (document.getElementById('tag-premium').checked) tags.push('premium');
-  if (document.getElementById('tag-beginner').checked) tags.push('beginner');
-  if (document.getElementById('tag-new').checked) tags.push('new');
-  const type = document.getElementById('p-type').value;
-  const isBundle = type === 'bundle';
-  const fontStyles = isBundle ? [...document.querySelectorAll('.font-style-cb:checked')].map(c=>c.value) : [];
-  const origPrice = Number(document.getElementById('p-orig-price').value) || null;
-  const stock = document.getElementById('p-stock').value !== '' ? Number(document.getElementById('p-stock').value) : null;
-
-  const data = {
-    name,
-    description: document.getElementById('p-desc').value.trim(),
-    price,
-    originalPrice: origPrice,
-    stock,
-    category,
-    type,
-    isBundle,
-    isPremiumBundle: isBundle && document.getElementById('p-is-premium-bundle').checked,
-    tags,
-    featured: document.getElementById('p-featured').checked,
-    images: imageUrls.filter(Boolean),
-    fontStyles,
-    fontStylesCount: fontStyles.length,
-    bundleItems: isBundle ? bundleItems : [],
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-
-  const btn = document.getElementById('save-btn');
-  btn.disabled = true; btn.textContent = 'Saving…';
-
-  try {
-    const editId = document.getElementById('edit-product-id').value;
-    if (editId) {
-      await db.collection('products').doc(editId).update(data);
-      showToast('Product updated!', 'success');
-    } else {
-      data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-      await db.collection('products').add(data);
-      showToast('Product added!', 'success');
     }
-    await loadAdminProducts();
-    loadDashboard();
-    showSection('products');
-  } catch(e) {
-    console.error(e);
-    showToast('Error saving product: ' + e.message, 'error');
-  }
-  btn.disabled = false; btn.textContent = '💾 Save Product';
-}
 
-async function deleteProduct(id, name, btnEl) {
-  if (!confirm(`Delete "${name}"?\nThis cannot be undone.`)) return;
-  btnEl.disabled = true; btnEl.textContent = '…';
-  try {
-    await db.collection('products').doc(id).delete();
-    showToast(`"${name}" deleted.`, 'info');
-    allAdminProducts = allAdminProducts.filter(p => p.id !== id);
-    renderAdminTable(allAdminProducts);
-    loadDashboard();
-  } catch(e) {
-    showToast('Delete failed: ' + e.message, 'error');
-    btnEl.disabled = false; btnEl.textContent = 'Delete';
-  }
-}
+    function filterAdminProducts() {
+      const q = document.getElementById('admin-search').value.toLowerCase();
+      renderAdminTable(q ? allAdminProducts.filter(p => p.name?.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q)) : allAdminProducts);
+    }
 
-// ============ BUNDLE OPTIONS ============
-function toggleBundleOptions() {
-  const isBundle = document.getElementById('p-type').value === 'bundle';
-  document.getElementById('bundle-options').classList.toggle('hidden', !isBundle);
-}
+    // ============ ADD / EDIT PRODUCT ============
+    function resetForm() {
+      document.getElementById('edit-product-id').value = '';
+      document.getElementById('form-title').textContent = 'Add Product';
+      document.getElementById('save-btn').textContent = '💾 Save Product';
+      ['p-name', 'p-desc', 'p-price', 'p-orig-price', 'p-stock'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('p-category').value = '';
+      document.getElementById('p-type').value = 'individual';
+      ['tag-bestseller', 'tag-premium', 'tag-beginner', 'tag-new', 'p-featured', 'p-is-premium-bundle'].forEach(id => document.getElementById(id).checked = false);
+      document.querySelectorAll('.font-style-cb').forEach(cb => cb.checked = false);
+      imageUrls = [];
+      bundleItems = [];
+      renderImagePreviews();
+      renderBundleItemsEditor();
+      toggleBundleOptions();
+    }
 
-function addBundleItem(item = {}) {
-  const idx = bundleItems.length;
-  bundleItems.push(item.name ? item : {name:'', description:'', image:''});
-  renderBundleItemsEditor();
-}
+    async function editProduct(id) {
+      showSection('add-product');
+      const doc = await db.collection('products').doc(id).get();
+      if (!doc.exists) return;
+      const p = { id: doc.id, ...doc.data() };
+      document.getElementById('edit-product-id').value = id;
+      document.getElementById('form-title').textContent = 'Edit Product';
+      document.getElementById('save-btn').textContent = '💾 Update Product';
+      document.getElementById('p-name').value = p.name || '';
+      document.getElementById('p-desc').value = p.description || '';
+      document.getElementById('p-price').value = p.price || '';
+      document.getElementById('p-orig-price').value = p.originalPrice || '';
+      document.getElementById('p-stock').value = p.stock !== undefined ? p.stock : '';
+      document.getElementById('p-category').value = p.category || '';
+      document.getElementById('p-type').value = (p.isBundle || p.type === 'bundle') ? 'bundle' : 'individual';
+      document.getElementById('tag-bestseller').checked = p.tags?.includes('bestseller') || false;
+      document.getElementById('tag-premium').checked = p.tags?.includes('premium') || false;
+      document.getElementById('tag-beginner').checked = p.tags?.includes('beginner') || false;
+      document.getElementById('tag-new').checked = p.tags?.includes('new') || false;
+      document.getElementById('p-featured').checked = p.featured || false;
+      document.getElementById('p-is-premium-bundle').checked = p.isPremiumBundle || false;
+      document.querySelectorAll('.font-style-cb').forEach(cb => { cb.checked = p.fontStyles?.includes(cb.value) || false; });
+      imageUrls = p.images || [];
+      bundleItems = p.bundleItems || [];
+      renderImagePreviews();
+      renderBundleItemsEditor();
+      toggleBundleOptions();
+    }
 
-function renderBundleItemsEditor() {
-  const el = document.getElementById('bundle-items-editor');
-  if (bundleItems.length === 0) {
-    el.innerHTML = '<p style="color:var(--text-light);font-size:13px;text-align:center;padding:20px;">No items added yet. Click "+ Add Item" above.</p>';
-    return;
-  }
-  el.innerHTML = bundleItems.map((item, i) => `
+    async function saveProduct() {
+      const name = document.getElementById('p-name').value.trim();
+      const price = Number(document.getElementById('p-price').value);
+      const category = document.getElementById('p-category').value;
+      if (!name || !price || !category) {
+        showToast('Please fill in Name, Price and Category.', 'error'); return;
+      }
+      const tags = [];
+      if (document.getElementById('tag-bestseller').checked) tags.push('bestseller');
+      if (document.getElementById('tag-premium').checked) tags.push('premium');
+      if (document.getElementById('tag-beginner').checked) tags.push('beginner');
+      if (document.getElementById('tag-new').checked) tags.push('new');
+      const type = document.getElementById('p-type').value;
+      const isBundle = type === 'bundle';
+      const fontStyles = isBundle ? [...document.querySelectorAll('.font-style-cb:checked')].map(c => c.value) : [];
+      const origPrice = Number(document.getElementById('p-orig-price').value) || null;
+      const stock = document.getElementById('p-stock').value !== '' ? Number(document.getElementById('p-stock').value) : null;
+
+      const data = {
+        name,
+        description: document.getElementById('p-desc').value.trim(),
+        price,
+        originalPrice: origPrice,
+        stock,
+        category,
+        type,
+        isBundle,
+        isPremiumBundle: isBundle && document.getElementById('p-is-premium-bundle').checked,
+        tags,
+        featured: document.getElementById('p-featured').checked,
+        images: imageUrls.filter(Boolean),
+        fontStyles,
+        fontStylesCount: fontStyles.length,
+        bundleItems: isBundle ? bundleItems : [],
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      const btn = document.getElementById('save-btn');
+      btn.disabled = true; btn.textContent = 'Saving…';
+
+      try {
+        const editId = document.getElementById('edit-product-id').value;
+        if (editId) {
+          await db.collection('products').doc(editId).update(data);
+          showToast('Product updated!', 'success');
+        } else {
+          data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          await db.collection('products').add(data);
+          showToast('Product added!', 'success');
+        }
+        await loadAdminProducts();
+        loadDashboard();
+        showSection('products');
+      } catch (e) {
+        console.error(e);
+        showToast('Error saving product: ' + e.message, 'error');
+      }
+      btn.disabled = false; btn.textContent = '💾 Save Product';
+    }
+
+    async function deleteProduct(id, name, btnEl) {
+      if (!confirm(`Delete "${name}"?\nThis cannot be undone.`)) return;
+      btnEl.disabled = true; btnEl.textContent = '…';
+      try {
+        await db.collection('products').doc(id).delete();
+        showToast(`"${name}" deleted.`, 'info');
+        allAdminProducts = allAdminProducts.filter(p => p.id !== id);
+        renderAdminTable(allAdminProducts);
+        loadDashboard();
+      } catch (e) {
+        showToast('Delete failed: ' + e.message, 'error');
+        btnEl.disabled = false; btnEl.textContent = 'Delete';
+      }
+    }
+
+    // ============ BUNDLE OPTIONS ============
+    function toggleBundleOptions() {
+      const isBundle = document.getElementById('p-type').value === 'bundle';
+      document.getElementById('bundle-options').classList.toggle('hidden', !isBundle);
+    }
+
+    function addBundleItem(item = {}) {
+      const idx = bundleItems.length;
+      bundleItems.push(item.name ? item : { name: '', description: '', image: '' });
+      renderBundleItemsEditor();
+    }
+
+    function renderBundleItemsEditor() {
+      const el = document.getElementById('bundle-items-editor');
+      if (bundleItems.length === 0) {
+        el.innerHTML = '<p style="color:var(--text-light);font-size:13px;text-align:center;padding:20px;">No items added yet. Click "+ Add Item" above.</p>';
+        return;
+      }
+      el.innerHTML = bundleItems.map((item, i) => `
     <div style="background:var(--cream);border-radius:10px;padding:14px;border:1px solid var(--border);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <span style="font-weight:600;font-size:13px;">Item ${i+1}</span>
+        <span style="font-weight:600;font-size:13px;">Item ${i + 1}</span>
         <button onclick="removeBundleItem(${i})" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:18px;" title="Remove">×</button>
       </div>
       <div style="display:grid;gap:8px;">
-        <input type="text" value="${item.name||''}" class="form-ctrl" placeholder="Item name (e.g. Qalam Pen)" oninput="updateBundleItem(${i},'name',this.value)" style="padding:9px 12px;font-size:13px;"/>
-        <input type="text" value="${item.description||''}" class="form-ctrl" placeholder="Short description (optional)" oninput="updateBundleItem(${i},'description',this.value)" style="padding:9px 12px;font-size:13px;"/>
-        <input type="url" value="${item.image||''}" class="form-ctrl" placeholder="Image URL (optional)" oninput="updateBundleItem(${i},'image',this.value)" style="padding:9px 12px;font-size:13px;"/>
+        <input type="text" value="${item.name || ''}" class="form-ctrl" placeholder="Item name (e.g. Qalam Pen)" oninput="updateBundleItem(${i},'name',this.value)" style="padding:9px 12px;font-size:13px;"/>
+        <input type="text" value="${item.description || ''}" class="form-ctrl" placeholder="Short description (optional)" oninput="updateBundleItem(${i},'description',this.value)" style="padding:9px 12px;font-size:13px;"/>
+        <input type="url" value="${item.image || ''}" class="form-ctrl" placeholder="Image URL (optional)" oninput="updateBundleItem(${i},'image',this.value)" style="padding:9px 12px;font-size:13px;"/>
       </div>
     </div>
   `).join('');
-}
-
-function updateBundleItem(idx, key, value) { bundleItems[idx][key] = value; }
-function removeBundleItem(idx) { bundleItems.splice(idx, 1); renderBundleItemsEditor(); }
-
-// ============ IMAGE UPLOAD (ImgBB) ============
-async function uploadImage(input) {
-  const file = input.files[0];
-  if (!file) return;
-  if (file.size > 10 * 1024 * 1024) { showToast('File too large (max 10MB)', 'error'); return; }
-  document.getElementById('upload-progress').classList.remove('hidden');
-  const bar = document.getElementById('upload-bar');
-  bar.style.width = '30%';
-  try {
-    const form = new FormData();
-    form.append('image', file);
-    bar.style.width = '60%';
-    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method:'POST', body:form});
-    bar.style.width = '90%';
-    const json = await res.json();
-    if (json.success) {
-      imageUrls.push(json.data.url);
-      renderImagePreviews();
-      showToast('Image uploaded!', 'success');
-    } else {
-      showToast('Upload failed: ' + (json.error?.message || 'Unknown error'), 'error');
     }
-  } catch(e) {
-    showToast('Upload error: ' + e.message, 'error');
-  }
-  bar.style.width = '100%';
-  setTimeout(() => { document.getElementById('upload-progress').classList.add('hidden'); bar.style.width='0%'; }, 500);
-  input.value = '';
-}
 
-function addImageUrl() {
-  const url = document.getElementById('img-url-input').value.trim();
-  if (!url) return;
-  if (!url.startsWith('http')) { showToast('Enter a valid URL starting with http', 'error'); return; }
-  imageUrls.push(url);
-  document.getElementById('img-url-input').value = '';
-  renderImagePreviews();
-}
+    function updateBundleItem(idx, key, value) { bundleItems[idx][key] = value; }
+    function removeBundleItem(idx) { bundleItems.splice(idx, 1); renderBundleItemsEditor(); }
 
-function renderImagePreviews() {
-  const el = document.getElementById('image-previews');
-  if (imageUrls.length === 0) { el.innerHTML = ''; return; }
-  el.innerHTML = imageUrls.map((url, i) => `
+    // ============ IMAGE UPLOAD (ImgBB) ============
+    async function uploadImage(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) { showToast('File too large (max 10MB)', 'error'); return; }
+      document.getElementById('upload-progress').classList.remove('hidden');
+      const bar = document.getElementById('upload-bar');
+      bar.style.width = '30%';
+      try {
+        const form = new FormData();
+        form.append('image', file);
+        bar.style.width = '60%';
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: form });
+        bar.style.width = '90%';
+        const json = await res.json();
+        if (json.success) {
+          imageUrls.push(json.data.url);
+          renderImagePreviews();
+          showToast('Image uploaded!', 'success');
+        } else {
+          showToast('Upload failed: ' + (json.error?.message || 'Unknown error'), 'error');
+        }
+      } catch (e) {
+        showToast('Upload error: ' + e.message, 'error');
+      }
+      bar.style.width = '100%';
+      setTimeout(() => { document.getElementById('upload-progress').classList.add('hidden'); bar.style.width = '0%'; }, 500);
+      input.value = '';
+    }
+
+    function addImageUrl() {
+      const url = document.getElementById('img-url-input').value.trim();
+      if (!url) return;
+      if (!url.startsWith('http')) { showToast('Enter a valid URL starting with http', 'error'); return; }
+      imageUrls.push(url);
+      document.getElementById('img-url-input').value = '';
+      renderImagePreviews();
+    }
+
+    function renderImagePreviews() {
+      const el = document.getElementById('image-previews');
+      if (imageUrls.length === 0) { el.innerHTML = ''; return; }
+      el.innerHTML = imageUrls.map((url, i) => `
     <div style="position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid var(--border);">
       <img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"/>
-      ${i===0?'<div style="position:absolute;top:4px;left:4px;background:var(--gold);color:var(--dark);font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;">MAIN</div>':''}
+      ${i === 0 ? '<div style="position:absolute;top:4px;left:4px;background:var(--gold);color:var(--dark);font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;">MAIN</div>' : ''}
       <button onclick="removeImage(${i})" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;">×</button>
     </div>
   `).join('');
-}
+    }
 
-function removeImage(i) { imageUrls.splice(i, 1); renderImagePreviews(); }
+    function removeImage(i) { imageUrls.splice(i, 1); renderImagePreviews(); }
 
-// ============ SETTINGS ============
-async function loadSettings_admin() {
-  const s = await getSettings();
-  document.getElementById('s-store-name').value = s.storeName || '';
-  document.getElementById('s-wa-number').value = s.whatsappNumber || '';
-}
+    // ============ SETTINGS ============
+    async function loadSettings_admin() {
+      const s = await getSettings();
+      document.getElementById('s-store-name').value = s.storeName || '';
+      document.getElementById('s-wa-number').value = s.whatsappNumber || '';
+    }
 
-async function saveSettings_admin() {
-  const data = {
-    storeName: document.getElementById('s-store-name').value.trim(),
-    whatsappNumber: document.getElementById('s-wa-number').value.trim().replace(/\D/g,'')
-  };
-  await saveSettings(data);
-  showToast('Settings saved!', 'success');
-}
+    async function saveSettings_admin() {
+      const data = {
+        storeName: document.getElementById('s-store-name').value.trim(),
+        whatsappNumber: document.getElementById('s-wa-number').value.trim().replace(/\D/g, '')
+      };
+      await saveSettings(data);
+      showToast('Settings saved!', 'success');
+    }
 
-async function changePassword() {
-  const np = document.getElementById('s-new-pwd').value;
-  const cp = document.getElementById('s-confirm-pwd').value;
-  if (!np) { showToast('Enter a new password', 'error'); return; }
-  if (np !== cp) { showToast('Passwords do not match', 'error'); return; }
-  await saveSettings({adminPassword: np});
-  showToast('Password updated!', 'success');
-  document.getElementById('s-new-pwd').value = '';
-  document.getElementById('s-confirm-pwd').value = '';
-}
+    async function changePassword() {
+      const np = document.getElementById('s-new-pwd').value;
+      const cp = document.getElementById('s-confirm-pwd').value;
+      if (!np) { showToast('Enter a new password', 'error'); return; }
+      if (np !== cp) { showToast('Passwords do not match', 'error'); return; }
+      await saveSettings({ adminPassword: np });
+      showToast('Password updated!', 'success');
+      document.getElementById('s-new-pwd').value = '';
+      document.getElementById('s-confirm-pwd').value = '';
+    }
 
-async function testWhatsApp() {
-  const s = await getSettings();
-  const phone = (s.whatsappNumber || '919999999999').replace(/\D/g,'');
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent('🧪 Test message from ' + (s.storeName || 'Calligraphy Store') + ' admin panel. WhatsApp is working!')}`, '_blank');
-}
+    async function testWhatsApp() {
+      const s = await getSettings();
+      const phone = (s.whatsappNumber || '919999999999').replace(/\D/g, '');
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent('🧪 Test message from ' + (s.storeName || 'Calligraphy Store') + ' admin panel. WhatsApp is working!')}`, '_blank');
+    }
 
-// Load settings on section click
-document.getElementById('nav-settings').addEventListener('click', loadSettings_admin);
+    // Load settings on section click
+    document.getElementById('nav-settings').addEventListener('click', loadSettings_admin);
 
-function showToast(msg, type) {
-  let box = document.getElementById('toasts');
-  if (!box) {
-    box = document.createElement('div');
-    box.id = 'toasts';
-    box.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;';
-    document.body.appendChild(box);
-  }
-  const t = document.createElement('div');
-  const bg = type==='success'?'#C9A84C':type==='error'?'#ef4444':'#1C3D2E';
-  t.style.cssText = `background:${bg};color:white;padding:12px 20px;border-radius:10px;font-family:Inter,sans-serif;font-size:14px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.25);transform:translateX(120px);opacity:0;transition:all .3s ease;max-width:300px;pointer-events:all;`;
-  t.textContent = msg;
-  box.appendChild(t);
-  requestAnimationFrame(()=>{ t.style.transform='translateX(0)'; t.style.opacity='1'; });
-  setTimeout(()=>{ t.style.transform='translateX(120px)'; t.style.opacity='0'; setTimeout(()=>t.remove(),300); },3000);
-}
+    function showToast(msg, type) {
+      let box = document.getElementById('toasts');
+      if (!box) {
+        box = document.createElement('div');
+        box.id = 'toasts';
+        box.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;';
+        document.body.appendChild(box);
+      }
+      const t = document.createElement('div');
+      const bg = type === 'success' ? '#C9A84C' : type === 'error' ? '#ef4444' : '#1C3D2E';
+      t.style.cssText = `background:${bg};color:white;padding:12px 20px;border-radius:10px;font-family:Inter,sans-serif;font-size:14px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.25);transform:translateX(120px);opacity:0;transition:all .3s ease;max-width:300px;pointer-events:all;`;
+      t.textContent = msg;
+      box.appendChild(t);
+      requestAnimationFrame(() => { t.style.transform = 'translateX(0)'; t.style.opacity = '1'; });
+      setTimeout(() => { t.style.transform = 'translateX(120px)'; t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3000);
+    }
 
-function rupees(n) { return '₹'+Number(n).toLocaleString('en-IN'); }
-</script>
+    function rupees(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
+  </script>
 </body>
+
 </html>

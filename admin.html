@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Admin Panel — Ajeer Calligraphy Store</title>
+  <title>Admin Panel — Calligraphy Tools Store</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/styles.css"/>
@@ -17,7 +17,7 @@
   <div style="background:#fff;border-radius:20px;padding:48px 40px;width:380px;max-width:90%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.3);">
     <div style="font-size:48px;margin-bottom:12px;">🖊️</div>
     <h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#0D0D0D;margin-bottom:4px;">Admin Panel</h1>
-    <p style="font-size:13px;color:#888;margin-bottom:32px;">Ajeer Calligraphy Store</p>
+    <p style="font-size:13px;color:#888;margin-bottom:32px;">Calligraphy Tools Store</p>
     <div class="form-row">
       <label class="form-lbl" style="text-align:left;">Password</label>
       <input id="login-pwd" type="password" class="form-ctrl" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()"/>
@@ -34,9 +34,12 @@
 
     <!-- SIDEBAR -->
     <aside class="admin-side">
-      <div class="admin-logo">
-        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#fff;">🖊️ Ajeer</div>
-        <div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:2px;letter-spacing:1px;">ADMIN PANEL</div>
+      <div class="admin-logo" style="display:flex; align-items:center; gap:10px; justify-content:center;">
+        <img src="https://i.ibb.co/xS6JG15G/logo.png" alt="Logo" style="height:32px; width:32px; border-radius:50%;">
+        <div style="text-align:left;">
+          <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff;line-height:1.1;">Calligraphy</div>
+          <div style="font-size:9px;color:#fff;margin-top:2px;letter-spacing:1px;text-transform:uppercase;opacity:0.8;">Tools Store</div>
+        </div>
       </div>
       <nav style="padding:16px 0;">
         <button class="a-nav-item active" onclick="showSection('dashboard')" id="nav-dashboard">
@@ -307,7 +310,7 @@
             <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">📲 WhatsApp & Store Info</h2>
             <div class="form-row">
               <label class="form-lbl">Store Name</label>
-              <input id="s-store-name" type="text" class="form-ctrl" placeholder="Ajeer Calligraphy Store"/>
+              <input id="s-store-name" type="text" class="form-ctrl" placeholder="Calligraphy Tools Store"/>
             </div>
             <div class="form-row">
               <label class="form-lbl">WhatsApp Number</label>

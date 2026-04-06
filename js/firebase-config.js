@@ -29,7 +29,7 @@ async function getSettings() {
 function defaultSettings() {
   return {
     whatsappNumber: '919999999999',
-    storeName: 'Ajeer Calligraphy Store',
+    storeName: 'Calligraphy Tools Store',
     adminPassword: 'admin123'
   };
 }

@@ -780,8 +780,8 @@
 
     async function testWhatsApp() {
       const s = await getSettings();
-      const phone = (s.whatsappNumber || '919999999999').replace(/\D/g, '');
-      window.open(`https://wa.me/${phone}?text=${encodeURIComponent('🧪 Test message from ' + (s.storeName || 'Calligraphy Store') + ' admin panel. WhatsApp is working!')}`, '_blank');
+      const phone = (s.whatsappNumber || '917736348312').replace(/\D/g, '');
+      window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent('🧪 Test message from ' + (s.storeName || 'Calligraphy Store') + ' admin panel. WhatsApp is working!')}`;
     }
 
     // Load settings on section click

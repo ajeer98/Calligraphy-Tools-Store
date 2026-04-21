@@ -171,18 +171,17 @@
                   Basic Information</h2>
                 <div class="form-row">
                   <label class="form-lbl">Product Name *</label>
-                  <input id="p-name" type="text" class="form-ctrl" placeholder="e.g. Premium Naskh Calligraphy Pen" />
+                  <input id="p-name" type="text" class="form-ctrl" placeholder="e.g. Premium Naskh Calligraphy Qalam" />
                 </div>
                 <div class="grid sm:grid-cols-2 gap-4">
                   <div class="form-row">
                     <label class="form-lbl">Category *</label>
-                    <select id="p-category" class="form-ctrl">
+                    <select id="p-category" class="form-ctrl" onchange="toggleSizeOption()">
                       <option value="">Select category</option>
-                      <option value="pens">Calligraphy Pens</option>
+                      <option value="pens">Calligraphy Qalams</option>
                       <option value="inks">Premium Inks</option>
-                      <option value="nibs">Nibs & Tips</option>
+                      <option value="paper">Paper</option>
                       <option value="kits">Kits & Bundles</option>
-                      <option value="paper">Practice Paper</option>
                       <option value="accessories">Accessories</option>
                     </select>
                   </div>
@@ -193,6 +192,11 @@
                       <option value="bundle">Bundle / Kit</option>
                     </select>
                   </div>
+                </div>
+                <div id="size-options-container" class="form-row hidden">
+                  <label class="form-lbl">Available Sizes (comma separated)</label>
+                  <input id="p-sizes" type="text" class="form-ctrl" placeholder="e.g. 2mm, 3mm, 4mm" />
+                  <p class="text-xs text-gray-400 mt-1">Only visible for Calligraphy Qalams.</p>
                 </div>
                 <div class="form-row">
                   <label class="form-lbl">Description</label>
@@ -369,7 +373,46 @@
                 <p style="font-size:12px;color:var(--text-light);margin-top:6px;">Include country code. e.g.,
                   919876543210 for India.</p>
               </div>
-              <button onclick="saveSettings_admin()" class="btn-gold">Save Settings</button>
+              <div class="form-row">
+                <label class="form-lbl">Email Address</label>
+                <input id="s-store-email" type="email" class="form-ctrl" placeholder="hello@calligraphystore.com" />
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Instagram Username</label>
+                <input id="s-store-insta" type="text" class="form-ctrl" placeholder="calligraphy_tools_store" />
+              </div>
+            </div>
+            <div class="a-card">
+              <h2
+                style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+                🎁 Homepage Starter Kit Highlight</h2>
+              <div class="form-row">
+                <label class="form-lbl">Highlight Title</label>
+                <input id="s-kit-title" type="text" class="form-ctrl" placeholder="Starter Kit for Beginners" />
+              </div>
+              <div class="form-row">
+                <label class="form-lbl">Highlight Description</label>
+                <textarea id="s-kit-desc" class="form-ctrl" rows="3" placeholder="Description of the kit..."></textarea>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="form-row">
+                  <label class="form-lbl">Display Price (₹)</label>
+                  <input id="s-kit-price" type="number" class="form-ctrl" placeholder="999" />
+                </div>
+                <div class="form-row">
+                  <label class="form-lbl">Original Price (₹)</label>
+                  <input id="s-kit-orig" type="number" class="form-ctrl" placeholder="1499" />
+                </div>
+              </div>
+            </div>
+            <div class="a-card">
+              <h2
+                style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+                📦 Starter Kit Features</h2>
+              <div id="kit-features-editor" class="space-y-4 mb-4"></div>
+              <div class="flex justify-center">
+                <button onclick="addKitFeature()" class="a-btn-sm btn-dark">+ Add Item</button>
+              </div>
             </div>
             <div class="a-card">
               <h2
@@ -400,6 +443,12 @@
               Send Test Message
             </button>
           </div>
+
+          <!-- Main Save Button -->
+          <div class="mt-8 flex justify-center md:justify-end">
+            <button onclick="saveSettings_admin()" class="btn-gold" style="padding: 16px 48px; font-size: 16px;">💾 Save
+              All Settings</button>
+          </div>
         </div>
 
       </main>
@@ -417,6 +466,7 @@
     let allAdminProducts = [];
     let imageUrls = [];
     let bundleItems = [];
+    let kitFeatures = [];
 
     async function doLogin() {
       const pwd = document.getElementById('login-pwd').value;
@@ -448,6 +498,11 @@
         loadAdminProducts();
       }
     });
+
+    function toggleSizeOption() {
+      const cat = document.getElementById('p-category').value;
+      document.getElementById('size-options-container').classList.toggle('hidden', cat !== 'pens');
+    }
 
     // ============ NAVIGATION ============
     function showSection(name) {
@@ -556,6 +611,7 @@
       renderImagePreviews();
       renderBundleItemsEditor();
       toggleBundleOptions();
+      toggleSizeOption();
     }
 
     async function editProduct(id) {
@@ -572,6 +628,8 @@
       document.getElementById('p-orig-price').value = p.originalPrice || '';
       document.getElementById('p-stock').value = p.stock !== undefined ? p.stock : '';
       document.getElementById('p-category').value = p.category || '';
+      document.getElementById('p-sizes').value = p.sizes ? p.sizes.join(', ') : '';
+      toggleSizeOption();
       document.getElementById('p-type').value = (p.isBundle || p.type === 'bundle') ? 'bundle' : 'individual';
       document.getElementById('tag-bestseller').checked = p.tags?.includes('bestseller') || false;
       document.getElementById('tag-premium').checked = p.tags?.includes('premium') || false;
@@ -591,6 +649,9 @@
       const name = document.getElementById('p-name').value.trim();
       const price = Number(document.getElementById('p-price').value);
       const category = document.getElementById('p-category').value;
+      const sizesRaw = document.getElementById('p-sizes').value;
+      const sizes = category === 'pens' ? sizesRaw.split(',').map(s => s.trim()).filter(s => s !== '') : [];
+
       if (!name || !price || !category) {
         showToast('Please fill in Name, Price and Category.', 'error'); return;
       }
@@ -612,6 +673,7 @@
         originalPrice: origPrice,
         stock,
         category,
+        sizes,
         type,
         isBundle,
         isPremiumBundle: isBundle && document.getElementById('p-is-premium-bundle').checked,
@@ -756,12 +818,57 @@
       const s = await getSettings();
       document.getElementById('s-store-name').value = s.storeName || '';
       document.getElementById('s-wa-number').value = s.whatsappNumber || '';
+      document.getElementById('s-store-email').value = s.storeEmail || '';
+      document.getElementById('s-store-insta').value = s.storeInstagram || '';
+      // Starter Kit
+      document.getElementById('s-kit-title').value = s.kitTitle || '';
+      document.getElementById('s-kit-desc').value = s.kitDesc || '';
+      document.getElementById('s-kit-price').value = s.kitPrice || '';
+      document.getElementById('s-kit-orig').value = s.kitOrig || '';
+
+      kitFeatures = s.kitFeatures || [];
+      renderKitFeaturesEditor();
+    }
+
+    function addKitFeature() {
+      kitFeatures.push({ icon: '🖊️', title: '', desc: '' });
+      renderKitFeaturesEditor();
+    }
+
+    function renderKitFeaturesEditor() {
+      const container = document.getElementById('kit-features-editor');
+      container.innerHTML = kitFeatures.map((f, i) => `
+        <div class="p-3 bg-gray-50 rounded-lg border border-gray-100 relative">
+          <button onclick="kitFeatures.splice(${i}, 1); renderKitFeaturesEditor();" class="absolute top-1 right-2 text-red-400 hover:text-red-600">×</button>
+          <div class="grid grid-cols-4 gap-2">
+            <input type="text" value="${f.icon || ''}" class="form-ctrl text-center" placeholder="Icon" oninput="updateKitFeature(${i}, 'icon', this.value)" />
+            <input type="text" value="${f.title || ''}" class="form-ctrl col-span-3" placeholder="Item Title" oninput="updateKitFeature(${i}, 'title', this.value)" />
+          </div>
+          <input type="text" value="${f.desc || ''}" class="form-ctrl mt-2" placeholder="Short description" oninput="updateKitFeature(${i}, 'desc', this.value)" />
+        </div>
+      `).join('');
+
+      if (kitFeatures.length === 0) {
+        container.innerHTML = '<p class="text-center text-gray-400 text-sm">No items added.</p>';
+      }
+    }
+
+    function updateKitFeature(index, key, value) {
+      kitFeatures[index][key] = value;
     }
 
     async function saveSettings_admin() {
       const data = {
         storeName: document.getElementById('s-store-name').value.trim(),
-        whatsappNumber: document.getElementById('s-wa-number').value.trim().replace(/\D/g, '')
+        whatsappNumber: document.getElementById('s-wa-number').value.trim().replace(/\D/g, ''),
+        storeEmail: document.getElementById('s-store-email').value.trim(),
+        storeInstagram: document.getElementById('s-store-insta').value.trim(),
+        // Starter Kit
+        kitTitle: document.getElementById('s-kit-title').value.trim(),
+        kitDesc: document.getElementById('s-kit-desc').value.trim(),
+        kitPrice: Number(document.getElementById('s-kit-price').value) || 0,
+        kitOrig: Number(document.getElementById('s-kit-orig').value) || 0,
+        kitFeatures: kitFeatures
       };
       await saveSettings(data);
       showToast('Settings saved!', 'success');

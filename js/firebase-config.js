@@ -33,7 +33,7 @@ function defaultSettings() {
     storeName: 'Calligraphy Tools Store',
     storeEmail: 'muhammedajeer54@gmail.com',
     storeInstagram: 'calligraphy_tools_store',
-    adminPassword: 'admin123',
+    adminPassword: 'ajeer@.com',
     kitTitle: 'Starter Kit for Beginners',
     kitDesc: 'Everything you need to start your calligraphy journey. Includes 2 font style guides, premium qalams, ink, practice sheets, and a carrying case.',
     kitPrice: 999,

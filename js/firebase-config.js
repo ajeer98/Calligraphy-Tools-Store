@@ -18,19 +18,32 @@ let _settingsCache = null;
 async function getSettings() {
   if (_settingsCache) return _settingsCache;
   try {
-    const doc = await db.collection('settings').doc('config').get();
+    const doc = await db.collection('settings').doc('config').get({ source: 'server' });
     _settingsCache = doc.exists ? doc.data() : defaultSettings();
     return _settingsCache;
   } catch (e) {
+    console.error("Firestore Settings Error:", e);
     return defaultSettings();
   }
 }
 
 function defaultSettings() {
   return {
-    whatsappNumber: '919999999999',
+    whatsappNumber: '917736348312',
     storeName: 'Calligraphy Tools Store',
-    adminPassword: 'admin123'
+    storeEmail: 'muhammedajeer54@gmail.com',
+    storeInstagram: 'calligraphy_tools_store',
+    adminPassword: 'admin123',
+    kitTitle: 'Starter Kit for Beginners',
+    kitDesc: 'Everything you need to start your calligraphy journey. Includes 2 font style guides, premium qalams, ink, practice sheets, and a carrying case.',
+    kitPrice: 999,
+    kitOrig: 1499,
+    kitFeatures: [
+      { icon: '🖊️', title: 'Calligraphy Qalam', desc: '2 sizes included' },
+      { icon: '🎨', title: 'Premium Ink', desc: '2 bottles, 30ml each' },
+      { icon: '📄', title: 'Practice Sheets', desc: '50 ruled sheets' },
+      { icon: '📘', title: 'Font Guides', desc: 'Naskh & Nastaliq' }
+    ]
   };
 }
 

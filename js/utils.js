@@ -5,16 +5,17 @@ const Cart = {
   save(items) { localStorage.setItem(this.KEY, JSON.stringify(items)); this.badge(); },
   add(product, qty = 1) {
     const items = this.get();
-    const ex = items.find(i => i.id === product.id);
-    if (ex) ex.quantity += qty; else items.push({ ...product, quantity: qty });
+    const cartId = product.size ? `${product.id}_${product.size.replace(/\s+/g, '_')}` : product.id;
+    const ex = items.find(i => (i.cartId || i.id) === cartId);
+    if (ex) ex.quantity += qty; else items.push({ ...product, cartId, quantity: qty });
     this.save(items);
     showToast(`${product.name} added to cart!`, 'success');
   },
-  remove(id) { this.save(this.get().filter(i => i.id !== id)); },
-  setQty(id, qty) {
-    if (qty <= 0) { this.remove(id); return; }
+  remove(cartId) { this.save(this.get().filter(i => (i.cartId || i.id) !== cartId)); },
+  setQty(cartId, qty) {
+    if (qty <= 0) { this.remove(cartId); return; }
     const items = this.get();
-    const item = items.find(i => i.id === id);
+    const item = items.find(i => (i.cartId || i.id) === cartId);
     if (item) item.quantity = qty;
     this.save(items);
   },
@@ -34,17 +35,17 @@ const Cart = {
 function rupees(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
 
 // ============ WHATSAPP ============
-async function sendWhatsAppOrder(info) {
+function sendWhatsAppOrder(info, settings) {
   const items = Cart.get();
   const total = Cart.total();
-  const s = await getSettings();
+  const s = settings || {};
   let msg = `🖊️ *New Order — ${s.storeName || 'Calligraphy Store'}*\n\n`;
   msg += `*📦 Items:*\n`;
   items.forEach(i => { msg += `• ${i.name} × ${i.quantity} = ${rupees(i.price * i.quantity)}\n`; });
   msg += `\n*💰 Total: ${rupees(total)}*\n\n`;
   msg += `*👤 Customer:*\nName: ${info.name}\nPhone: ${info.phone}\nAddress: ${info.address}`;
   if (info.notes) msg += `\nNotes: ${info.notes}`;
-  const phone = (s.whatsappNumber || '919999999999').replace(/\D/g, '');
+  const phone = (s.whatsappNumber || '917736348312').replace(/\D/g, '');
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -80,6 +81,36 @@ function initNav() {
   if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
 }
 
+// ============ FOOTER ============
+async function initFooter() {
+  if (typeof getSettings === 'function') {
+    try {
+      const s = await getSettings();
+      const phone = (s.whatsappNumber || '917736348312').replace(/\D/g, '');
+
+      const footerWa = document.getElementById('footer-wa');
+      if (footerWa) footerWa.href = `https://wa.me/${phone}?text=${encodeURIComponent('Hello! I would like to know more about your calligraphy products.')}`;
+
+      const footerPhone = document.getElementById('footer-phone');
+      if (footerPhone) {
+        footerPhone.innerHTML = `<i class="fa-solid fa-phone-flip w-5 text-gold"></i> +${phone}`;
+        footerPhone.href = `tel:+${phone}`;
+      }
+      const footerEmail = document.getElementById('footer-email');
+      if (footerEmail && s.storeEmail) {
+        footerEmail.innerHTML = `<i class="fa-regular fa-envelope w-5 text-gold"></i> ${s.storeEmail}`;
+        footerEmail.href = `mailto:${s.storeEmail}`;
+      }
+      const footerInsta = document.getElementById('footer-insta');
+      if (footerInsta && s.storeInstagram) {
+        footerInsta.innerHTML = `<i class="fa-brands fa-instagram w-5 text-gold"></i> @${s.storeInstagram}`;
+        footerInsta.href = `https://www.instagram.com/${s.storeInstagram}/`;
+        footerInsta.target = "_blank";
+      }
+    } catch (e) { console.error('Footer link init failed:', e); }
+  }
+}
+
 // ============ LAZY IMAGES ============
 function lazyLoad() {
   const obs = new IntersectionObserver(entries => {
@@ -96,6 +127,7 @@ function lazyLoad() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
+  initFooter();
   lazyLoad();
   if (typeof AOS !== 'undefined') AOS.init({ duration: 750, once: true, offset: 80 });
 });

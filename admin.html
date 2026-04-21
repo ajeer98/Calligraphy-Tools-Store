@@ -32,8 +32,6 @@
       </div>
       <button onclick="doLogin()" class="btn-gold w-full justify-center" style="margin-top:8px;">Sign In →</button>
       <p id="login-err" class="hidden text-red-500 text-sm mt-4">Incorrect password. Try again.</p>
-      <p class="text-xs text-gray-300 mt-6">Default password: <code
-          style="background:#f0f0f0;padding:2px 6px;border-radius:4px;">admin123</code></p>
     </div>
   </div>
 
@@ -178,7 +176,7 @@
                     <label class="form-lbl">Category *</label>
                     <select id="p-category" class="form-ctrl" onchange="toggleSizeOption()">
                       <option value="">Select category</option>
-                      <option value="pens">Calligraphy Qalams</option>
+                      <option value="qalams">Calligraphy Qalams</option>
                       <option value="inks">Premium Inks</option>
                       <option value="paper">Paper</option>
                       <option value="kits">Kits & Bundles</option>
@@ -471,7 +469,7 @@
     async function doLogin() {
       const pwd = document.getElementById('login-pwd').value;
       const s = await getSettings();
-      const correctPwd = s.adminPassword || 'admin123';
+      const correctPwd = s.adminPassword || 'ajeer@.com';
       if (pwd === correctPwd) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-panel').style.display = 'block';
@@ -501,7 +499,7 @@
 
     function toggleSizeOption() {
       const cat = document.getElementById('p-category').value;
-      document.getElementById('size-options-container').classList.toggle('hidden', cat !== 'pens');
+      document.getElementById('size-options-container').classList.toggle('hidden', cat !== 'qalams');
     }
 
     // ============ NAVIGATION ============
@@ -650,7 +648,7 @@
       const price = Number(document.getElementById('p-price').value);
       const category = document.getElementById('p-category').value;
       const sizesRaw = document.getElementById('p-sizes').value;
-      const sizes = category === 'pens' ? sizesRaw.split(',').map(s => s.trim()).filter(s => s !== '') : [];
+      const sizes = category === 'qalams' ? sizesRaw.split(',').map(s => s.trim()).filter(s => s !== '') : [];
 
       if (!name || !price || !category) {
         showToast('Please fill in Name, Price and Category.', 'error'); return;
@@ -749,7 +747,7 @@
         <button onclick="removeBundleItem(${i})" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:18px;" title="Remove">×</button>
       </div>
       <div style="display:grid;gap:8px;">
-        <input type="text" value="${item.name || ''}" class="form-ctrl" placeholder="Item name (e.g. Qalam Pen)" oninput="updateBundleItem(${i},'name',this.value)" style="padding:9px 12px;font-size:13px;"/>
+        <input type="text" value="${item.name || ''}" class="form-ctrl" placeholder="Item name (e.g. Reed Qalam)" oninput="updateBundleItem(${i},'name',this.value)" style="padding:9px 12px;font-size:13px;"/>
         <input type="text" value="${item.description || ''}" class="form-ctrl" placeholder="Short description (optional)" oninput="updateBundleItem(${i},'description',this.value)" style="padding:9px 12px;font-size:13px;"/>
         <input type="url" value="${item.image || ''}" class="form-ctrl" placeholder="Image URL (optional)" oninput="updateBundleItem(${i},'image',this.value)" style="padding:9px 12px;font-size:13px;"/>
       </div>

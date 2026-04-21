@@ -253,7 +253,7 @@
         </div>
         <div>
           <div class="footer-title">Categories</div>
-          <a href="products.html?cat=pens" class="footer-link">Calligraphy Qalams</a>
+          <a href="products.html?cat=qalams" class="footer-link">Calligraphy Qalams</a>
           <a href="products.html?cat=inks" class="footer-link">Premium Inks</a>
           <a href="products.html?cat=paper" class="footer-link">Paper</a>
           <a href="products.html?cat=kits" class="footer-link">Bundle Kits</a>
@@ -366,7 +366,7 @@
       }
 
       // Render Sizes
-      if (p.category === 'pens' && p.sizes && p.sizes.length > 0) {
+      if (p.category === 'qalams' && p.sizes && p.sizes.length > 0) {
         const area = document.getElementById('size-selection-area');
         const chips = document.getElementById('size-chips');
         area.classList.remove('hidden');
@@ -424,7 +424,7 @@
       if (!currentProduct) return;
       const qty = Number(document.getElementById('qty-input').value);
 
-      if (currentProduct.category === 'pens' && currentProduct.sizes?.length > 0) {
+      if (currentProduct.category === 'qalams' && currentProduct.sizes?.length > 0) {
         if (selectedSizes.length === 0) {
           showToast('Please select at least one size', 'error');
           return;

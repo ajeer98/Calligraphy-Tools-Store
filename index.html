@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Calligraphy Tools Store — Premium Calligraphy Tools</title>
   <meta name="description"
-    content="Discover premium calligraphy pens, inks, nibs and starter kits. Handpicked tools for beginners and masters. Shop now via WhatsApp." />
+    content="Discover premium calligraphy Qalams, inks, nibs and starter kits. Handpicked tools for beginners and masters. Shop now via WhatsApp." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -79,8 +79,9 @@
         <h1 class="hero-title fade-up text-6xl md:text-7xl" style="animation-delay:.1s">
           Elevate Your<br><span class="italic-gold">Calligraphy</span>
         </h1>
-        <p class="hero-sub fade-up" style="animation-delay:.2s">Handpicked pens, inks & nibs for every level. 2 stunning
-          font styles — Nastaliq & Naskh. Beginners to masters welcome.</p>
+        <p class="hero-sub fade-up" style="animation-delay:.2s">Handpicked Qalams, inks & nibs for every level.
+          Beginners
+          to masters welcome.</p>
         <div class="flex flex-col sm:flex-row items-start gap-4 fade-up" style="animation-delay:.3s">
           <a href="products.html" class="btn-gold w-48 justify-center">Shop Collection ✦</a>
           <a id="hero-call-top" href="#" class="btn-outline w-48 justify-center">
@@ -233,13 +234,13 @@
         <div class="divider center"></div>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <a href="products.html?cat=pens" class="cat-card" data-aos="fade-up">
+        <a href="products.html?cat=qalams" class="cat-card" data-aos="fade-up">
           <div
             style="width:100%;height:100%;background:linear-gradient(135deg,#1a0a00,#3d1f00);display:flex;align-items:center;justify-content:center;font-size:80px;">
             🖊️</div>
           <div class="cat-card-info">
-            <div class="cat-card-name">Pens</div>
-            <div class="cat-card-count">Dip & Reed Pens</div>
+            <div class="cat-card-name">Qalams</div>
+            <div class="cat-card-count">Dip & Reed Qalams</div>
             <div class="cat-arrow">Shop Now →</div>
           </div>
         </a>
@@ -329,7 +330,7 @@
         </div>
         <div>
           <div class="footer-title">Categories</div>
-          <a href="products.html?cat=pens" class="footer-link">Calligraphy Qalams</a>
+          <a href="products.html?cat=qalams" class="footer-link">Calligraphy Qalams</a>
           <a href="products.html?cat=inks" class="footer-link">Premium Inks</a>
           <a href="products.html?cat=paper" class="footer-link">Paper</a>
           <a href="products.html?cat=kits" class="footer-link">Bundle Kits</a>
@@ -438,7 +439,7 @@
             ${p.stock && p.stock < 5 ? `<div class="stock-low">⚡ Only ${p.stock} left!</div>` : ''}
             <div class="flex gap-2 mt-2">
               <a href="product.html?id=${p.id}" class="btn-dark" style="flex:1;justify-content:center;padding:10px;">View</a>
-              ${p.category === 'pens' && p.sizes?.length > 0
+              ${p.category === 'qalams' && p.sizes?.length > 0
                 ? `<a href="product.html?id=${p.id}" class="btn-gold" style="flex:1;justify-content:center;padding:10px;">Options</a>`
                 : `<button onclick="Cart.add({id:'${p.id}',name:'${p.name.replace(/'/g, "\\'")}',price:${p.price},image:'${p.images?.[0] || ''}'})" class="btn-gold" style="flex:1;justify-content:center;padding:10px;">Add 🛒</button>`
               }

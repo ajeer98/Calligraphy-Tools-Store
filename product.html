@@ -265,7 +265,6 @@
               class="fa-regular fa-envelope w-5"></i> muhammedajeer54@gmail.com</a>
           <a id="footer-insta" href="https://www.instagram.com/calligraphy_tools_store/" target="_blank"
             class="footer-link"><i class="fa-brands fa-instagram w-5"></i> calligraphy_tools_store</a>
-          <a href="admin.html" class="footer-link text-white/20 text-xs mt-4 block">Admin Panel</a>
         </div>
       </div>
       <hr class="footer-hr" />
@@ -315,8 +314,6 @@
       document.getElementById('product-name').textContent = p.name;
       document.getElementById('product-category').textContent = (p.category || '').toUpperCase() + (p.type ? ' · ' + p.type : '');
       document.getElementById('product-desc').textContent = p.description || 'Premium calligraphy tool crafted for exceptional performance.';
-
-      selectedSizes = [];
 
       // Tags
       let tagsHTML = '';
@@ -379,7 +376,7 @@
               <span class="text-xs font-bold text-gray-500 uppercase tracking-tight">${size}</span>
               <div class="qty-ctrl" style="transform: scale(0.85); transform-origin: right;">
                 <button class="qty-btn" style="width:26px; height:26px;" onclick="changeSizeQty('${size}', -1)">−</button>
-                <input class="qty-val" style="width:28px; font-size:13px;" id="qty-${size.replace(/\s+/g, '_')}" type="number" value="0" min="0" readonly />
+                <input class="qty-val" style="width:28px; font-size:13px;" id="qty-${size.replace(/\s+/g, '_')}" type="text" value="0" readonly />
                 <button class="qty-btn" style="width:26px; height:26px;" onclick="changeSizeQty('${size}', 1)">+</button>
               </div>
             </div>

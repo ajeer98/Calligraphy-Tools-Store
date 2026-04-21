@@ -140,7 +140,7 @@
 
           <!-- Quantity + Add to Cart -->
           <div class="flex items-center gap-4 mb-6">
-            <div class="qty-ctrl">
+            <div class="qty-ctrl" id="main-qty-ctrl">
               <button class="qty-btn" onclick="changeQty(-1)">−</button>
               <input class="qty-val" id="qty-input" type="number" value="1" min="1" max="20" readonly />
               <button class="qty-btn" onclick="changeQty(1)">+</button>
@@ -283,7 +283,7 @@
   <script>
     let currentProduct = null;
     let productSettings = null;
-    let selectedSizes = [];
+    let sizeQuantities = {};
     const placeholder = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%23EDE8DF' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='60'%3E🖊️%3C/text%3E%3C/svg%3E`;
 
     async function loadProduct() {
@@ -309,6 +309,7 @@
       document.title = `${p.name} — Calligraphy Tools Store`;
       document.getElementById('page-loading').classList.add('hidden');
       document.getElementById('product-content').classList.remove('hidden');
+      sizeQuantities = {};
 
       document.getElementById('breadcrumb-name').textContent = p.name;
       document.getElementById('product-name').textContent = p.name;
@@ -370,11 +371,24 @@
         const area = document.getElementById('size-selection-area');
         const chips = document.getElementById('size-chips');
         area.classList.remove('hidden');
-        chips.innerHTML = p.sizes.map(size => `
-          <button onclick="selectSize('${size}', this)" class="size-chip border-2 border-gray-200 rounded-lg px-4 py-2 text-sm font-medium hover:border-gold transition-all">
-            ${size}
-          </button>
-        `).join('');
+        chips.className = "grid grid-cols-2 gap-2";
+        chips.innerHTML = p.sizes.map(size => {
+          sizeQuantities[size] = 0;
+          return `
+            <div class="flex items-center justify-between p-2 px-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+              <span class="text-xs font-bold text-gray-500 uppercase tracking-tight">${size}</span>
+              <div class="qty-ctrl" style="transform: scale(0.85); transform-origin: right;">
+                <button class="qty-btn" style="width:26px; height:26px;" onclick="changeSizeQty('${size}', -1)">−</button>
+                <input class="qty-val" style="width:28px; font-size:13px;" id="qty-${size.replace(/\s+/g, '_')}" type="number" value="0" min="0" readonly />
+                <button class="qty-btn" style="width:26px; height:26px;" onclick="changeSizeQty('${size}', 1)">+</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+        document.getElementById('main-qty-ctrl').classList.add('hidden');
+      } else {
+        document.getElementById('size-selection-area').classList.add('hidden');
+        document.getElementById('main-qty-ctrl').classList.remove('hidden');
       }
 
       // Bundle section
@@ -397,15 +411,13 @@
       }
     }
 
-    function selectSize(size, el) {
-      const index = selectedSizes.indexOf(size);
-      if (index > -1) {
-        selectedSizes.splice(index, 1);
-        el.classList.remove('border-gold', 'bg-gold/5');
-      } else {
-        selectedSizes.push(size);
-        el.classList.add('border-gold', 'bg-gold/5');
-      }
+    function changeSizeQty(size, delta) {
+      const input = document.getElementById(`qty-${size.replace(/\s+/g, '_')}`);
+      let val = parseInt(input.value) + delta;
+      if (val < 0) val = 0;
+      if (val > 20) val = 20;
+      input.value = val;
+      sizeQuantities[size] = val;
     }
 
     function switchImg(src, thumbEl) {
@@ -422,23 +434,25 @@
 
     function addToCart() {
       if (!currentProduct) return;
-      const qty = Number(document.getElementById('qty-input').value);
 
       if (currentProduct.category === 'qalams' && currentProduct.sizes?.length > 0) {
-        if (selectedSizes.length === 0) {
-          showToast('Please select at least one size', 'error');
-          return;
+        let added = false;
+        for (const size in sizeQuantities) {
+          const q = sizeQuantities[size];
+          if (q > 0) {
+            Cart.add({
+              id: currentProduct.id,
+              name: `${currentProduct.name} (${size})`,
+              price: currentProduct.price,
+              image: currentProduct.images?.[0] || '',
+              size: size
+            }, q);
+            added = true;
+          }
         }
-        selectedSizes.forEach(size => {
-          Cart.add({
-            id: currentProduct.id,
-            name: `${currentProduct.name} (${size})`,
-            price: currentProduct.price,
-            image: currentProduct.images?.[0] || '',
-            size: size
-          }, qty);
-        });
+        if (!added) showToast('Please select quantity for at least one size', 'error');
       } else {
+        const qty = Number(document.getElementById('qty-input').value);
         Cart.add({
           id: currentProduct.id,
           name: currentProduct.name,
@@ -450,12 +464,34 @@
 
     function buyNowWhatsApp() {
       if (!currentProduct) return;
-      const qty = Number(document.getElementById('qty-input').value);
       const s = productSettings || {};
       const phone = (s.whatsappNumber || '917736348312').replace(/\D/g, '');
-      const total = currentProduct.price * qty;
+
       let msg = `🖊️ *Order Request — ${s.storeName || 'Calligraphy Store'}*\n\n`;
-      msg += `• ${currentProduct.name} × ${qty} = ${rupees(total)}\n`;
+      let total = 0;
+      let hasItems = false;
+
+      if (currentProduct.category === 'qalams' && currentProduct.sizes?.length > 0) {
+        for (const size in sizeQuantities) {
+          const q = sizeQuantities[size];
+          if (q > 0) {
+            msg += `• ${currentProduct.name} (${size}) × ${q} = ${rupees(currentProduct.price * q)}\n`;
+            total += currentProduct.price * q;
+            hasItems = true;
+          }
+        }
+      } else {
+        const qty = Number(document.getElementById('qty-input').value);
+        total = currentProduct.price * qty;
+        msg += `• ${currentProduct.name} × ${qty} = ${rupees(total)}\n`;
+        hasItems = true;
+      }
+
+      if (!hasItems) {
+        showToast('Please select quantity', 'error');
+        return;
+      }
+
       msg += `\n*Total: ${rupees(total)}*\n\nI'd like to place this order. Please share payment & delivery details.`;
       window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
     }
@@ -482,7 +518,10 @@
         <div class="prod-card-body">
           <a href="product.html?id=${p.id}"><div class="prod-name" style="font-size:16px;">${p.name}</div></a>
           <div class="prod-price" style="font-size:18px;">${rupees(p.price)}</div>
-          <button onclick="Cart.add({id:'${p.id}',name:'${(p.name || '').replace(/'/g, "\\'")}',price:${p.price},image:'${p.images?.[0] || ''}'})" class="btn-gold w-full justify-center" style="padding:9px;font-size:12px;margin-top:8px;">+ Add to Cart</button>
+          ${p.category === 'qalams' && p.sizes?.length > 0
+            ? `<a href="product.html?id=${p.id}" class="btn-gold w-full justify-center" style="padding:9px;font-size:12px;margin-top:8px;">Add 🛒</a>`
+            : `<button onclick="Cart.add({id:'${p.id}',name:'${(p.name || '').replace(/'/g, "\\'")}',price:${p.price},image:'${p.images?.[0] || ''}'})" class="btn-gold w-full justify-center" style="padding:9px;font-size:12px;margin-top:8px;">Add 🛒</button>`
+          }
         </div>
       </div>
     `).join('');

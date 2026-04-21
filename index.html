@@ -122,7 +122,7 @@
 
   <!-- ===== STATS ===== -->
   <div class="stats-bar">
-    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
       <div data-aos="fade-up">
         <div class="stat-num">5000+</div>
         <div class="stat-lbl">Happy Customers</div>
@@ -437,11 +437,10 @@
               ${p.originalPrice ? `<div class="prod-orig">${rupees(p.originalPrice)}</div>` : ''}
             </div>
             ${p.stock && p.stock < 5 ? `<div class="stock-low">⚡ Only ${p.stock} left!</div>` : ''}
-            <div class="flex gap-2 mt-2">
-              <a href="product.html?id=${p.id}" class="btn-dark" style="flex:1;justify-content:center;padding:10px;">View</a>
+            <div class="flex mt-2">
               ${p.category === 'qalams' && p.sizes?.length > 0
-                ? `<a href="product.html?id=${p.id}" class="btn-gold" style="flex:1;justify-content:center;padding:10px;">Options</a>`
-                : `<button onclick="Cart.add({id:'${p.id}',name:'${p.name.replace(/'/g, "\\'")}',price:${p.price},image:'${p.images?.[0] || ''}'})" class="btn-gold" style="flex:1;justify-content:center;padding:10px;">Add 🛒</button>`
+                ? `<a href="product.html?id=${p.id}" class="btn-gold" style="flex:1;justify-content:center;padding:10px;font-size:12px;">Add 🛒</a>`
+                : `<button onclick="Cart.add({id:'${p.id}',name:'${(p.name || '').replace(/'/g, "\\'")}',price:${p.price},image:'${p.images?.[0] || ''}'})" class="btn-gold" style="flex:1;justify-content:center;padding:10px;font-size:12px;">Add 🛒</button>`
               }
             </div>
           </div>
